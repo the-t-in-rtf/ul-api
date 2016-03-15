@@ -1,0 +1,40 @@
+{
+  "name": "ul-api",
+  "version": "1.0.0",
+  "description": "The Unified Listing API and tests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/all-tests.js",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GPII/ul-api.git"
+  },
+  "author": "Tony Atkins <tony@raisingthefloor.org>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://issues.gpii.net/browse/GPII"
+  },
+  "homepage": "https://github.com/GPII/ul-api",
+  "dependencies": {
+    "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#c83ff8cde8ba37c72f7e26bebf81c44d1a681c36",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#47cc039b86c5271c27ce5432a9fb6afe72b91568",
+    "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#4dd281863428378ab0c9a7fcd309296ed25667bb",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#c69834c9327ddef473b5d91f25e248deb30b8598",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#a9d36d91964f195900efe74e6479bbdc006f4559",
+    "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
+    "kettle": "git://github.com/amb26/kettle.git#cae26e655b57647a0a70fed4ba32b96d5e885c5e",
+    "marked": "0.3.5"
+  },
+  "devDependencies": {
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#7e207248a081922959ac0d444f3cdee83800d50e",
+    "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#64a7c616bec99cb43d593924f2b8fa681e077812",
+    "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#04a45c1683e69ae9453f55b049c96b90cac32c39",
+    "grunt": "0.4.4",
+    "grunt-contrib-jshint": "0.9.0",
+    "grunt-jsonlint": "1.0.4",
+    "grunt-shell": "0.6.4",
+    "node-jqunit": "~1.1.3"
+  }
+}

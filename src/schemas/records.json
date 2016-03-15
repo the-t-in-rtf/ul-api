@@ -1,0 +1,81 @@
+{
+    "type": "object",
+    "id": "records.json",
+
+    "definitions": {
+        "ok": {
+            "type": "boolean"
+        },
+        "total_rows": {
+            "type": "number"
+        },
+        "offset": {
+            "type": "number"
+        },
+        "limit": {
+            "type": "number"
+        },
+        "statuses": {
+            "type": "array",
+            "items": {
+                    "$ref": "record.json#/definitions/status"
+            }
+        },
+        "sources": {
+            "type": "array",
+            "items": {
+                "$ref": "record.json#/definitions/source"
+            }
+        },
+        "filters": {
+            "type": "object",
+            "properties": {
+                "updated": {
+                    "$ref": "record.json#/definitions/updated"
+                },
+                "statuses": {
+                    "$ref": "records.json#/definitions/statuses"
+                },
+                "sources": {
+                    "$ref": "records.json#/definitions/sources"
+                }
+            }
+        },
+        "records": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "record.json"
+            }
+        },
+        "retrievedAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+
+    "properties": {
+        "ok": {
+            "$ref": "records.json#/definitions/ok"
+        },
+        "total_rows": {
+            "$ref": "records.json#/definitions/total_rows"
+        },
+        "offset": {
+            "$ref": "records.json#/definitions/offset"
+        },
+        "limit": {
+            "$ref": "records.json#/definitions/limit"
+        },
+        "filters": {
+            "$ref": "records.json#/definitions/filters"
+        },
+        "records": {
+            "$ref": "records.json#/definitions/records"
+        },
+        "retrievedAt": {
+            "$ref": "records.json#/definitions/retrievedAt"
+        }
+    },
+    "required": ["ok","total_rows","offset","limit","filters","records","retrievedAt"]
+}

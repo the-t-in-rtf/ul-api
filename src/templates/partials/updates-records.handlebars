@@ -1,0 +1,20 @@
+{{#if message}}
+    <p>The following unified records match your search criteria.</p>
+
+    {{#each message}}
+        <div class="row">
+            <div class="column small-3">
+                <a href="/record?source={{source}}&sid={{sid}}">{{name}}</a>
+            </div>
+            <div class="column small-9 ul-updates-record-description">
+                {{#if description}}{{{md description}}}{{/if}}
+            </div>
+        </div>
+        <ul>
+        </ul>
+    {{/each}}
+{{else}}
+    <div class="panel">
+        No records were found.  Check your search criteria and the filters you have chosen.
+    </div>
+{{/if}}

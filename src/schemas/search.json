@@ -1,0 +1,86 @@
+{
+    "type": "object",
+    "id": "search.json",
+
+    "definitions": {
+        "ok": {
+            "type": "boolean"
+        },
+        "total_rows": {
+            "type": "number"
+        },
+        "offset": {
+            "type": "number"
+        },
+        "limit": {
+            "type": "number"
+        },
+        "q" : {
+            "type": "string"
+        },
+        "statuses": {
+            "type": "array",
+            "items": {
+                "$ref": "record.json#/definitions/status"
+            }
+        },
+        "sources": {
+            "type": "array",
+            "items": {
+                "$ref": "record.json#/definitions/source"
+            }
+        },
+        "filters": {
+            "type": "object",
+            "properties": {
+                "updated": {
+                    "$ref": "record.json#/definitions/updated"
+                },
+                "statuses": {
+                    "$ref": "search.json#/definitions/statuses"
+                },
+                "sources": {
+                    "$ref": "search.json#/definitions/sources"
+                }
+            }
+        },
+        "records": {
+            "type": "array",
+            "items": {
+                "$ref": "record.json"
+            }
+        },
+        "retrievedAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+
+    "properties": {
+        "ok": {
+            "$ref": "search.json#/definitions/ok"
+        },
+        "q": {
+            "$ref": "search.json#/definitions/q"
+        },
+        "total_rows": {
+            "$ref": "search.json#/definitions/total_rows"
+        },
+        "offset": {
+            "$ref": "search.json#/definitions/offset"
+        },
+        "limit": {
+            "$ref": "search.json#/definitions/limit"
+        },
+        "filters": {
+            "$ref": "search.json#/definitions/filters"
+        },
+        "records": {
+            "$ref": "search.json#/definitions/records"
+        },
+        "retrievedAt": {
+            "$ref": "search.json#/definitions/retrievedAt"
+        }
+    },
+    "required": ["ok","q", "total_rows", "offset", "limit", "filters", "records", "retrievedAt"]
+}

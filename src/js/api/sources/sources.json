@@ -1,0 +1,40 @@
+{
+    "Handicat": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Vlibank": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Siva": {
+        "view": ["reviewers", "eastin"]
+    },
+    "EASTIN Admin": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Hjælpemiddelbasen": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Rehadat": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Hulpmiddelenwijzer": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Oaeg": {
+        "view": ["reviewers", "eastin"]
+    },
+    "Dlf data": {
+        "view": ["reviewers", "eastin"]
+    },
+    "unified": {
+        "view": ["*"],
+        "edit": ["reviewers"]
+    },
+    "SolutionsOntologyFinal": {
+      "view": ["reviewers", "sat"],
+      "edit": ["sat"]
+    },
+    "~": {
+        "view": ["~", "reviewers"]
+    }
+}
