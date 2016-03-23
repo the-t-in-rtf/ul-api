@@ -46,11 +46,10 @@ fluid.defaults("gpii.ul.api.tests.harness", {
             }
         }
     },
-    // Report that we're ready when all our key components have started up.
     events: {
         apiStarted:   null,
         pouchStarted: null,
-        onReady: {
+        onStarted: {
             events: {
                 apiStarted:   "apiStarted",
                 pouchStarted: "pouchStarted"

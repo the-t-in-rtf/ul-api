@@ -4,14 +4,14 @@ var fluid = require("infusion");
 
 require("gpii-express");
 require("gpii-express-user");
-require("gpii-handlebars");
 
 require("./docs");
-//require("./product");
+require("./product");
 //require("./products");
 //require("./search");
 //require("./updates");
 //require("./sources");
+require("./404");
 
 fluid.defaults("gpii.ul.api", {
     gradeNames:   ["gpii.express.router.passthrough"],
@@ -39,9 +39,9 @@ fluid.defaults("gpii.ul.api", {
         docs: {
             type: "gpii.ul.api.docs"
         },
-        //product: {
-        //    type: "gpii.ul.api.product"
-        //},
+        product: {
+            type: "gpii.ul.api.product"
+        },
         //products: {
         //    type: "gpii.ul.api.products"
         //},
@@ -61,15 +61,19 @@ fluid.defaults("gpii.ul.api", {
         //        couch: "{gpii.express}.options.config.couch"
         //    }
         //},
-        user: {
-            type: "gpii.express.user.api",
-            options: {
-                app:       "{gpii.express}.options.config.app",
-                couch: {
-                    userDbName: "users",
-                    userDbUrl: "{gpii.ul.api}.options.couch.urls.users"
-                }
-            }
+        //user: {
+        //    type: "gpii.express.user.api",
+        //    options: {
+        //        app:       "{gpii.express}.options.config.app",
+        //        couch: {
+        //            userDbName: "users",
+        //            userDbUrl: "{gpii.ul.api}.options.couch.urls.users"
+        //        }
+        //    }
+        //},
+        404: {
+            type:     "gpii.ul.api.404",
+            priority: "last"
         }
     }
 });
