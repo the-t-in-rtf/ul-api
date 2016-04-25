@@ -10,7 +10,6 @@ fluid.module.register("ul-api", __dirname, require);
 fluid.registerNamespace("gpii.ul.api");
 gpii.ul.api.loadTestingSupport = function () {
     require("./tests/js/lib/fixtures");
-    require("./tests/js/lib/test-harness");
 };
 
 module.exports = gpii.ul.api;
