@@ -11,7 +11,7 @@ updates.templatesDir  = path.join(__dirname, "templates");
 var when              = require("when");
 var moment            = require("moment");
 updates.updatedMoment = moment();
-updates.updated       = updates.updatedMoment.subtract(1, 'week').toDate();
+updates.updated       = updates.updatedMoment.subtract(1, "week").toDate();
 
 // TODO:  Add support for command line arguments regarding frequency, etc.
 
@@ -19,12 +19,12 @@ updates.updated       = updates.updatedMoment.subtract(1, 'week').toDate();
 
 // TODO:  Convert to a single combined handlebars helper for email, express, and client-side
 updates.helpers = {
-    "jsonify": function(context) { return JSON.stringify(context); },
-    "format":  function(context, format) { return moment(context).format(format);}
+    "jsonify": function (context) { return JSON.stringify(context); },
+    "format":  function (context, format) { return moment(context).format(format); }
 };
 
 // Poll the "updates" API for relevant updates (run for all vendors at the moment)
-updates.getUpdates = function(){
+updates.getUpdates = function () {
     var defer = when.defer();
 
     var getOptions = {
@@ -37,7 +37,7 @@ updates.getUpdates = function(){
     };
 
     var request = require("request");
-    request(getOptions, function(error, response, body){
+    request(getOptions, function (error, response, body) {
         if (error) { defer.reject(error); }
 
         defer.resolve(body);
@@ -48,15 +48,14 @@ updates.getUpdates = function(){
 
 
 // TODO:  Prepare a summary from the email template
-updates.generateReport = function(apiDataString) {
+updates.generateReport = function (apiDataString) {
 
     // TODO:  Update the template to display a more appropriate message when there are no updates.
 
     var defer = when.defer();
     var data = JSON.parse(apiDataString);
-    debugger;
-    emailTemplates(updates.templatesDir, { "helpers": updates.helpers}, function(err, template){
-        template("updates", data, function(err, html, text){
+    emailTemplates(updates.templatesDir, { "helpers": updates.helpers}, function (err, template) {
+        template("updates", data, function (err, html, text) {
             if (err) {
                 defer.reject(err);
             }
@@ -70,12 +69,12 @@ updates.generateReport = function(apiDataString) {
 };
 
 // TODO:  Send the email
-updates.sendEmail = function(templateOutput) {
+updates.sendEmail = function (templateOutput) {
     var data = JSON.parse(templateOutput);
 
     // TODO:  Investigate async libraries for mail handling
-    var nodemailer    = require('nodemailer');
-    var smtpTransport = require('nodemailer-smtp-transport');
+    var nodemailer    = require("nodemailer");
+    var smtpTransport = require("nodemailer-smtp-transport");
     var transporter   = nodemailer.createTransport(smtpTransport());
 
     // TODO: Pull this from the configuration

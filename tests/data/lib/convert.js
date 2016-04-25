@@ -15,7 +15,7 @@ var request      = require("request");
 var options      = {
     url: convert.config.couch.url + "_all_docs?include_docs=true"
 };
-request(options, function(error, response, body){
+request(options, function (error, response, body) {
     if (error) {
         console.error(error);
         return;
@@ -23,7 +23,7 @@ request(options, function(error, response, body){
 
     var data = JSON.parse(body);
     var converted = [];
-    data.rows.forEach(function(row) {
+    data.rows.forEach(function (row) {
         // TODO:  This will need to be updated once we have real UIDs.
         var clusterIds = [
             "1421059432806-826608318",
@@ -61,7 +61,7 @@ request(options, function(error, response, body){
     var timestamp = (new Date()).getTime();
     var filename  = "/tmp/output-" + timestamp + ".json";
 
-    fs.writeFile(filename, JSON.stringify({ "docs": converted }, null, 2), function(err){
+    fs.writeFile(filename, JSON.stringify({ "docs": converted }, null, 2), function (err) {
         if (err) {
             console.error("Error saving file '" + filename + "': " + err);
             return;

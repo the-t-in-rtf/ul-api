@@ -24,28 +24,28 @@ postTests.invalidRecord = {};
 postTests.apiUrl        = postTests.config.express.baseUrl + postTests.config.express.apiPath;
 postTests.productApiUrl = postTests.apiUrl + "product";
 
-postTests.generalize = function(object) {
+postTests.generalize = function (object) {
     var newObject = JSON.parse(JSON.stringify(object));
-    var fieldsToRemove = ["_id","_rev","updated"];
-    fieldsToRemove.forEach(function(field){
-        if (newObject[field]){ delete newObject[field]; }
+    var fieldsToRemove = ["_id", "_rev", "updated"];
+    fieldsToRemove.forEach(function (field) {
+        if (newObject[field]) { delete newObject[field]; }
     });
     return newObject;
 };
 
-postTests.loadPouch = function() {
+postTests.loadPouch = function () {
     postTests.pouch = require("../../../tests/lib/pouch")(postTests.config);
 
-    postTests.pouch.start(function() {
+    postTests.pouch.start(function () {
         postTests.startExpress();
     });
 };
 
 // Spin up an express instance
-postTests.startExpress = function() {
+postTests.startExpress = function () {
     postTests.express = require("../../../tests/lib/express")(postTests.config);
 
-    postTests.express.start(function() {
+    postTests.express.start(function () {
         var bodyParser = require("body-parser");
         postTests.express.app.use(bodyParser.json());
 
@@ -60,20 +60,20 @@ postTests.startExpress = function() {
     });
 };
 
-postTests.runTests = function() {
+postTests.runTests = function () {
     console.log("Running tests...");
 
     var jqUnit = require("jqUnit");
     jqUnit.module("POST /api/product");
 
-    jqUnit.asyncTest("Use POST to create a new record (not logged in)", function() {
+    jqUnit.asyncTest("Use POST to create a new record (not logged in)", function () {
         var options = {
             "url":  postTests.productApiUrl,
             "json": postTests.validRecord
         };
 
         var request = require("request");
-        request.post(options, function(e,r,b) {
+        request.post(options, function (e, r, b) {
             jqUnit.start();
 
             jqUnit.assertNull("There should be no raw errors returned.", e);
@@ -84,8 +84,8 @@ postTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use POST to update an existing record (should fail)", function() {
-        postTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use POST to update an existing record (should fail)", function () {
+        postTests.loginHelper.login(jqUnit, {}, function () {
             var updatedRecord = JSON.parse(JSON.stringify(postTests.validRecord));
             updatedRecord.description = "This record has been updated.";
             var options = {
@@ -93,7 +93,7 @@ postTests.runTests = function() {
                 "json": updatedRecord,
                 "jar":  postTests.loginHelper.jar
             };
-            postTests.request.post(options, function(e,r,b) {
+            postTests.request.post(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertFalse("The response should not be 'ok'", b.ok);
@@ -105,8 +105,8 @@ postTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use POST to create a new record (logged in)", function() {
-        postTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use POST to create a new record (logged in)", function () {
+        postTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = JSON.parse(JSON.stringify(postTests.validRecord));
             newRecord.source = "unified";
             newRecord.uid    = "completelyNewRecord";
@@ -117,7 +117,7 @@ postTests.runTests = function() {
                 "json": newRecord,
                 "jar":  postTests.loginHelper.jar
             };
-            postTests.request.post(options, function(e,r,b) {
+            postTests.request.post(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertNull("There should be no validation errors returned", b.errors);
@@ -127,9 +127,9 @@ postTests.runTests = function() {
                 var checkOptions = {
                     "url": postTests.productApiUrl + "/" + newRecord.source + "/" + newRecord.sid
                 };
-                postTests.request.get(checkOptions, function(e,r,b) {
+                postTests.request.get(checkOptions, function (e, r, b) {
                     jqUnit.start();
-                    jqUnit.assertNull("There should be no errors returned",e);
+                    jqUnit.assertNull("There should be no errors returned", e);
 
                     var jsonData = JSON.parse(b);
                     var savedRecord = jsonData.record;
@@ -151,8 +151,8 @@ postTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use POST to attempt to create an invalid record (logged in)", function() {
-        postTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use POST to attempt to create an invalid record (logged in)", function () {
+        postTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = JSON.parse(JSON.stringify(postTests.invalidRecord));
 
             var options = {
@@ -160,7 +160,7 @@ postTests.runTests = function() {
                 "json": newRecord,
                 "jar":  postTests.loginHelper.jar
             };
-            postTests.request.post(options, function(e,r,b) {
+            postTests.request.post(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertTrue("There should be validation errors returned", b.errors && Object.keys(b.errors).length > 0);
@@ -171,8 +171,8 @@ postTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use POST to attempt to create a unified record whose sid does not match its uid", function() {
-        postTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use POST to attempt to create a unified record whose sid does not match its uid", function () {
+        postTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = postTests.generalize(JSON.parse(JSON.stringify(postTests.validRecord)));
             newRecord.source = "unified";
             newRecord.sid    = "newValue";
@@ -183,7 +183,7 @@ postTests.runTests = function() {
                 "json": newRecord,
                 "jar":  postTests.loginHelper.jar
             };
-            postTests.request.post(options, function(e,r) {
+            postTests.request.post(options, function (e, r) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertEquals("The status code should be '400'", 400, r.statusCode);

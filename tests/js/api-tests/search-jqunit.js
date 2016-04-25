@@ -18,26 +18,26 @@ nock.disableNetConnect();
 nock.enableNetConnect("localhost");
 
 searchTests.testTerms = ["jaws", "nvda", "bogus"];
-searchTests.testTerms.forEach(function(term){
+searchTests.testTerms.forEach(function (term) {
     var termData = JSON.stringify(require("./data/" + term + ".json"), null, 2);
     nock(searchTests.config.couch.luceneUrl).persist().get("?q=(" + term + ")").reply(200, termData);
 });
 
 var testUtils = require("../../tests/lib/testUtils")(searchTests.config);
 
-searchTests.loadPouch = function() {
+searchTests.loadPouch = function () {
     searchTests.pouch = require("../../tests/lib/pouch")(searchTests.config);
 
-    searchTests.pouch.start(function() {
+    searchTests.pouch.start(function () {
         searchTests.startExpress();
     });
 };
 
 // Spin up an express instance
-searchTests.startExpress = function() {
+searchTests.startExpress = function () {
     searchTests.express = require("../../tests/lib/express")(searchTests.config);
 
-    searchTests.express.start(function() {
+    searchTests.express.start(function () {
         var search = require("../index.js")(searchTests.config);
         searchTests.express.app.use("/search", search.router);
 
@@ -48,19 +48,19 @@ searchTests.startExpress = function() {
     });
 };
 
-searchTests.runTests = function() {
+searchTests.runTests = function () {
     var jqUnit = fluid.require("jqUnit");
     var request = require("request");
     jqUnit.module("Tests for /api/search and /api/suggest");
 
-    jqUnit.asyncTest("Confirm that nock is working...", function() {
+    jqUnit.asyncTest("Confirm that nock is working...", function () {
         var options = {
             "url": searchTests.config.couch.luceneUrl,
             "qs": { "q": "(jaws)" }
         };
 
         var cannedData = require("./data/jaws.json");
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             var jsonData = JSON.parse(body);
@@ -68,12 +68,12 @@ searchTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Confirm that a normal search works...", function() {
+    jqUnit.asyncTest("Confirm that a normal search works...", function () {
         var options = {
             "url": searchTests.config.express.baseUrl + "search",
             "qs": { "q": "jaws" }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -86,12 +86,12 @@ searchTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Confirm that a normal search works with sources=true...", function() {
+    jqUnit.asyncTest("Confirm that a normal search works with sources=true...", function () {
         var options = {
             "url": searchTests.config.express.baseUrl + "search",
             "qs": { "q": "jaws", "sources": true }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -100,19 +100,19 @@ searchTests.runTests = function() {
             jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertTrue("There should be search results...", jsonData.records.length > 0);
-                jsonData.records.forEach(function(record) {
+                jsonData.records.forEach(function (record) {
                     jqUnit.assertEquals("All records should be 'unified'", "unified", record.source);
                 });
             }
         });
     });
 
-    jqUnit.asyncTest("Confirm that a 'suggest' search works...", function() {
+    jqUnit.asyncTest("Confirm that a 'suggest' search works...", function () {
         var options = {
             "url": searchTests.config.express.baseUrl + "suggest",
             "qs": { "q": "jaws" }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -125,11 +125,11 @@ searchTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Confirm that a search returns an error if no query is passed...", function() {
+    jqUnit.asyncTest("Confirm that a search returns an error if no query is passed...", function () {
         var options = {
             "url": searchTests.config.express.baseUrl + "search"
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -140,11 +140,11 @@ searchTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Confirm that a 'suggest' search returns an error if no query is passed...", function() {
+    jqUnit.asyncTest("Confirm that a 'suggest' search returns an error if no query is passed...", function () {
         var options = {
             "url": searchTests.config.express.baseUrl + "suggest"
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);

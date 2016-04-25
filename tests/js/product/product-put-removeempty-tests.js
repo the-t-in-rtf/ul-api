@@ -10,7 +10,7 @@ var config = loader.loadConfig(require("../../../../../config/test-pouch.json"))
 
 require("../index.js")(config);
 
-jqUnit.test("An object with no empty entries should be preserved...", function() {
+jqUnit.test("An object with no empty entries should be preserved...", function () {
     var start    = { foo: "bar", baz: { qux: "quux"} };
 
     // We make a copy to ensure that the array has not been mangled (which we will test later).
@@ -21,7 +21,7 @@ jqUnit.test("An object with no empty entries should be preserved...", function()
     jqUnit.assertDeepEq("The stripped object should still contain all entries...", expected, stripped);
 });
 
-jqUnit.test("An object with empty entries should be stripped...", function() {
+jqUnit.test("An object with empty entries should be stripped...", function () {
     var start    = { foo: "bar", bar: null, baz: { qux: "quux", quux: null} };
     var copy     = fluid.copy(start);
     var expected = { foo: "bar", baz: { qux: "quux"} };

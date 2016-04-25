@@ -3,6 +3,7 @@
 //
 "use strict";
 var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 
 require("../../../");
 
@@ -11,6 +12,11 @@ require("gpii-pouchdb");
 require("gpii-express-user");
 require("gpii-handlebars");
 
+fluid.registerNamespace("gpii.ul.api.tests.harness");
+gpii.ul.api.tests.harness.stopServer = function (that) {
+    that.express.destroy();
+    that.pouch.destroy();
+};
 
 fluid.defaults("gpii.ul.api.tests.harness", {
     gradeNames: ["fluid.modelComponent"],
@@ -20,40 +26,29 @@ fluid.defaults("gpii.ul.api.tests.harness", {
     },
     templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
-    urls: {
-        api:     {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/api", { port: "{harness}.options.ports.api"}]
-            }
-        },
-        pouch:    {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port", { port: "{harness}.options.ports.pouch"}]
-            }
-        },
-        db:    {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["%baseUrl/ul", { baseUrl: "{harness}.options.urls.pouch"}]
-            }
-        },
-        users:    {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["%baseUrl/users", { baseUrl: "{harness}.options.urls.pouch"}]
-            }
-        }
-    },
     events: {
         apiStarted:   null,
+        apiStopped:   null,
         pouchStarted: null,
+        pouchStopped: null,
         onStarted: {
             events: {
                 apiStarted:   "apiStarted",
                 pouchStarted: "pouchStarted"
             }
+        },
+        onStopped: {
+            events: {
+                apiStopped:   "apiStopped",
+                pouchStopped: "pouchStopped"
+            }
+        }
+    },
+    invokers: {
+        // Pass through requests to "stop" the component to the underlying components
+        stopServer: {
+            funcName: "gpii.ul.api.tests.harness.stopServer",
+            args:     ["{that}"]
         }
     },
     components: {
@@ -63,13 +58,14 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                 config: {
                     express: {
                         port :   "{harness}.options.ports.api",
-                        baseUrl: "{harness}.options.urls.api",
+                        // baseUrl: "{harness}.options.urls.api",
                         views:   "{gpii.ul.api.tests.harness}.options.templateDirs",
                         session: { secret: "Printer, printer take a hint-ter."}
                     }
                 },
                 listeners: {
-                    onStarted: "{harness}.events.apiStarted.fire"
+                    onStarted: "{harness}.events.apiStarted.fire",
+                    onStopped: "{harness}.events.apiStopped.fire"
                 },
                 components: {
                     json: {
@@ -158,8 +154,8 @@ fluid.defaults("gpii.ul.api.tests.harness", {
             options: {
                 config: {
                     express: {
-                        "port" : "{harness}.options.ports.pouch",
-                        baseUrl: "{harness}.options.urls.pouch"
+                        "port" : "{harness}.options.ports.pouch"
+                        // baseUrl: "{harness}.options.urls.pouch"
                     },
                     app: {
                         name: "Pouch Test Server",
@@ -167,7 +163,8 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     }
                 },
                 listeners: {
-                    onStarted: "{harness}.events.pouchStarted.fire"
+                    onStarted: "{harness}.events.pouchStarted.fire",
+                    onStopped: "{harness}.events.pouchStopped.fire"
                 },
                 components: {
                     pouch: {

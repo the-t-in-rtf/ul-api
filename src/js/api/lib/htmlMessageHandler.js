@@ -39,6 +39,7 @@ fluid.defaults("gpii.ul.api.htmlMessageHandler.staticBody", {
 //
 fluid.defaults("gpii.ul.api.htmlMessageHandler.validationErrors", {
     gradeNames: ["gpii.ul.api.htmlMessageHandler"],
+    templateKey: "pages/validation-error.handlebars",
     invokers: {
         handleRequest: {
             func: "{that}.sendResponse",

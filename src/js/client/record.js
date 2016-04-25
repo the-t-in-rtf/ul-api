@@ -150,9 +150,8 @@
 
     // The component that loads the record content and controls the initial rendering.  Subcomponents
     // listen for this component to give the go ahead, and then take over parts of the interface.
-    var rebind = {
 
-    };fluid.defaults("gpii.ul.record", {
+    fluid.defaults("gpii.ul.record", {
         gradeNames: ["gpii.templates.ajaxCapable", "gpii.templates.templateAware"],
         baseUrl:    "/api/product/",
         selectors: {

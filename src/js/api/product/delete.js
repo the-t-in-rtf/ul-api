@@ -1,6 +1,6 @@
 // API Support for DELETE /api/product/:source:/:sid
 "use strict";
-module.exports=function(config){
+module.exports = function (config) {
     var fluid         = require("infusion");
     var namespace     = "gpii.ul.api.products.delete";
     var del           = fluid.registerNamespace(namespace);
@@ -14,12 +14,12 @@ module.exports=function(config){
     del.config        = config;
 
     // TODO: add support for versions
-    del.router.use("/:source/:sid",function(req, res) {
+    del.router.use("/:source/:sid", function (req, res) {
         var myRes = res;
 
         if (!req.session || !req.session._gpii_user) {
             del.schemaHelper.setHeaders(res, "message");
-            myRes.status(401).send(JSON.stringify({ok:false, message: "You must be logged in to use this function."}));
+            myRes.status(401).send(JSON.stringify({ok: false, message: "You must be logged in to use this function."}));
             return;
         }
 
@@ -41,7 +41,7 @@ module.exports=function(config){
             qs: { "key": JSON.stringify([ params.source, params.sid]) }
         };
         var request = require("request");
-        request.get(options, function(error, response, body){
+        request.get(options, function (error, response, body) {
             if (error) {
                 del.schemaHelper.setHeaders(myRes, "message");
                 myRes.status(500).send(JSON.stringify({ "ok": false, "message": body.error}));
@@ -73,7 +73,7 @@ module.exports=function(config){
                 };
 
                 var deleteRequest = require("request");
-                deleteRequest.put(deleteOptions, function(error, response, body){
+                deleteRequest.put(deleteOptions, function (error, response, body) {
                     if (error) {
                         del.schemaHelper.setHeaders(myRes, "message");
                         myRes.status(500).send(JSON.stringify({ "ok": false, "message": body.error}));

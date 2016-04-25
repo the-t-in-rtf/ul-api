@@ -25,28 +25,28 @@ putTests.invalidRecord = {};
 putTests.apiUrl        = putTests.config.express.baseUrl + putTests.config.express.apiPath;
 putTests.productApiUrl = putTests.apiUrl + "product";
 
-putTests.generalize = function(object) {
+putTests.generalize = function (object) {
     var newObject = JSON.parse(JSON.stringify(object));
-    var fieldsToRemove = ["_id","_rev","updated"];
-    fieldsToRemove.forEach(function(field){
-        if (newObject[field]){ delete newObject[field]; }
+    var fieldsToRemove = ["_id", "_rev", "updated"];
+    fieldsToRemove.forEach(function (field) {
+        if (newObject[field]) { delete newObject[field]; }
     });
     return newObject;
 };
 
-putTests.loadPouch = function() {
+putTests.loadPouch = function () {
     putTests.pouch = require("../../../tests/lib/pouch")(putTests.config);
 
-    putTests.pouch.start(function() {
+    putTests.pouch.start(function () {
         putTests.startExpress();
     });
 };
 
 // Spin up an express instance
-putTests.startExpress = function() {
+putTests.startExpress = function () {
     putTests.express = require("../../../tests/lib/express")(putTests.config);
 
-    putTests.express.start(function() {
+    putTests.express.start(function () {
         var bodyParser = require("body-parser");
         putTests.express.app.use(bodyParser.json());
 
@@ -61,20 +61,20 @@ putTests.startExpress = function() {
     });
 };
 
-putTests.runTests = function() {
+putTests.runTests = function () {
     console.log("Running tests...");
 
     var jqUnit = require("jqUnit");
     jqUnit.module("PUT /api/product");
 
-    jqUnit.asyncTest("Use PUT to create a new record (not logged in)", function() {
+    jqUnit.asyncTest("Use PUT to create a new record (not logged in)", function () {
         var options = {
             "url":  putTests.productApiUrl,
             "json": putTests.validRecord
         };
 
         var request = require("request");
-        request.put(options, function(e,r,b) {
+        request.put(options, function (e, r, b) {
             jqUnit.start();
 
             jqUnit.assertNull("There should be no raw errors returned.", e);
@@ -85,8 +85,8 @@ putTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use PUT to update an existing record (logged in)", function() {
-        putTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use PUT to update an existing record (logged in)", function () {
+        putTests.loginHelper.login(jqUnit, {}, function () {
             var updatedRecord = JSON.parse(JSON.stringify(putTests.validRecord));
             updatedRecord.description = "This record has been updated.";
             var options = {
@@ -94,7 +94,7 @@ putTests.runTests = function() {
                 "json": updatedRecord,
                 "jar":  putTests.loginHelper.jar
             };
-            putTests.request.put(options, function(e,r,b) {
+            putTests.request.put(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertNull("There should be no validation errors returned", b.errors);
@@ -104,9 +104,9 @@ putTests.runTests = function() {
                 var checkOptions = {
                     "url": putTests.productApiUrl + "/" + updatedRecord.source + "/" + updatedRecord.sid
                 };
-                putTests.request.get(checkOptions, function(e,r,b) {
+                putTests.request.get(checkOptions, function (e, r, b) {
                     jqUnit.start();
-                    jqUnit.assertNull("There should be no errors returned",e);
+                    jqUnit.assertNull("There should be no errors returned", e);
 
                     var jsonData = JSON.parse(b);
                     var savedRecord = jsonData.record;
@@ -131,8 +131,8 @@ putTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use PUT to create a new record (logged in)", function() {
-        putTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use PUT to create a new record (logged in)", function () {
+        putTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = JSON.parse(JSON.stringify(putTests.validRecord));
             newRecord.source = "unified";
             newRecord.uid    = "completelyNewRecord";
@@ -143,7 +143,7 @@ putTests.runTests = function() {
                 "json": newRecord,
                 "jar":  putTests.loginHelper.jar
             };
-            putTests.request.put(options, function(e,r,b) {
+            putTests.request.put(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertNull("There should be no validation errors returned", b.errors);
@@ -153,9 +153,9 @@ putTests.runTests = function() {
                 var checkOptions = {
                     "url": putTests.productApiUrl + "/" + newRecord.source + "/" + newRecord.sid
                 };
-                putTests.request.get(checkOptions, function(e,r,b) {
+                putTests.request.get(checkOptions, function (e, r, b) {
                     jqUnit.start();
-                    jqUnit.assertNull("There should be no errors returned",e);
+                    jqUnit.assertNull("There should be no errors returned", e);
 
                     var jsonData = JSON.parse(b);
                     var savedRecord = jsonData.record;
@@ -177,8 +177,8 @@ putTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use PUT to attempt to create an invalid record (logged in)", function() {
-        putTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use PUT to attempt to create an invalid record (logged in)", function () {
+        putTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = JSON.parse(JSON.stringify(putTests.invalidRecord));
 
             var options = {
@@ -186,7 +186,7 @@ putTests.runTests = function() {
                 "json": newRecord,
                 "jar":  putTests.loginHelper.jar
             };
-            putTests.request.put(options, function(e,r,b) {
+            putTests.request.put(options, function (e, r, b) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertTrue("There should be validation errors returned", b.errors && Object.keys(b.errors).length > 0);
@@ -197,8 +197,8 @@ putTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Use PUT to attempt to create a unified record whose sid does not match its uid", function() {
-        putTests.loginHelper.login(jqUnit, {}, function(){
+    jqUnit.asyncTest("Use PUT to attempt to create a unified record whose sid does not match its uid", function () {
+        putTests.loginHelper.login(jqUnit, {}, function () {
             var newRecord = putTests.generalize(JSON.parse(JSON.stringify(putTests.validRecord)));
             newRecord.source = "unified";
             newRecord.sid    = "newValue";
@@ -209,7 +209,7 @@ putTests.runTests = function() {
                 "json": newRecord,
                 "jar":  putTests.loginHelper.jar
             };
-            putTests.request.put(options, function(e,r) {
+            putTests.request.put(options, function (e, r) {
                 jqUnit.start();
                 jqUnit.assertNull("There should be no raw errors returned", e);
                 jqUnit.assertEquals("The status code should be '400'", 400, r.statusCode);

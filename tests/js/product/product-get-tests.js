@@ -1,14 +1,27 @@
 // tests for all read methods
 "use strict";
 var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
+
+var jqUnit = require("node-jqunit");
 
 require("../lib/fixtures");
 
 fluid.defaults("gpii.ul.api.tests.product.get.request", {
-    gradeNames: ["gpii.ul.api.tests.request"],
-    endpoint:   "product",
+    gradeNames: ["gpii.ul.api.tests.request.json"],
     method:     "GET"
 });
+
+
+// Wrapper to call the correct functions from the `gpii-express test helpers.
+// TODO:  If this pattern comes up more often, updated `gpii-express` to pass through the statusCode variable
+//        from other methods to isSaneResponse.
+fluid.registerNamespace("gpii.ul.api.tests.product.get");
+gpii.ul.api.tests.product.get.verifyContent = function (response, body, expected, statusCode) {
+    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
+    jqUnit.assertDeepEq("The message body should be as expected...", expected, body);
+};
+
 
 fluid.defaults("gpii.ul.api.tests.product.get", {
     gradeNames: ["gpii.ul.api.tests.testCaseHolder"],
@@ -20,37 +33,52 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{requestNoParams}.send"
+                            func: "{requestNoParams}.send",
+                            args: []
                         },
                         {
-                            listener: "gpii.express.tests.helpers.isSaneResponse",
                             event:    "{requestNoParams}.events.onComplete",
-                            args:     ["{requestNoParams}.nativeResponse", "{arguments}.0", 400]
-                        },
-                        {
-                            func: "gpii.express.tests.helpers.verifyJSONContent",
-                            args: ["{requestNoParams}.nativeResponse", "{arguments}.0", "{that}.options.expected.noParams"]
-                        }
-                    ]
-                },
-                {
-                    name: "Verify that an appropriate error is received when calling the interface with only one parameter...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{requestOneParam}.send"
-                        },
-                        {
-                            listener: "gpii.express.tests.helpers.isSaneResponse",
-                            event:    "{requestNoParams}.events.onComplete",
-                            args:     ["{requestOneParam}.nativeResponse", "{arguments}.0", 400]
-                        },
-                        {
-                            func: "gpii.express.tests.helpers.verifyJSONContent",
-                            args: ["{requestOneParam}.nativeResponse", "{arguments}.0", "{that}.options.expected.oneParam"]
+                            listener: "gpii.ul.api.tests.product.get.verifyContent",
+                            // response, body, expected, statusCode
+                            args:     [
+                                "{requestNoParams}.nativeResponse",
+                                {
+                                    expander: {
+                                        funcName: "JSON.parse",
+                                        args: [ "{arguments}.0"]
+                                    }
+                                },
+                                "{that}.options.expected.noParams",
+                                400
+                            ]
                         }
                     ]
                 }
+                // {
+                //     name: "Verify that an appropriate error is received when calling the interface with only one parameter...",
+                //     type: "test",
+                //     sequence: [
+                //         {
+                //             func: "{requestOneParam}.send",
+                //             args: []
+                //         },
+                //         {
+                //             event:    "{requestOneParam}.events.onComplete",
+                //             listener: "jqUnit.assertDeepEq",
+                //             args:     [
+                //                 "There should be a single validation error...",
+                //                 {
+                //                     expander: {
+                //                         funcName: "JSON.parse",
+                //                         args:     ["{arguments}.0"]
+                //
+                //                     }
+                //                 },
+                //                 "{that}.options.expected.oneParam"
+                //             ]
+                //         }
+                //     ]
+                // }
 
                 /*
                  gpii.express.tests.helpers.isSaneResponse = function (response, body, status) {
@@ -60,8 +88,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
 
                 //requestSourceOnly: {
 
-                //    jqUnit.asyncTest("Call the interface with only one parameter...", function() {
-                //        request.get(getTests.getUrl + "/foo", function(error, response, body) {
+                //    jqUnit.asyncTest("Call the interface with only one parameter...", function () {
+                //        request.get(getTests.getUrl + "/foo", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -78,8 +106,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
 
                 //requestMissingRecord: {
 
-                //    jqUnit.asyncTest("Looking for a record that doesn't exist...", function() {
-                //        request.get(getTests.getUrl + "/foo/bar", function(error, response, body) {
+                //    jqUnit.asyncTest("Looking for a record that doesn't exist...", function () {
+                //        request.get(getTests.getUrl + "/foo/bar", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -92,8 +120,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
 
                 //requestExistingRecord: {
 
-                //    jqUnit.asyncTest("Looking for a record that exists...", function() {
-                //        request.get(getTests.getUrl + "/Vlibank/B812", function(error, response, body) {
+                //    jqUnit.asyncTest("Looking for a record that exists...", function () {
+                //        request.get(getTests.getUrl + "/Vlibank/B812", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -107,8 +135,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
                 //requestUnifiedRecord: {
 
 
-                //    jqUnit.asyncTest("Looking for a unified record without sources ...", function() {
-                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330", function(error, response, body) {
+                //    jqUnit.asyncTest("Looking for a unified record without sources ...", function () {
+                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -125,14 +153,13 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
 
                 //requestUnifiedRecordWithSources: {
 
-                //    jqUnit.asyncTest("Retrieving a unified record with sources=true ...", function() {
-                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330?sources=true", function(error, response, body) {
+                //    jqUnit.asyncTest("Retrieving a unified record with sources=true ...", function () {
+                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330?sources=true", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
                 //            var jsonData = JSON.parse(body);
                 //
-                //            debugger;
                 //            jqUnit.assertNotUndefined("A record should have been returned...", jsonData.record);
                 //            if (jsonData.record) {
                 //              jqUnit.assertNotUndefined("There should be 'sources' data for the record...", jsonData.record.sources);
@@ -144,8 +171,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
 
                 //requestSourceRecordWithSources: {
 
-                //    jqUnit.asyncTest("Retrieving a source record with sources=true ...", function() {
-                //        request.get(getTests.getUrl + "/Vlibank/B812?sources=true", function(error, response, body) {
+                //    jqUnit.asyncTest("Retrieving a source record with sources=true ...", function () {
+                //        request.get(getTests.getUrl + "/Vlibank/B812?sources=true", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -162,8 +189,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
                 // TODO:  Request a record with an encoded slash
                 // requestRecordWithSlash
 
-                //    jqUnit.asyncTest("Retrieving a source record with a space in the source name ...", function() {
-                //        request.get(getTests.getUrl + "/Dlf data/0110204", function(error, response, body) {
+                //    jqUnit.asyncTest("Retrieving a source record with a space in the source name ...", function () {
+                //        request.get(getTests.getUrl + "/Dlf data/0110204", function (error, response, body) {
                 //            jqUnit.start();
                 //
                 //            testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -178,7 +205,10 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
     ],
     components: {
         requestNoParams: {
-            type: "gpii.ul.api.tests.product.get.request"
+            type: "gpii.ul.api.tests.product.get.request",
+            options: {
+                endpoint: "product"
+            }
         },
         requestOneParam: {
             type: "gpii.ul.api.tests.product.get.request",

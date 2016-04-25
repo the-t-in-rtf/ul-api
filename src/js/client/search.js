@@ -240,7 +240,7 @@
                                 onMarkupRendered: "{search}.events.onMarkupRendered"
                             }
                         }
-                    },
+                    }
                     // TODO:  Add detailed tests to prevent this component from blowing away the existing model data.
                     //model: {
                     //    offset:  "{search}.model.offset",

@@ -1,7 +1,7 @@
 // handle POST /api/product
 "use strict";
 
-module.exports = function(config) {
+module.exports = function (config) {
     var fluid = require("infusion");
 
     var namespace = "gpii.ul.product.post";

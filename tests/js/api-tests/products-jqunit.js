@@ -9,19 +9,19 @@ productsTests.config = loader.loadConfig(require("../../../../config/test-pouch.
 
 var testUtils = require("../../tests/lib/testUtils")(productsTests.config);
 
-productsTests.loadPouch = function() {
+productsTests.loadPouch = function () {
     productsTests.pouch = require("../../tests/lib/pouch")(productsTests.config);
 
-    productsTests.pouch.start(function() {
+    productsTests.pouch.start(function () {
         productsTests.startExpress();
     });
 };
 
 // Spin up an express instance
-productsTests.startExpress = function() {
+productsTests.startExpress = function () {
     productsTests.express = require("../../tests/lib/express")(productsTests.config);
 
-    productsTests.express.start(function() {
+    productsTests.express.start(function () {
         // Mount the module being tested
         var products = require("../index.js")(productsTests.config);
         productsTests.express.app.use("/products", products.router);
@@ -30,13 +30,13 @@ productsTests.startExpress = function() {
     });
 };
 
-productsTests.runTests = function() {
+productsTests.runTests = function () {
     var jqUnit = fluid.require("jqUnit");
     var request = require("request");
     jqUnit.module("Tests for GET /api/products");
 
-    jqUnit.asyncTest("Call the interface with no parameters...", function() {
-        request.get(productsTests.config.express.baseUrl + "products", function(error, response, body) {
+    jqUnit.asyncTest("Call the interface with no parameters...", function () {
+        request.get(productsTests.config.express.baseUrl + "products", function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -46,12 +46,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Look for records updated after a very old date...", function() {
+    jqUnit.asyncTest("Look for records updated after a very old date...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { updated: "1970-01-01T16:54:12.023Z" }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -64,12 +64,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Look for records updated after a distant future date...", function() {
+    jqUnit.asyncTest("Look for records updated after a distant future date...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { updated: "3000-01-01T16:54:12.023Z" }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -82,12 +82,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by source...", function() {
+    jqUnit.asyncTest("Look for records, limiting by source...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { source: "unified" }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -101,9 +101,9 @@ productsTests.runTests = function() {
                 jqUnit.stop();
                 var options = {
                     "url": productsTests.config.express.baseUrl + "products",
-                    "qs": { source: ["unified","Vlibank"] }
+                    "qs": { source: ["unified", "Vlibank"] }
                 };
-                request.get(options, function(error, response, body) {
+                request.get(options, function (error, response, body) {
                     jqUnit.start();
 
                     testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -122,11 +122,11 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by status...", function() {
+    jqUnit.asyncTest("Look for records, limiting by status...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products"
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -142,7 +142,7 @@ productsTests.runTests = function() {
                     "url": productsTests.config.express.baseUrl + "products",
                     "qs": { status: ["deleted"] }
                 };
-                request.get(options, function(error, response, body) {
+                request.get(options, function (error, response, body) {
                     jqUnit.start();
 
                     testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -158,12 +158,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by multiple statuses...", function() {
+    jqUnit.asyncTest("Look for records, limiting by multiple statuses...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { status: ["deleted"] }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -178,7 +178,7 @@ productsTests.runTests = function() {
                     "url": productsTests.config.express.baseUrl + "products",
                     "qs": { status: ["deleted", "new", "active"] }
                 };
-                request.get(options, function(error, response, body) {
+                request.get(options, function (error, response, body) {
                     jqUnit.start();
 
                     testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -194,12 +194,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Present unified records from all sources...", function() {
+    jqUnit.asyncTest("Present unified records from all sources...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { sources: true }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -209,10 +209,10 @@ productsTests.runTests = function() {
             if (jsonData.records) {
                 jqUnit.assertTrue("The list of records should not be empty...", jsonData.records.length > 0);
 
-                jsonData.records.forEach(function(record){
+                jsonData.records.forEach(function (record) {
                     jqUnit.assertEquals("Only 'unified' records should be returned when sources=true", "unified", record.source);
                     jqUnit.assertNotUndefined("All records should include sources when sources=true", record.sources);
-                    if (record.sources){
+                    if (record.sources) {
                         jqUnit.assertTrue("There should be at least one source record for each record when sources=true", record.sources.length >= 1);
                     }
                 });
@@ -220,12 +220,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Present unified records limited by source...", function() {
+    jqUnit.asyncTest("Present unified records limited by source...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { sources: true }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -242,7 +242,7 @@ productsTests.runTests = function() {
                     "url": productsTests.config.express.baseUrl + "products",
                     "qs": { sources: true, source: "Vlibank" }
                 };
-                request.get(limitedOptions, function(error, response, body) {
+                request.get(limitedOptions, function (error, response, body) {
                     jqUnit.start();
                     testUtils.isSaneResponse(jqUnit, error, response, body);
 
@@ -256,12 +256,12 @@ productsTests.runTests = function() {
         });
     });
 
-    jqUnit.asyncTest("Test offset and limit parameters (get the same record as part of two overlapping sets)...", function() {
+    jqUnit.asyncTest("Test offset and limit parameters (get the same record as part of two overlapping sets)...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { offset: 0, limit: 3 }
         };
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
             jqUnit.start();
 
             testUtils.isSaneResponse(jqUnit, error, response, body);
@@ -278,7 +278,7 @@ productsTests.runTests = function() {
                     "url": productsTests.config.express.baseUrl + "products",
                     "qs": { offset: 2, limit: 1 }
                 };
-                request.get(limitedOptions, function(error, response, body) {
+                request.get(limitedOptions, function (error, response, body) {
                     jqUnit.start();
                     testUtils.isSaneResponse(jqUnit, error, response, body);
 

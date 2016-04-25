@@ -1,4 +1,4 @@
-function(keys, values, rereduce) {
+function (keys, values, rereduce) {
     "use strict";
 
     // Reduce all the records with the same "parent" ID to a single structure...
@@ -13,14 +13,14 @@ function(keys, values, rereduce) {
                 }
 
                 if (existingRecord.sources) {
-                    existingRecord.sources.forEach(function(source){
+                    existingRecord.sources.forEach(function (source) {
                         combinedRecord.sources.push(JSON.parse(JSON.stringify(source)));
                     });
                 }
             }
             else if (newRecord.sources) {
                 if (!combinedRecord.sources) { combinedRecord.sources = []; }
-                newRecord.sources.forEach(function(record){
+                newRecord.sources.forEach(function (record) {
                     if (record) {
                         combinedRecord.sources.push(JSON.parse(JSON.stringify(record)));
                     }
@@ -37,7 +37,7 @@ function(keys, values, rereduce) {
             }
             else if (newRecord.sources) {
                 if (!combinedRecord.sources) { combinedRecord.sources = []; }
-                newRecord.sources.forEach(function(record){
+                newRecord.sources.forEach(function (record) {
                     combinedRecord.sources.push(JSON.parse(JSON.stringify(record)));
                 });
             }
@@ -57,8 +57,8 @@ function(keys, values, rereduce) {
         // 3. Preserve all unique records with no cluster data
 
         var rereduced = {};
-        values.forEach(function(partial){
-            Object.keys(partial).forEach(function(key){
+        values.forEach(function (partial) {
+            Object.keys(partial).forEach(function (key) {
                 var record = partial[key];
                 if (record.uid || record.sources) {
                     var combinedRecord = combine(rereduced[key], record);

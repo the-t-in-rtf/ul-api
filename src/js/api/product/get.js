@@ -182,6 +182,7 @@ fluid.defaults("gpii.ul.api.product.get", {
     gradeNames:   ["gpii.schema.middleware.contentAware.router"],
     templateDirs: ["%ul-api/src/templates"],
     method:       "get",
+    // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path:         ["/:source/:sid", "/:source", "/"],
     schemaDirs:   "%ul-api/src/schemas",
     schemaKey:    "product-get.json",
@@ -214,6 +215,7 @@ fluid.defaults("gpii.ul.api.product.get", {
         innerRouter: {
             options: {
                 routerOptions: {
+                    // Required to pick up the URL parameters from the enclosing router.
                     mergeParams: true
                 }
             }
