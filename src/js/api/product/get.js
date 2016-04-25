@@ -10,6 +10,20 @@ var gpii = fluid.registerNamespace("gpii");
 require("gpii-express");
 require("gpii-json-schema");
 
+/*
+
+    TODO:  Refactor this to use the new version of Express, etc., and :
+
+    1. validate the user input using JSON Schema Validation middleware
+    2. look up the user and:
+       2a. Call next({ isError: true, message: "The record blah blah blah not found..." }) if the record is not found or if there is any other error.
+       2b. Fire the onRequest event to the handler, but include the record data.
+    3. Wire in an HTML renderer for success that uses `page/record.handlebars`.
+    4. Wire in the JSON header middleware and JSON sender after the HTML renderer.
+    5. Let errors fall through to the global JSON / HTML error handlers
+
+ */
+
 // TODO:  Put the JSON Schema headers back in
 
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
@@ -174,7 +188,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
 });
 
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
-    gradeNames: ["gpii.ul.api.htmlMessageHandler"],
+    gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/record.handlebars"
 });
 
@@ -184,6 +198,9 @@ fluid.defaults("gpii.ul.api.product.get", {
     method:       "get",
     // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path:         ["/:source/:sid", "/:source", "/"],
+    routerOptions: {
+        mergeParams: true
+    },
     schemaDirs:   "%ul-api/src/schemas",
     schemaKey:    "product-get.json",
     rules: {
@@ -193,19 +210,19 @@ fluid.defaults("gpii.ul.api.product.get", {
     },
     successHandlers: {
         "default": {
-            contentType: "text/html",
+            contentType:   "text/html",
             handlerGrades: ["gpii.ul.api.product.get.handler.html"]
         },
         json: {
-            contentType: "application/json",
+            contentType:   "application/json",
             handlerGrades: ["gpii.ul.api.product.get.handler.base"]
         }
     },
     errorHandlers: {
-        "html": {
-            contentType: "text/html",
-            handlerGrades: ["gpii.ul.api.htmlMessageHandler.validationErrors"]
-        },
+        // "html": {
+        //     contentType: "text/html",
+        //     handlerGrades: ["gpii.ul.api.htmlMessageHandler.validationErrors"]
+        // },
         json: {
             contentType: "application/json",
             handlerGrades: ["gpii.schema.middleware.handler"]

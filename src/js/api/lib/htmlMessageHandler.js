@@ -9,10 +9,10 @@ gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, conte
 };
 
 // A `gpii.express.handler` mix-in grade that uses the `gpii-handlebars` renderer to deliver HTML content.
-// NOTE:  This cannot be used by itself, as the required `handleRequest` invoker is not implemented.
+// NOTE:  This cannot be used by itself, as the required `handleRequest` invoker is not implemented.  It must be mixed
+// with an instance of `gpii.express.handler`.
 //
 fluid.defaults("gpii.ul.api.htmlMessageHandler", {
-    gradeNames: ["gpii.express.handler"],
     templateKey: "pages/message.handlebars",
     invokers: {
         sendResponse: {
@@ -30,6 +30,7 @@ fluid.defaults("gpii.ul.api.htmlMessageHandler.staticBody", {
     invokers: {
         handleRequest: {
             func: "{that}.sendResponse",
+            // TODO:  Review this, it seems really inappropriate
             args: [ 404, "{that}.options.messageBody"] // statusCode, body
         }
     }
