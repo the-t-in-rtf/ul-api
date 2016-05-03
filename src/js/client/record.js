@@ -18,12 +18,14 @@
 
     // The component that handles the binding, etc. for the "Edit" form.
     fluid.defaults("gpii.ul.record.edit", {
-        gradeNames: ["gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.handlebars.templateFormControl"],
         ajaxOptions: {
             url:         "/api/product",
             method:      "PUT",
             dataType:    "json",
-            json:        true
+            headers: {
+                accept: "application/json"
+            }
         },
         rules: {
             modelToRequestPayload: {
@@ -152,7 +154,7 @@
     // listen for this component to give the go ahead, and then take over parts of the interface.
 
     fluid.defaults("gpii.ul.record", {
-        gradeNames: ["gpii.templates.ajaxCapable", "gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
         baseUrl:    "/api/product/",
         selectors: {
             viewport:        ".record-viewport",
@@ -164,7 +166,10 @@
         },
         ajaxOptions: {
             method:   "GET",
-            dataType: "json"
+            dataType: "json",
+            headers: {
+                accept: "application/json"
+            }
         },
         model: {
             successMessage: false,
@@ -179,9 +184,15 @@
             },
             successResponseToModel: {
                 "":     "notfound",
-                record: "responseJSON.record"
+                record: "responseJSON"
             },
             ajaxOptions: {
+                dataType: "json",
+                // TODO:  Make the header bits part of a standard grade
+                // This is the only way I've found to avoid jQuery.ajax() adding */* to the list of accepted formats.
+                headers: {
+                    accept: "application/json"
+                },
                 url: {
                     transform: {
                         type: "gpii.ul.stringTemplate",
@@ -217,7 +228,7 @@
         },
         components: {
             view: {
-                type:          "gpii.templates.templateMessage",
+                type:          "gpii.handlebars.templateMessage",
                 container:     ".record-view",
                 createOnEvent: "{record}.events.onMarkupRendered",
                 options: {
@@ -297,7 +308,7 @@
             // We don't need the rest of the baggage from `templateFormControl`, but we do need a similar pattern to
             // display common "success" and "error" messages.
             success: {
-                type:          "gpii.templates.templateMessage",
+                type:          "gpii.handlebars.templateMessage",
                 createOnEvent: "{record}.events.onMarkupRendered",
                 container:     ".record-success",
                 options: {
@@ -308,7 +319,7 @@
                 }
             },
             error: {
-                type:          "gpii.templates.templateMessage",
+                type:          "gpii.handlebars.templateMessage",
                 createOnEvent: "{record}.events.onMarkupRendered",
                 container:     ".record-error",
                 options: {

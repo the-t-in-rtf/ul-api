@@ -21,13 +21,14 @@ fluid.defaults("gpii.ul.api.404.handler.json", {
     }
 });
 
+// TODO:  Replace with gpii.express.singleTemplateMiddleware
 fluid.defaults("gpii.ul.api.404.handler.html", {
     gradeNames: ["gpii.ul.api.404.handler", "gpii.ul.api.htmlMessageHandler.staticBody"],
     templateKey: "pages/error.handlebars"
 });
 
 fluid.defaults("gpii.ul.api.404", {
-    gradeNames: ["gpii.express.contentAware.router"],
+    gradeNames: ["gpii.express.middleware.contentAware"],
     path: "/",
     namespace: "404",
     handlers: {

@@ -101,7 +101,7 @@
     };
 
     fluid.defaults("gpii.ul.search.navbar", {
-        gradeNames: ["gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.templateAware"],
         template:   "search-topnav",
         members: {
             oldFocus: undefined

@@ -10,7 +10,7 @@ require("./get");
 //require("./delete");
 
 fluid.defaults("gpii.ul.api.product", {
-    gradeNames: ["gpii.express.router.passthrough"],
+    gradeNames: ["gpii.express.router"],
     path:       "/product",
     method:     "use",
     components: {

@@ -8,7 +8,7 @@
 
     // The component that handles data entry, including saving changes.
     fluid.defaults("gpii.ul.contribute.form", {
-        gradeNames:    ["gpii.templates.templateFormControl"],
+        gradeNames:    ["gpii.handlebars.templateFormControl"],
         hideOnSuccess: false,
         hideOnError:   false,
         ajaxOptions: {
@@ -110,7 +110,7 @@
     // The component that loads the record content and controls the initial rendering.  Subcomponents
     // listen for this component to give the go ahead, and then take over parts of the interface.
     fluid.defaults("gpii.ul.contribute", {
-        gradeNames: ["gpii.templates.ajaxCapable", "gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
         baseUrl:    "/api/product/",
         messages: {
             loginRequired: "You must log in to contribute to the Unified Listing."
@@ -154,6 +154,8 @@
                 successMessage: { literalValue: null }
             },
             ajaxOptions: {
+                json:     true,
+                dataType: "json",
                 url: {
                     transform: {
                         type: "gpii.ul.stringTemplate",
@@ -210,7 +212,7 @@
         components: {
             // The common component for positive feedback.
             success: {
-                type:          "gpii.templates.templateMessage",
+                type:          "gpii.handlebars.templateMessage",
                 createOnEvent: "{contribute}.events.onMarkupRendered",
                 container:     ".contribute-success",
                 options: {
@@ -222,7 +224,7 @@
             },
             // The common component for negative feedback (errors, etc).
             error: {
-                type:          "gpii.templates.templateMessage",
+                type:          "gpii.handlebars.templateMessage",
                 createOnEvent: "{contribute}.events.onMarkupRendered",
                 container:     ".contribute-error",
                 options: {

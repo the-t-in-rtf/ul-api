@@ -2,9 +2,11 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
+// TODO:  Create a rendering handler comparable to gpii.express.singleTemplateMiddleware and replace this with that.
+
 fluid.registerNamespace("gpii.ul.api.htmlMessageHandler");
 gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, context) {
-    that.response.status(statusCode).render(that.options.templateKey, context);
+    that.options.response.status(statusCode).render(that.options.templateKey, context);
     that.events.afterResponseSent.fire(that);
 };
 

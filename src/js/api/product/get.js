@@ -29,14 +29,19 @@ require("gpii-json-schema");
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {
     if (!couchResponse) {
-        that.sendResponse(500, { ok: false, message: that.options.errorMessages.noCouchResponse});
+        that.options.next({ isError: true, statusCode: 500, message: that.options.errorMessages.noCouchResponse});
+        // TODO:  Discuss how to clean up this pattern
+        that.events.afterResponseSent.fire(that);
     }
     else if (couchResponse.rows.length === 0) {
-        that.sendResponse(404, { ok: false, message: that.options.errorMessages.notFound});
-
+        that.options.next({ isError: true, statusCode: 404, message: that.options.errorMessages.notFound});
+        // TODO:  Discuss how to clean up this pattern
+        that.events.afterResponseSent.fire(that);
     }
     else if (couchResponse.rows.length > 1) {
-        that.sendResponse(500, { ok: false, message: that.options.errorMessages.duplicateFound});
+        that.options.next({ isError: true, statusCode: 500, message: that.options.errorMessages.duplicateFound});
+        // TODO:  Discuss how to clean up this pattern
+        that.events.afterResponseSent.fire(that);
     }
     else {
         // We transform and then filter separately so that we can include all and then filter out Couch-isms like `_id`.
@@ -44,8 +49,8 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         that.productRecord = fluid.filterKeys(transformedOutput, that.options.couchKeysToExclude, true);
 
         // Look up the sources if the "sources" flag is set in {that}.request.query.
-        if (that.request.params.source === "unified" && that.request.query.sources) {
-            that.sourceReader.get({ uid: that.request.params.sid });
+        if (that.options.request.params.source === "unified" && that.options.request.query.sources) {
+            that.sourceReader.get({ uid: that.options.request.params.sid });
         }
         // No need to look up sources, just send what we have now.
         else {
@@ -56,7 +61,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
 
 gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchResponse) {
     if (!couchResponse) {
-        that.sendResponse(500, { ok: false, message: that.options.errorMessages.noCouchSourceResponse});
+        that.options.next({ isError: true, statusCode: 500, message: that.options.errorMessages.noCouchSourceResponse});
     }
     else {
         that.productRecord.sources = [];
@@ -76,13 +81,6 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
 // underlying `gpii.express.handler` `that.sendResponse` invoker with the results.
 fluid.defaults("gpii.ul.api.product.get.handler.base", {
     gradeNames: ["gpii.express.handler"],
-    /*
-      TODO:  Discuss how best to send the right schemas for both errors and success messages.
-
-      gradeNames: ["gpii.schema.handler"],
-      schemaKey: "",
-      schemaUrl  ""
-     */
     errorMessages: {
         noCouchResponse: "Could not retrieve the original record from the database.  Contact an administrator for help.",
         noCouchSourceResponse: "Could not retrieve the list of source records for the original record.  Contact an administrator for help.",
@@ -167,14 +165,14 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 key: {
                     expander: {
                         funcName: "JSON.stringify",
-                        args: [["{that}.request.params.source", "{that}.request.params.sid"]] // This must be encoded as an array
+                        args: [["{gpii.express.handler}.options.request.params.source", "{gpii.express.handler}.options.request.params.sid"]] // This must be encoded as an array
                     }
                 }
             }]
         },
         handleError: {
-            func: "{that}.sendResponse",
-            args: [500, "{arguments}.0"] // error
+            func: "{that}.options.next",
+            args: [{ isError: true, statusCode: 500, message: "{arguments}.0"}] // error
         },
         processProductResponse: {
             funcName: "gpii.ul.api.product.get.handler.processProductResponse",
@@ -187,54 +185,55 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     }
 });
 
+// TODO:  Do we have a convenience grade for this pattern yet?  Check gpii.express.singleTemplateMiddleware
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/record.handlebars"
 });
 
 fluid.defaults("gpii.ul.api.product.get", {
-    gradeNames:   ["gpii.schema.middleware.contentAware.router"],
-    templateDirs: ["%ul-api/src/templates"],
+    gradeNames:   ["gpii.express.router"],
     method:       "get",
     // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path:         ["/:source/:sid", "/:source", "/"],
     routerOptions: {
         mergeParams: true
     },
-    schemaDirs:   "%ul-api/src/schemas",
-    schemaKey:    "product-get.json",
-    rules: {
-        requestContentToValidate: {
-            "": "params"
-        }
-    },
-    successHandlers: {
-        "default": {
-            contentType:   "text/html",
-            handlerGrades: ["gpii.ul.api.product.get.handler.html"]
-        },
-        json: {
-            contentType:   "application/json",
-            handlerGrades: ["gpii.ul.api.product.get.handler.base"]
-        }
-    },
-    errorHandlers: {
-        // "html": {
-        //     contentType: "text/html",
-        //     handlerGrades: ["gpii.ul.api.htmlMessageHandler.validationErrors"]
-        // },
-        json: {
-            contentType: "application/json",
-            handlerGrades: ["gpii.schema.middleware.handler"]
-        }
-    },
     components: {
-        innerRouter: {
+        validationMiddleware: {
+            type: "gpii.schema.validationMiddleware",
             options: {
+                rules: {
+                    requestContentToValidate: {
+                        "": "params"
+                    }
+                },
+                schemaDirs:   "%gpii-ul-api/src/schemas",
+                schemaKey:    "product-get.json"
+            }
+        },
+        innerRouter: {
+            type: "gpii.express.middleware.contentAware",
+            options: {
+                priority: "after:validationMiddleware",
+                path:     "/:source/:sid",
+                handlers: {
+                    html: {
+                        priority:      "after:json",
+                        contentType:   "text/html",
+                        handlerGrades: ["gpii.ul.api.product.get.handler.html"]
+                    },
+                    json: {
+                        priority:      "after:default",
+                        contentType:   "application/json",
+                        handlerGrades: ["gpii.ul.api.product.get.handler.base"]
+                    }
+                },
                 routerOptions: {
                     // Required to pick up the URL parameters from the enclosing router.
                     mergeParams: true
-                }
+                },
+                templateDirs: "{gpii.ul.api}.options.templateDirs"
             }
         }
     }

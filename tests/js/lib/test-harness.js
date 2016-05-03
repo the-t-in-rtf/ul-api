@@ -19,13 +19,13 @@ gpii.ul.api.tests.harness.stopServer = function (that) {
 };
 
 fluid.defaults("gpii.ul.api.tests.harness", {
-    gradeNames: ["fluid.modelComponent"],
+    gradeNames:   ["fluid.modelComponent"],
+    templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     ports: {
         api:   7633,
         pouch: 7634
     },
-    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     events: {
         apiStarted:   null,
         apiStopped:   null,
@@ -55,51 +55,30 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         express: {
             type: "gpii.express",
             options: {
-                config: {
-                    express: {
-                        port :   "{harness}.options.ports.api",
-                        // baseUrl: "{harness}.options.urls.api",
-                        views:   "{gpii.ul.api.tests.harness}.options.templateDirs",
-                        session: { secret: "Printer, printer take a hint-ter."}
-                    }
-                },
+                gradeNames: ["gpii.express.user.withRequiredMiddleware"],
+                port :   "{harness}.options.ports.api",
+                templateDirs: "{harness}.options.templateDirs",
                 listeners: {
                     onStarted: "{harness}.events.apiStarted.fire",
                     onStopped: "{harness}.events.apiStopped.fire"
                 },
                 components: {
-                    json: {
-                        type: "gpii.express.middleware.bodyparser.json"
-                    },
-                    urlencoded: {
-                        type: "gpii.express.middleware.bodyparser.urlencoded"
-                    },
-                    cookieparser: {
-                        type: "gpii.express.middleware.cookieparser"
-                    },
-                    session: {
-                        type: "gpii.express.middleware.session"
-                    },
-                    handlebars: {
-                        type: "gpii.express.hb",
-                        options: {
-                            templateDirs: "{gpii.ul.api.tests.harness}.options.templateDirs"
-                        }
-                    },
                     // Client-side Handlebars template bundles
                     inline: {
-                        type: "gpii.express.hb.inline",
+                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
+                            priority: "after:session",
                             path: "/hbs",
-                            templateDirs: "{gpii.ul.api.tests.harness}.options.templateDirs"
+                            templateDirs: "{harness}.options.templateDirs"
                         }
                     },
                     // NPM dependencies
                     nm: {
                         type: "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path: "/nm",
-                            content: "%ul-api/node_modules"
+                            content: "%gpii-ul-api/node_modules"
                         }
 
                     },
@@ -107,16 +86,18 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     src: {
                         type: "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path:    "/src",
-                            content: "%ul-api/src"
+                            content: "%gpii-ul-api/src"
                         }
                     },
                     // Bower Components
                     bc: {
                         type: "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path: "/bc",
-                            content: "%ul-api/bower_components"
+                            content: "%gpii-ul-api/bower_components"
                         }
 
                     },
@@ -124,21 +105,25 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     schemas: {
                         type: "gpii.express.router.static",
                         options: {
+                            priority: "after:session",
                             path:    "/schemas",
-                            content: "{gpii.ul.api.tests.harness}.options.schemaDirs"
+                            content: "{harness}.options.schemaDirs"
                         }
                     },
                     // Bundled JSON Schemas for client-side validation
                     allSchemas: {
-                        type: "gpii.schema.inline.router",
+                        type: "gpii.schema.inlineMiddleware",
                         options: {
+                            priority: "after:session",
                             path:       "/allSchemas",
-                            schemaDirs: "{gpii.ul.api.tests.harness}.options.schemaDirs"
+                            schemaDirs: "{harness}.options.schemaDirs"
                         }
                     },
                     api: {
                         type: "gpii.ul.api",
                         options: {
+                            // TODO:  investigate why "last" does not work properly here.
+                            priority: "after:allSchemas",
                             couch: {
                                 urls: {
                                     base: "{harness}.options.urls.pouch"
@@ -152,16 +137,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         pouch: {
             type: "gpii.express",
             options: {
-                config: {
-                    express: {
-                        "port" : "{harness}.options.ports.pouch"
-                        // baseUrl: "{harness}.options.urls.pouch"
-                    },
-                    app: {
-                        name: "Pouch Test Server",
-                        url:  "{harness}.options.urls.pouch"
-                    }
-                },
+                port: "{harness}.options.ports.pouch",
                 listeners: {
                     onStarted: "{harness}.events.pouchStarted.fire",
                     onStopped: "{harness}.events.pouchStopped.fire"
@@ -172,8 +148,8 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                         options: {
                             path: "/",
                             databases: {
-                                users: { data: "%ul-api/tests/data/users.json" },
-                                ul:    { data: "%ul-api/tests/data/ul.json" }
+                                users: { data: "%gpii-ul-api/tests/data/users.json" },
+                                ul:    { data: "%gpii-ul-api/tests/data/ul.json" }
                             }
                         }
                     }

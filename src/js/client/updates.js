@@ -12,11 +12,13 @@
 
     // The "source picker", which is also responsible for getting the list of valid sources.
     fluid.defaults("gpii.ul.updates.controls", {
-        gradeNames: ["gpii.templates.ajaxCapable", "gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
         template:   "updates-controls",
         ajaxOptions: {
-            method: "GET",
-            url:    "/api/sources"
+            method:   "GET",
+            url:      "/api/sources",
+            json:     true,
+            dataType: "json"
         },
         rules: {
             successResponseToModel: {
@@ -87,12 +89,14 @@
     };
 
     fluid.defaults("gpii.ul.updates", {
-        gradeNames: ["gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.handlebars.templateFormControl"],
         hideOnSuccess: false,
         hideOnError:   false,
         ajaxOptions: {
             method:      "GET",
             url:         "/api/updates",
+            json:     true,
+            dataType: "json",
             traditional: true // We are passing array data, whose variable name jQuery will mangle without this option.
         },
         templates: {
@@ -148,7 +152,7 @@
                 }
             },
             output: {
-                type: "gpii.templates.templateMessage",
+                type: "gpii.handlebars.templateMessage",
                 container: "{updates}.options.selectors.output",
                 createOnEvent: "{updates}.events.onMarkupRendered",
                 options: {

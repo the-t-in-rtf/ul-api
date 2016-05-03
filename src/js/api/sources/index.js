@@ -24,7 +24,7 @@ fluid.registerNamespace("gpii.ul.api.sources");
 fluid.registerNamespace("gpii.ul.api.sources.request");
 gpii.ul.api.sources.request.handleRequest = function (that) {
 
-    var user = that.request && that.request.session && that.request.session._gpii_user ? that.request.session._gpii_user : null;
+    var user = that.options.request && that.options.request.session && that.options.request.session._gpii_user ? that.options.request.session._gpii_user : null;
     var visibleSources = gpii.ul.api.sources.request.listAllowedSources(that.options.sources, user);
 
     that.sendResponse(200, { sources: visibleSources });

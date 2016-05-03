@@ -91,12 +91,12 @@ gpii.ul.api.updates.handler.makeDeliverResultsPromise = function (that) {
             var includeCluster = false;
             cluster.sources.forEach(function (sourceRecord) {
                 // Only compare selected sources and not all available sources
-                if (that.request.matchingSources.indexOf(sourceRecord.source) !== -1) {
+                if (that.options.request.matchingSources.indexOf(sourceRecord.source) !== -1) {
                     // If neither record is new enough to meet our filter criteria, we don't need to make a further comparison.
                     var maxDate = gpii.ul.api.updates.handler.maxDate([cluster.updated, sourceRecord.updated]);
-                    if (!that.request.updatedSince || maxDate >= that.request.updatedSince) {
+                    if (!that.options.request.updatedSince || maxDate >= that.options.request.updatedSince) {
                         // filter for clusters where the source data is newer (used to track suggested changes, for example)
-                        if (that.request.sourceNewer) {
+                        if (that.options.request.sourceNewer) {
                             if (sourceRecord.updated > cluster.updated) {
                                 includeCluster = true;
                             }
@@ -118,10 +118,10 @@ gpii.ul.api.updates.handler.makeDeliverResultsPromise = function (that) {
 
         // TODO:  Display the selected statuses in the params list
         var params = {
-            "sources": that.request.matchingSources
+            "sources": that.options.request.matchingSources
         };
-        if (that.request.updatedSince) {
-            params.updated = that.request.updatedSince;
+        if (that.options.request.updatedSince) {
+            params.updated = that.options.request.updatedSince;
         }
 
         that.sendResponse(200, {
@@ -134,24 +134,24 @@ gpii.ul.api.updates.handler.makeDeliverResultsPromise = function (that) {
 };
 
 gpii.ul.api.updates.handler.handleRequest = function (that) {
-    if (!that.request.query.source) {
+    if (!that.options.request.query.source) {
         that.sendResponse(400, { "ok": false, "message": "Cannot continue with at least one &quot;source&quot; parameter.  Check the API documentation for full details."});
         return;
     }
 
     // We should be able to work with either a single or multiple "source" parameters
-    that.request.matchingSources = Array.isArray(that.request.query.source) ? that.request.query.source : [that.request.query.source];
-    that.request.updatedSince    = that.request.query.updated ? new Date(that.request.query.updated) : null;
-    that.request.sourceNewer     = that.request.query.sourceNewer && that.request.query.sourceNewer === "true" ? true : false;
+    that.options.request.matchingSources = Array.isArray(that.options.request.query.source) ? that.options.request.query.source : [that.options.request.query.source];
+    that.options.request.updatedSince    = that.options.request.query.updated ? new Date(that.options.request.query.updated) : null;
+    that.options.request.sourceNewer     = that.options.request.query.sourceNewer && that.options.request.query.sourceNewer === "true" ? true : false;
 
     // "unified" is not a meaningful choice, return an error if it's included in the list
-    if (that.request.matchingSources.indexOf("unified") !== -1) {
+    if (that.options.request.matchingSources.indexOf("unified") !== -1) {
         that.sendResponse(400, { "ok": false, "message": "Cannot compare the &quot;unified&quot; source with itself."});
         return;
     }
 
     // Retrieve all records for the specified source that have their "uid" field set.
-    var urlWithKeys = fluid.stringTemplate(that.options.sourceView, { keys: JSON.stringify(that.request.matchingSources)});
+    var urlWithKeys = fluid.stringTemplate(that.options.sourceView, { keys: JSON.stringify(that.options.request.matchingSources)});
     var options = {
         url: urlWithKeys
     };

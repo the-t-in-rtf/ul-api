@@ -10,24 +10,25 @@ var fs     = require("fs");
 
 fluid.registerNamespace("gpii.ul.api.docs");
 
-gpii.ul.api.docs.route = function (that, req, res) {
+// TODO:  I have used this pattern before.  Confirm that this is not already available somewhere else.
+gpii.ul.api.docs.middleware = function (that, req, res) {
     var markdown = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
     res.render(that.options.template, { "title": that.options.title, "body": marked(markdown, that.options.markedOptions), "layout": that.options.layout});
 };
 
 fluid.defaults("gpii.ul.api.docs", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["gpii.express.middleware"],
     path:       "/",
     method:     "get",
     template:   "pages/docs",
     layout:     "main",
     title:      "PTD API Documentation",
-    mdFile:     "%ul-api/docs/apidocs.md",
+    mdFile:     "%gpii-ul-api/docs/apidocs.md",
     markedOptions: {
     },
     invokers: {
-        route: {
-            funcName: "gpii.ul.api.docs.route",
+        middleware: {
+            funcName: "gpii.ul.api.docs.middleware",
             args:     ["{that}", "{arguments}.0", "{arguments}.1"]
         }
     }

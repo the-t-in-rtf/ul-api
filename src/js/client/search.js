@@ -20,7 +20,7 @@
     };
 
     fluid.defaults("gpii.ul.search.query", {
-        gradeNames: ["gpii.templates.templateFormControl"],
+        gradeNames: ["gpii.handlebars.templateFormControl"],
         ajaxOptions: {
             url:      "/api/search",
             method:   "GET",
@@ -66,7 +66,7 @@
         },
         invokers: {
             submitForm: {
-                funcName: "gpii.templates.templateFormControl.submitForm",
+                funcName: "gpii.handlebars.templateFormControl.submitForm",
                 args:     ["{that}", "{arguments}.0"]
             }
         },
@@ -120,7 +120,7 @@
 
 
     fluid.defaults("gpii.ul.search.records", {
-        gradeNames: ["gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.templateAware"],
         model: {
             records:  []
         },
@@ -213,7 +213,7 @@
 
     // The wrapper component that wires together all controls.
     fluid.defaults("gpii.ul.search", {
-        gradeNames: ["gpii.templates.templateAware"],
+        gradeNames: ["gpii.handlebars.templateAware"],
         model: {
             q:         "",
             source:    [],
