@@ -47,6 +47,9 @@ fluid.defaults("gpii.test.ul.api.testemHarness", {
         ],
         on_start: "{that}.createFixtures",
         on_exit:  "{that}.destroyFixtures"
+        // As I am not ever making changes, I can spin up a single server instance for the whole run.  If you want it per-test, you'd use something like:
+        // before_tests: "{that}.createFixtures",
+        // after_tests:  "{that}.destroyFixtures"
     },
     events: {
         constructFixtures: null,
