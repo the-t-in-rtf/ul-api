@@ -26,6 +26,20 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         api:   7633,
         pouch: 7634
     },
+    urls: {
+        api: {
+            expander: {
+                funcName: "fluid.stringTemplate",
+                args:     ["http://localhost:%port", { port: "{that}.options.ports.api"}]
+            }
+        },
+        pouch: {
+            expander: {
+                funcName: "fluid.stringTemplate",
+                args:     ["http://localhost:%port", { port: "{that}.options.ports.pouch"}]
+            }
+        }
+    },
     events: {
         apiStarted:   null,
         apiStopped:   null,

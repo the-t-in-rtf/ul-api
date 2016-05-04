@@ -10,12 +10,12 @@ require("gpii-express");
 gpii.express.loadTestingSupport();
 
 require("gpii-test-browser");
-gpii.tests.browser.loadTestingSupport();
+gpii.test.browser.loadTestingSupport();
 
 require("./test-harness");
 
-fluid.defaults("gpii.ul.api.tests.testCaseHolder", {
-    gradeNames: ["gpii.tests.browser.caseHolder.withStandardStart"],
+fluid.defaults("gpii.test.ul.api.testCaseHolder", {
+    gradeNames: ["gpii.test.browser.caseHolder.withStandardStart"],
     // Manually kill off our fixtures when the tests are finished, and wait for them to die.
     sequenceEnd: [
         {
@@ -31,8 +31,8 @@ fluid.defaults("gpii.ul.api.tests.testCaseHolder", {
     ]
 });
 
-fluid.defaults("gpii.ul.api.tests.testEnvironment", {
-    gradeNames: ["gpii.tests.browser.environment"],
+fluid.defaults("gpii.test.ul.api.testEnvironment", {
+    gradeNames: ["gpii.test.browser.environment"],
     ports: {
         api:   7639,
         pouch: 7638
@@ -86,10 +86,10 @@ fluid.defaults("gpii.ul.api.tests.testEnvironment", {
                 ports: "{testEnvironment}.options.ports",
                 listeners: {
                     "onStarted.notifyEnvironment": {
-                        func: "{gpii.ul.api.tests.testEnvironment}.events.onHarnessStarted.fire"
+                        func: "{gpii.test.ul.api.testEnvironment}.events.onHarnessStarted.fire"
                     },
                     "onStopped.notifyEnvironment": {
-                        func: "{gpii.ul.api.tests.testEnvironment}.events.onHarnessStopped.fire"
+                        func: "{gpii.test.ul.api.testEnvironment}.events.onHarnessStopped.fire"
                     }
                 }
             }
@@ -97,9 +97,12 @@ fluid.defaults("gpii.ul.api.tests.testEnvironment", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.request", {
+fluid.defaults("gpii.test.ul.api.request", {
     gradeNames: ["kettle.test.request.httpCookie"],
     port:       "{testEnvironment}.options.ports.api",
+    headers: {
+        accept: "application/json"
+    },
     path: {
         expander: {
             funcName: "fluid.stringTemplate",
@@ -108,16 +111,9 @@ fluid.defaults("gpii.ul.api.tests.request", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.request.json", {
-    gradeNames: ["gpii.ul.api.tests.request"],
+fluid.defaults("gpii.test.ul.api.request.html", {
+    gradeNames: ["gpii.test.ul.api.request"],
     headers: {
-        accept: "application/json"
-    }
-});
-
-fluid.defaults("gpii.ul.api.tests.request.html", {
-    gradeNames: ["gpii.ul.api.tests.request"],
-    headers: {
-        accept: "application/json"
+        accept: "text/html"
     }
 });

@@ -7,26 +7,25 @@ var jqUnit = require("node-jqunit");
 
 require("../lib/fixtures");
 
-fluid.defaults("gpii.ul.api.tests.product.get.request", {
-    gradeNames: ["gpii.ul.api.tests.request.json"],
+fluid.defaults("gpii.tests.ul.api.product.get.request", {
+    gradeNames: ["gpii.test.ul.api.request"],
     method:     "GET"
 });
 
 
 // Wrapper to call the correct functions from the `gpii-express test helpers.
-// TODO:  If this pattern comes up more often, updated `gpii-express` to pass through the statusCode variable
-//        from other methods to isSaneResponse.
-fluid.registerNamespace("gpii.ul.api.tests.product.get");
-gpii.ul.api.tests.product.get.verifyContent = function (response, body, expected, statusCode) {
-    gpii.express.tests.helpers.isSaneResponse(response, body, statusCode);
+// TODO:  If this pattern comes up more often, update `gpii-express` to pass through the statusCode variable from other methods to isSaneResponse.
+fluid.registerNamespace("gpii.tests.ul.api.product.get");
+gpii.tests.ul.api.product.get.verifyContent = function (response, body, expected, statusCode) {
+    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
     jqUnit.assertDeepEq("The message body should be as expected...", expected, body);
 };
 
-
-fluid.defaults("gpii.ul.api.tests.product.get", {
-    gradeNames: ["gpii.ul.api.tests.testCaseHolder"],
+fluid.defaults("gpii.tests.ul.api.product.get", {
+    gradeNames: ["gpii.test.ul.api.testCaseHolder"],
     rawModules: [
         {
+            name: "testing GET /api/product/:source/:sid",
             tests: [
                 {
                     name: "Verify that an appropriate error is received when calling the interface with no parameters...",
@@ -38,7 +37,7 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
                         },
                         {
                             event:    "{requestNoParams}.events.onComplete",
-                            listener: "gpii.ul.api.tests.product.get.verifyContent",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
                             // response, body, expected, statusCode
                             args:     [
                                 "{requestNoParams}.nativeResponse",
@@ -81,7 +80,7 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
                 // }
 
                 /*
-                 gpii.express.tests.helpers.isSaneResponse = function (response, body, status) {
+                 gpii.test.express.helpers.isSaneResponse = function (response, body, status) {
                  gpii.express.tests.helpers.verifyStringContent = function (response, body, expectedString) {
                  gpii.express.tests.helpers.verifyJSONContent = function (response, body, expected) {
                  */
@@ -204,50 +203,53 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
         }
     ],
     components: {
+        cookieJar: {
+            type: "kettle.test.cookieJar"
+        },
         requestNoParams: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product"
             }
         },
         requestOneParam: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/unified"
             }
         },
         requestMissingRecord: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/unified/notfound"
             }
         },
         requestExistingRecord: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/Vlibank/B812"
             }
         },
         requestUnifiedRecord: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "unified/unifiedNewer"
             }
         },
         requestUnifiedRecordWithSources: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/unified/unifiedNewer?sources=true"
             }
         },
         requestSourceRecordWithSources: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/Vlibank/B812?sources=true"
             }
         },
         requestRecordWithSlash: {
-            type: "gpii.ul.api.tests.product.get.request",
+            type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "product/slashed%2fsource/slashed%2fsid"
             }
@@ -255,8 +257,8 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
     },
     expected: {
         noParams: {
-            "ok": false,
-            "message": "The JSON you have provided is not valid.",
+            "isError": true,
+            "message": "The information you provided is incomplete or incorrect.  Please check the following:",
             "fieldErrors": [
                 {
                     "keyword": "required",
@@ -296,15 +298,17 @@ fluid.defaults("gpii.ul.api.tests.product.get", {
     }
 });
 
-
-gpii.ul.api.tests.testEnvironment({
+fluid.defaults("gpii.tests.ul.api.product.get.environment", {
+    gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
         api:   9753,
         pouch: 3579
     },
     components: {
         testCaseHolder: {
-            type: "gpii.ul.api.tests.product.get"
+            type: "gpii.tests.ul.api.product.get"
         }
     }
 });
+
+fluid.test.runTests("gpii.tests.ul.api.product.get.environment");

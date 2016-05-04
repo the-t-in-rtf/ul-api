@@ -10,19 +10,7 @@ var gpii = fluid.registerNamespace("gpii");
 require("gpii-express");
 require("gpii-json-schema");
 
-/*
-
-    TODO:  Refactor this to use the new version of Express, etc., and :
-
-    1. validate the user input using JSON Schema Validation middleware
-    2. look up the user and:
-       2a. Call next({ isError: true, message: "The record blah blah blah not found..." }) if the record is not found or if there is any other error.
-       2b. Fire the onRequest event to the handler, but include the record data.
-    3. Wire in an HTML renderer for success that uses `page/record.handlebars`.
-    4. Wire in the JSON header middleware and JSON sender after the HTML renderer.
-    5. Let errors fall through to the global JSON / HTML error handlers
-
- */
+require("../lib/validationGatedContentAware");
 
 // TODO:  Put the JSON Schema headers back in
 
@@ -185,55 +173,40 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     }
 });
 
-// TODO:  Do we have a convenience grade for this pattern yet?  Check gpii.express.singleTemplateMiddleware
+// TODO:  Create a common grade for this pattern (in handlebars)
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/record.handlebars"
 });
 
 fluid.defaults("gpii.ul.api.product.get", {
-    gradeNames:   ["gpii.express.router"],
+    gradeNames:   ["gpii.ul.api.validationGatedContentAware"],
     method:       "get",
     // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path:         ["/:source/:sid", "/:source", "/"],
     routerOptions: {
         mergeParams: true
     },
+    schemaKey:    "product-get.json",
+    handlers: {
+        json: {
+            contentType:   "application/json",
+            handlerGrades: ["gpii.ul.api.product.get.handler.base"]
+        },
+        html: {
+            priority:      "after:json",
+            contentType:   "text/html",
+            handlerGrades: ["gpii.ul.api.product.get.handler.html"]
+        }
+    },
     components: {
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
             options: {
                 rules: {
                     requestContentToValidate: {
                         "": "params"
                     }
-                },
-                schemaDirs:   "%gpii-ul-api/src/schemas",
-                schemaKey:    "product-get.json"
-            }
-        },
-        innerRouter: {
-            type: "gpii.express.middleware.contentAware",
-            options: {
-                priority: "after:validationMiddleware",
-                path:     "/:source/:sid",
-                handlers: {
-                    html: {
-                        priority:      "after:json",
-                        contentType:   "text/html",
-                        handlerGrades: ["gpii.ul.api.product.get.handler.html"]
-                    },
-                    json: {
-                        priority:      "after:default",
-                        contentType:   "application/json",
-                        handlerGrades: ["gpii.ul.api.product.get.handler.base"]
-                    }
-                },
-                routerOptions: {
-                    // Required to pick up the URL parameters from the enclosing router.
-                    mergeParams: true
-                },
-                templateDirs: "{gpii.ul.api}.options.templateDirs"
+                }
             }
         }
     }
