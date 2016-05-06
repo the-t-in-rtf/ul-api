@@ -41,13 +41,13 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         }
     },
     events: {
-        apiStarted:   null,
+        apiReady:     null,
         apiStopped:   null,
         pouchStarted: null,
         pouchStopped: null,
         onStarted: {
             events: {
-                apiStarted:   "apiStarted",
+                apiReady:     "apiReady",
                 pouchStarted: "pouchStarted"
             }
         },
@@ -72,8 +72,17 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                 gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port :   "{harness}.options.ports.api",
                 templateDirs: "{harness}.options.templateDirs",
+                events: {
+                    apiReady: null,
+                    onReady: {
+                        events: {
+                            apiReady: "apiReady",
+                            onStarted: "onStarted"
+                        }
+                    }
+                },
                 listeners: {
-                    onStarted: "{harness}.events.apiStarted.fire",
+                    onReady:   "{harness}.events.apiReady.fire",
                     onStopped: "{harness}.events.apiStopped.fire"
                 },
                 components: {
@@ -141,6 +150,11 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                             couch: {
                                 urls: {
                                     base: "{harness}.options.urls.pouch"
+                                }
+                            },
+                            listeners: {
+                                "onReady.notifyParent": {
+                                    func: "{harness}.events.apiReady.fire"
                                 }
                             }
                         }

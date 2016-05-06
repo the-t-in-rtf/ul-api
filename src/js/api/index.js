@@ -24,6 +24,14 @@ fluid.defaults("gpii.ul.api", {
     path:         "/api",
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    events: {
+        productEndpointReady: null,
+        onReady: {
+            events: {
+                productEndpointReady: "productEndpointReady"
+            }
+        }
+    },
     couch: {
         db:  "ul",
         urls: {
@@ -61,7 +69,12 @@ fluid.defaults("gpii.ul.api", {
         product: {
             type: "gpii.ul.api.product",
             options: {
-                priority: "after:corsHeaders"
+                priority: "after:corsHeaders",
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api}.events.productEndpointReady.fire"
+                    }
+                }
             }
         },
         //products: {
@@ -116,13 +129,31 @@ fluid.defaults("gpii.ul.api", {
         jsonErrorHandler: {
             type: "gpii.express.middleware.error",
             options: {
-                priority: "after:htmlErrorHandler"
+                priority: "after:htmlErrorHandler",
+                errorOutputRules: {
+                    "isError":     "error.isError",
+                    "message":     "error.message",
+                    "fieldErrors": "error.fieldErrors"
+                }
             }
         },
         docs: {
             type: "gpii.ul.api.docs",
             options: {
                 priority: "after:jsonErrorHandler"
+            }
+        },
+        jsonErrors: {
+            type: "gpii.express.middleware.error",
+            options: {
+                priority: "after:docs",
+                rules: {
+                    errorOutputRules: {
+                        "isError":     "error.isError",
+                        "message":     "error.message",
+                        "fieldErrors": "error.fieldErrors"
+                    }
+                }
             }
         },
         // TODO:  Test with a bogus path versus /

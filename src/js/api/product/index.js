@@ -13,9 +13,24 @@ fluid.defaults("gpii.ul.api.product", {
     gradeNames: ["gpii.express.router"],
     path:       "/product",
     method:     "use",
+    events: {
+        onGetSchemasDereferenced: null,
+        onSchemasDereferenced: {
+            events: {
+                onGetSchemasDereferenced: "onGetSchemasDereferenced"
+            }
+        }
+    },
     components: {
         get: {
-            type: "gpii.ul.api.product.get"
+            type: "gpii.ul.api.product.get",
+            options: {
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.product}.events.onGetSchemasDereferenced.fire"
+                    }
+                }
+            }
         }
         //,
         //put: {

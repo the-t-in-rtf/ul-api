@@ -8,7 +8,7 @@ var fluid = require("infusion");
 
 // TODO:  Move this to gpii-json-schema once we've exercised it a bit here.
 fluid.defaults("gpii.ul.api.validationGatedContentAware", {
-    gradeNames:       ["gpii.express.router"],
+    gradeNames: ["gpii.express.router"],
     events: {
         onSchemasDereferenced: null
     },
@@ -16,9 +16,19 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
         validationMiddleware: {
             type: "gpii.schema.validationMiddleware",
             options: {
-                priority:  "first",
+                priority:   "first",
+                rules: {
+                    validationErrorsToResponse: {
+                        isError:    { literalValue: true },
+                        statusCode: { literalValue: 400 },
+                        message: {
+                            literalValue: "{that}.options.messages.error"
+                        },
+                        fieldErrors: ""
+                    }
+                },
                 schemaDirs: "{gpii.ul.api}.options.schemaDirs",
-                schemaKey: "{gpii.ul.api.validationGatedContentAware}.options.schemaKey",
+                schemaKey:  "{gpii.ul.api.validationGatedContentAware}.options.schemaKey",
                 messages: {
                     error: "The information you provided is incomplete or incorrect.  Please check the following:"
                 },
@@ -33,6 +43,7 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
         renderedValidationError: {
             type: "gpii.handlebars.errorRenderingMiddleware",
             options: {
+                priority: "after:validationMiddleware",
                 templateKey: "pages/validation-error"
             }
         },
@@ -41,7 +52,7 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
         contentAwareMiddleware: {
             type: "gpii.express.middleware.contentAware",
             options: {
-                priority: "after:validationJsonMiddleware",
+                priority: "after:renderedValidationError",
                 handlers: "{gpii.ul.api.validationGatedContentAware}.options.handlers"
             }
         }

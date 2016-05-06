@@ -32,6 +32,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         that.events.afterResponseSent.fire(that);
     }
     else {
+        console.log("COUCH RESPONSE:", JSON.stringify(couchResponse, null, 2));
         // We transform and then filter separately so that we can include all and then filter out Couch-isms like `_id`.
         var transformedOutput = fluid.model.transformWithRules(couchResponse, that.options.rules.productCouchResponseToJson);
         that.productRecord = fluid.filterKeys(transformedOutput, that.options.couchKeysToExclude, true);
@@ -102,6 +103,10 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     "key":      "%key"
                 },
                 listeners: {
+                    // "onCreate.logSomething": {
+                    //     func: "console.log",
+                    //     args: ["product dataSource URL:", "{that}.options.url"]
+                    // },
                     // Continue processing after an initial successful read.
                     "onRead.processProductResponse": {
                         func: "{gpii.ul.api.product.get.handler.base}.processProductResponse",
@@ -110,7 +115,8 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     // Report back to the user on failure.
                     "onError.sendResponse": {
                         func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, "{arguments}.0"] // statusCode, body
+                        args: [ 500, { tag: "productReader.onError", message: "{arguments}.0" }] // statusCode, body
+                        // args: [ 500, "{arguments}.0"] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
                 }
@@ -130,6 +136,10 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     "uid": "%uid"
                 },
                 listeners: {
+                    // "onCreate.logSomething": {
+                    //     func: "console.log",
+                    //     args: ["sources dataSource URL:", "{that}.options.url"]
+                    // },
                     // Finish processing after the "sources" are read
                     "onRead.processSourcesResponse": {
                         func: "{gpii.ul.api.product.get.handler.base}.processSourcesResponse",
@@ -138,7 +148,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     // Report back to the user on failure.
                     "onError.sendResponse": {
                         func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, "{arguments}.0"] // statusCode, body
+                        args: [ 500, { tag: "sourceReader.onError", message: "{arguments}.0" }] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
                 }

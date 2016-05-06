@@ -22,7 +22,7 @@ gpii.tests.ul.api.product.get.verifyContent = function (response, body, expected
 };
 
 fluid.defaults("gpii.tests.ul.api.product.get", {
-    gradeNames: ["gpii.test.ul.api.testCaseHolder"],
+    gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
         {
             name: "testing GET /api/product/:source/:sid",
@@ -209,31 +209,31 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
         requestNoParams: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product"
+                endpoint: "api/product"
             }
         },
         requestOneParam: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product/unified"
+                endpoint: "api/product/unified"
             }
         },
         requestMissingRecord: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product/unified/notfound"
+                endpoint: "api/product/unified/notfound"
             }
         },
         requestExistingRecord: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product/Vlibank/B812"
+                endpoint: "api/product/Vlibank/B812"
             }
         },
         requestUnifiedRecord: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "unified/unifiedNewer"
+                endpoint: "api/product/unified/unifiedNewer"
             }
         },
         requestUnifiedRecordWithSources: {
