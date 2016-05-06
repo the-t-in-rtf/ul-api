@@ -45,6 +45,10 @@ fluid.defaults("gpii.test.ul.api.testemHarness", {
         "test_page": [
             "tests/static/cors-tests.html"
         ],
+        // These only work with `testem ci`.  If we use these hooks with `testem`, the server is destroyed before
+        // we can manually test things.
+        //
+        // TODO: Investigate.
         before_tests: "{that}.createFixtures",
         after_tests:  "{that}.destroyFixtures"
     },
