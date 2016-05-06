@@ -7,8 +7,15 @@
     fluid.registerNamespace("gpii.tests.ul.api.cors");
 
     gpii.tests.ul.api.cors.examinePage = function (requestor, message, expected) {
-        var containerHtml = $(requestor.container).html();
+        var container = $(requestor.container);
+        var containerHtml = container.html();
         jqUnit.assertTrue(QUnit.config.currentModule + ":" + message, containerHtml.indexOf(expected) !== -1);
+    };
+
+    gpii.tests.ul.api.cors.checkStatusCode = function (requestor, message, statusCode) {
+        var container = $(requestor.container);
+        var statusContainerHtml = container.find(".status").html();
+        jqUnit.assertTrue(QUnit.config.currentModule + ":" + message, statusContainerHtml && statusContainerHtml.indexOf(statusCode) !== -1);
     };
 
     fluid.defaults("gpii.tests.ul.api.cors.caseHolder.positive", {
@@ -31,12 +38,16 @@
                         },
                         {
                             func: "{testEnvironment}.requestor.makeRequest",
-                            args: ["http://localhost:6914/api/product/unified/unifiedNewer"]
+                            args: ["http://localhost:6194/api/product/unified/unifiedNewer"]
                         },
                         {
                             listener: "gpii.tests.ul.api.cors.examinePage",
                             event:    "{testEnvironment}.requestor.events.onRequestComplete",
                             args:     ["{testEnvironment}.requestor", "There should be a success message after we make a request.", "{that}.options.expected.success"]
+                        },
+                        {
+                            func: "gpii.tests.ul.api.cors.checkStatusCode",
+                            args: ["{testEnvironment}.requestor", "The status code should indicate success.", 200]
                         }
                     ]
                 }
@@ -64,12 +75,16 @@
                         },
                         {
                             func: "{testEnvironment}.requestor.makeRequest",
-                            args: ["http://localhost:6914/src/js/client/status.js"]
+                            args: ["http://localhost:6194/src/js/client/status.js"]
                         },
                         {
                             listener: "gpii.tests.ul.api.cors.examinePage",
                             event:    "{testEnvironment}.requestor.events.onRequestComplete",
-                            args:     ["{testEnvironment}.requestor", "There should be a failure message after we make a request.", "{that}.options.expected.failure"]
+                            args:     ["{testEnvironment}.requestor", "There should be a failure message after we make a request.", "{that}.options.expected.failure", 0]
+                        },
+                        {
+                            func: "gpii.tests.ul.api.cors.checkStatusCode",
+                            args: ["{testEnvironment}.requestor", "The status code should indicate a CORS failure.", 0]
                         }
                     ]
                 }
@@ -77,7 +92,6 @@
         }]
     });
 
-    // TODO:  Either move to separate markup or encapsulate the tests in separate test environments.
     fluid.defaults("gpii.tests.ul.api.cors.environment.positive", {
         gradeNames:    ["fluid.test.testEnvironment"],
         markupFixture: ".cors-viewport",

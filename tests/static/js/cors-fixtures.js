@@ -20,7 +20,7 @@
     };
     
     gpii.test.ul.api.cors.requestor.displayResponse = function (that, template) {
-        var payload = fluid.stringTemplate(template, { body: that.client.responseText });
+        var payload = fluid.stringTemplate(template, that.client);
         $(that.container).html(payload);
         that.events.onRequestComplete.fire(that);
     };
@@ -32,8 +32,8 @@
             onRequestComplete: null
         },
         templates: {
-            success: "<div class='callout success'><h1>Success!</h1><p>%body</p></div>",
-            error:   "<div class='callout alert'><h1>Error!</h1><p>%body</p></div>"
+            success: "<div class='callout success'><h1>Success!</h1><p>%responseText</p><div class=\"status\">%status</div></div>",
+            error:   "<div class='callout alert'><h1>Error!</h1><p>%responseText</p><div class=\"status\">%status</div></div>"
         },
         invokers: {
             handleError: {
