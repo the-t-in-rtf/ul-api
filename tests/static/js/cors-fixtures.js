@@ -1,34 +1,33 @@
 // Test fixtures to confirm that our CORS headers work in actual browsers.
-/* globals fluid, $ */
+/* globals fluid, $, XMLHttpRequest */
 "use strict";
 (function () {
     var gpii = fluid.registerNamespace("gpii");
     fluid.registerNamespace("gpii.test.ul.api.cors.requestor");
 
-    gpii.test.ul.api.cors.requestor.makeRequest = function (that) {
-        var options = {
-            url:      that.options.url,
-            success:  that.handleSuccess,
-            error:    that.handleError,
-            complete: that.events.onRequestComplete.fire,
-            headers: {
-                accept: "application/json"
-            }
-        };
-        $.ajax(options);
+    gpii.test.ul.api.cors.requestor.makeRequest = function (that, url) {
+        // We cannot use jQuery.ajax because it does not handle cross-domain errors in a way we can use.
+        var client = new XMLHttpRequest();
+
+        that.client = client;
+
+        client.onerror = that.handleError;
+        client.onload  = that.handleSuccess;
+
+        client.open("GET", url);
+        client.setRequestHeader("Accept", "application/json");
+        client.send();
     };
     
-    gpii.test.ul.api.cors.requestor.displayResponse = function (that, template, rawPayload) {
-        // We want to be able to handle whatever messages we might receive, but also to display them inline in raw HTML.
-        var stringPayload = typeof rawPayload === "string" ? rawPayload : "<pre>" + JSON.stringify(rawPayload, null, 2) + "</pre>";
-        var payload = fluid.stringTemplate(template, { body: stringPayload });
+    gpii.test.ul.api.cors.requestor.displayResponse = function (that, template) {
+        var payload = fluid.stringTemplate(template, { body: that.client.responseText });
         $(that.container).html(payload);
+        that.events.onRequestComplete.fire(that);
     };
 
     // A test component that makes a jquery request and updates a view with the results.
     fluid.defaults("gpii.test.ul.api.cors.requestor", {
         gradeNames: ["fluid.viewComponent"],
-        url: "http://localhost:6914/api/product/unified/unifiedNewer",
         events: {
             onRequestComplete: null
         },
@@ -39,15 +38,15 @@
         invokers: {
             handleError: {
                 funcName: "gpii.test.ul.api.cors.requestor.displayResponse",
-                args:     ["{that}", "{that}.options.templates.error", "{arguments}.2"] // jqXHR, textStatus, errorThrown
+                args:     ["{that}", "{that}.options.templates.error"]
             },
             handleSuccess: {
                 funcName: "gpii.test.ul.api.cors.requestor.displayResponse",
-                args:     ["{that}", "{that}.options.templates.success", "{arguments}.0"] // data, textStatus, jqXHR
+                args:     ["{that}", "{that}.options.templates.success"]
             },
             makeRequest: {
                 funcName: "gpii.test.ul.api.cors.requestor.makeRequest",
-                args:     ["{that}"]
+                args:     ["{that}", "{arguments}.0"] // url
             }
         }
     });

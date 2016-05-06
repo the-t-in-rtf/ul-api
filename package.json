@@ -4,7 +4,9 @@
   "description": "The Unified Listing API and tests.",
   "main": "index.js",
   "scripts": {
-    "test": "node tests/all-tests.js",
+    "test": "npm run testem-tests && npm run node-tests",
+    "node-tests": "node tests/all-tests.js",
+    "testem-tests": "testem ci",
     "postinstall": "bower install"
   },
   "repository": {
