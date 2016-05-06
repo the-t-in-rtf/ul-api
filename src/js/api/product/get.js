@@ -32,7 +32,6 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         that.events.afterResponseSent.fire(that);
     }
     else {
-        console.log("COUCH RESPONSE:", JSON.stringify(couchResponse, null, 2));
         // We transform and then filter separately so that we can include all and then filter out Couch-isms like `_id`.
         var transformedOutput = fluid.model.transformWithRules(couchResponse, that.options.rules.productCouchResponseToJson);
         that.productRecord = fluid.filterKeys(transformedOutput, that.options.couchKeysToExclude, true);
@@ -103,10 +102,6 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     "key":      "%key"
                 },
                 listeners: {
-                    // "onCreate.logSomething": {
-                    //     func: "console.log",
-                    //     args: ["product dataSource URL:", "{that}.options.url"]
-                    // },
                     // Continue processing after an initial successful read.
                     "onRead.processProductResponse": {
                         func: "{gpii.ul.api.product.get.handler.base}.processProductResponse",

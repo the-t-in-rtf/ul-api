@@ -4,8 +4,6 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-fluid.setLogging(true);
-
 require("./lib/test-harness");
 
 // Uncomment this to display the router diagram on startup.

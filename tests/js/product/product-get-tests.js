@@ -12,13 +12,14 @@ fluid.defaults("gpii.tests.ul.api.product.get.request", {
     method:     "GET"
 });
 
+var EventEmitter = require("events");
+EventEmitter.defaultMaxListeners = 100;
 
 // Wrapper to call the correct functions from the `gpii-express test helpers.
-// TODO:  If this pattern comes up more often, update `gpii-express` to pass through the statusCode variable from other methods to isSaneResponse.
 fluid.registerNamespace("gpii.tests.ul.api.product.get");
-gpii.tests.ul.api.product.get.verifyContent = function (response, body, expected, statusCode) {
+gpii.tests.ul.api.product.get.verifyContent = function (message, response, body, expected, statusCode) {
     gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
-    jqUnit.assertDeepEq("The message body should be as expected...", expected, body);
+    jqUnit.assertDeepEq(message, expected, body);
 };
 
 fluid.defaults("gpii.tests.ul.api.product.get", {
@@ -28,7 +29,7 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
             name: "testing GET /api/product/:source/:sid",
             tests: [
                 {
-                    name: "Verify that an appropriate error is received when calling the interface with no parameters...",
+                    name: "Call /api/product with no URL parameters...",
                     type: "test",
                     sequence: [
                         {
@@ -38,134 +39,150 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
                         {
                             event:    "{requestNoParams}.events.onComplete",
                             listener: "gpii.tests.ul.api.product.get.verifyContent",
-                            // response, body, expected, statusCode
+                            // message, response, body, expected, statusCode
                             args:     [
+                                "There should be multiple errors if we omit the source and sid...",
                                 "{requestNoParams}.nativeResponse",
-                                {
-                                    expander: {
-                                        funcName: "JSON.parse",
-                                        args: [ "{arguments}.0"]
-                                    }
-                                },
+                                "@expand:JSON.parse({arguments}.0)",
                                 "{that}.options.expected.noParams",
                                 400
                             ]
                         }
                     ]
+                },
+                {
+                    name: "Call /api/product with only one URL parameter...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestOneParam}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestOneParam}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "There should be a single validation error if we omit the sid...",
+                                "{requestNoParams}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.oneParam",
+                                400
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a non-existant record from /api/product...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestMissingRecord}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestMissingRecord}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see an error that indicates that the record could not be found...",
+                                "{requestMissingRecord}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.missing",
+                                404
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request an existing record from /api/product...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestExistingRecord}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestExistingRecord}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see the requested record...",
+                                "{requestExistingRecord}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.existing",
+                                200
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a unified record without sources from /api/product...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestUnifiedRecord}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestUnifiedRecord}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see the unified record...",
+                                "{requestUnifiedRecord}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.unified",
+                                200
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a unified record with sources from /api/product...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestUnifiedRecordWithSources}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestUnifiedRecordWithSources}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see the unified record...",
+                                "{requestUnifiedRecordWithSources}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.unifiedSources",
+                                200
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a source record with sources from /api/product...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestSourceRecordWithSources}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestSourceRecordWithSources}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see the source record...",
+                                "{requestSourceRecordWithSources}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.source",
+                                200
+                            ]
+                        }
+                    ]
                 }
-                // {
-                //     name: "Verify that an appropriate error is received when calling the interface with only one parameter...",
-                //     type: "test",
-                //     sequence: [
-                //         {
-                //             func: "{requestOneParam}.send",
-                //             args: []
-                //         },
-                //         {
-                //             event:    "{requestOneParam}.events.onComplete",
-                //             listener: "jqUnit.assertDeepEq",
-                //             args:     [
-                //                 "There should be a single validation error...",
-                //                 {
-                //                     expander: {
-                //                         funcName: "JSON.parse",
-                //                         args:     ["{arguments}.0"]
-                //
-                //                     }
-                //                 },
-                //                 "{that}.options.expected.oneParam"
-                //             ]
-                //         }
-                //     ]
-                // }
 
-                /*
-                 gpii.test.express.helpers.isSaneResponse = function (response, body, status) {
-                 gpii.express.tests.helpers.verifyStringContent = function (response, body, expectedString) {
-                 gpii.express.tests.helpers.verifyJSONContent = function (response, body, expected) {
-                 */
-
-                //requestSourceOnly: {
-
-                //    jqUnit.asyncTest("Call the interface with only one parameter...", function () {
-                //        request.get(getTests.getUrl + "/foo", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            try{
-                //                var jsonData = JSON.parse(body);
-                //                jqUnit.assertUndefined("A record should not have been returned...", jsonData.record);
-                //            }
-                //            catch(e) {
-                //                jqUnit.assertUndefined("There should be no parsing errors:\n" + body, e);
-                //            }
-                //        });
-                //    });
-                //
-
-                //requestMissingRecord: {
-
-                //    jqUnit.asyncTest("Looking for a record that doesn't exist...", function () {
-                //        request.get(getTests.getUrl + "/foo/bar", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            var jsonData = JSON.parse(body);
-                //
-                //            jqUnit.assertUndefined("A record should not have been returned...", jsonData.record);
-                //        });
-                //    });
-                //
-
-                //requestExistingRecord: {
-
-                //    jqUnit.asyncTest("Looking for a record that exists...", function () {
-                //        request.get(getTests.getUrl + "/Vlibank/B812", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            var jsonData = JSON.parse(body);
-                //
-                //            jqUnit.assertNotUndefined("A record should have been returned...", jsonData.record);
-                //        });
-                //    });
-                //
-
-                //requestUnifiedRecord: {
-
-
-                //    jqUnit.asyncTest("Looking for a unified record without sources ...", function () {
-                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            var jsonData = JSON.parse(body);
-                //
-                //            jqUnit.assertNotUndefined("A record should have been returned...", jsonData.record);
-                //            if (jsonData.record) {
-                //              jqUnit.assertUndefined("There should not be 'sources' data for the record...", jsonData.record.sources);
-                //            }
-                //        });
-                //    });
-                //
-
-
-                //requestUnifiedRecordWithSources: {
-
-                //    jqUnit.asyncTest("Retrieving a unified record with sources=true ...", function () {
-                //        request.get(getTests.getUrl + "/unified/1421059432812-144583330?sources=true", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            var jsonData = JSON.parse(body);
-                //
-                //            jqUnit.assertNotUndefined("A record should have been returned...", jsonData.record);
-                //            if (jsonData.record) {
-                //              jqUnit.assertNotUndefined("There should be 'sources' data for the record...", jsonData.record.sources);
-                //            }
-                //        });
-                //    });
-                //
 
 
                 //requestSourceRecordWithSources: {
@@ -184,21 +201,6 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
                 //        });
                 //    });
                 //
-
-                // TODO:  Request a record with an encoded slash
-                // requestRecordWithSlash
-
-                //    jqUnit.asyncTest("Retrieving a source record with a space in the source name ...", function () {
-                //        request.get(getTests.getUrl + "/Dlf data/0110204", function (error, response, body) {
-                //            jqUnit.start();
-                //
-                //            testUtils.isSaneResponse(jqUnit, error, response, body);
-                //            var jsonData = JSON.parse(body);
-                //
-                //            jqUnit.assertNotUndefined("A record should have been returned...", jsonData.record);
-                //        });
-                //    });
-                //};
             ]
         }
     ],
@@ -227,7 +229,7 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
         requestExistingRecord: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/Vlibank/B812"
+                endpoint: "api/product/unified/unifiedNewer"
             }
         },
         requestUnifiedRecord: {
@@ -239,19 +241,13 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
         requestUnifiedRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product/unified/unifiedNewer?sources=true"
+                endpoint: "api/product/unified/unifiedNewer?sources=true"
             }
         },
         requestSourceRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "product/Vlibank/B812?sources=true"
-            }
-        },
-        requestRecordWithSlash: {
-            type: "gpii.tests.ul.api.product.get.request",
-            options: {
-                endpoint: "product/slashed%2fsource/slashed%2fsid"
+                endpoint: "api/product/admin/admin1?sources=true"
             }
         }
     },
@@ -281,19 +277,66 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
             ]
         },
         oneParam: {
-            "ok": false,
-            "message": "The JSON you have provided is not valid.",
-            "fieldErrors": [
-                {
-                    "keyword": "required",
-                    "dataPath": "",
-                    "schemaPath": "#/required",
-                    "params": {
-                        "missingProperty": "sid"
-                    },
-                    "message": "The 'sid' URL parameter is required."
-                }
-            ]
+            "isError": true,
+            "message": "The information you provided is incomplete or incorrect.  Please check the following:",
+            "fieldErrors": [{
+                "keyword": "required",
+                "dataPath": "",
+                "schemaPath": "#/required",
+                "params": {
+                    "missingProperty": "sid"
+                },
+                "message": "The 'sid' URL parameter is required."
+            }]
+        },
+        missing: {
+            isError: true,
+            message: "Could not find a record matching the specified source and id."
+        },
+        existing: {
+            "uid":          "unifiedNewer",
+            "source":       "unified",
+            "sid":          "unifiedNewer",
+            "name":         "sample product 1",
+            "description":  "sample description 1",
+            "manufacturer": { "name": "sample manufacturer 1" },
+            "updated":      "2015-01-01"
+        },
+        unified: {
+            "uid":          "unifiedNewer",
+            "source":       "unified",
+            "sid":          "unifiedNewer",
+            "name":         "sample product 1",
+            "description":  "sample description 1",
+            "manufacturer": { "name": "sample manufacturer 1" },
+            "updated":      "2015-01-01"
+        },
+        unifiedSources: {
+            "uid":          "unifiedNewer",
+            "source":       "unified",
+            "sid":          "unifiedNewer",
+            "name":         "sample product 1",
+            "description":  "sample description 1",
+            "manufacturer": { "name": "sample manufacturer 1" },
+            "updated":      "2015-01-01",
+            "sources": [{
+                "uid":          "unifiedNewer",
+                "source":       "admin",
+                "sid":          "admin1",
+                "name":         "sample product 1",
+                "description":  "sample description 1",
+                "manufacturer": { "name": "sample manufacturer 1" },
+                "updated":      "2014-01-01"
+            }]
+        },
+        source:  {
+            "uid":          "unifiedNewer",
+            "source":       "admin",
+            "sid":          "admin1",
+            "name":         "sample product 1",
+            "description":  "sample description 1",
+            "manufacturer": { "name": "sample manufacturer 1" },
+            "updated":      "2014-01-01"
         }
     }
 });
