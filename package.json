@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run testem-tests && npm run node-tests",
-    "node-tests": "node tests/all-tests.js",
+    "node-tests": "node tests/node-tests.js",
     "testem-tests": "testem ci",
     "postinstall": "bower install"
   },
