@@ -2,7 +2,7 @@
 
 The Unified Listing is a federated database of products, including those focused on Assistive Technology users as well as mainstream products
 
-This API allows developers to read, create, and update records stored in the Unified Listing.
+This API allows developers to read, create, and update products stored in the Unified Listing.
 
 This document describes the REST API, including the syntax required to use all commands, and the format of all data to be passed into and returned from the API.
 
@@ -15,53 +15,51 @@ A product is a distinct piece of software or equipment.  Products may have more 
 
 All products in the Unified Listing have the following common fields:
 
-|Field|Description|Required?|
-| --- | --- | --- |
-|source|The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "ul".|Y|
-|sid|The unique identifier to identify this record in the source database.|Y|
-|uid|The Universal ID ("uid") is an id that is unique in the Unified listing and which is constant for different editions of a product (see ["editions"](#editions)).  "Source" records use this field to indicate which "unified" record they are associated with (if any).|Y|
-|name|The name of the product.|Y|
-|description|A description of the product.|Y|
-|manufacturer|A JSON object describing the manufacturer (see ["Manufacturer"](#manufacturers) below).|Y|
-|status|The status of this record.  Current supported values are listed below under ["Statuses"](#statuses).|Y|
-|images|Images of the product, if available (see ["Images"](#images) below).|N|
-|language|The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.|N|
-|updated|The date at which the record was last updated.|Y|
-
-[View JSON Schema for all products](../../schema/product.json)
+|Field                      | Description |
+| ------------------------- | ----------- |
+| `description` (required)  | A description of the product.|
+| `manufacturer` (required) | A JSON object describing the manufacturer (see ["Manufacturer"](#manufacturers) below).|
+| `name` (required)         | The name of the product.|
+| `sid` (required)          | The unique identifier to identify this record in the source database.|
+| `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "ul".|
+| `status` (required)       | The status of this record.  Current supported values are listed below under ["Statuses"](#statuses).|
+| `uid` (required)          | The Universal ID ("uid") is an id that is unique in the Unified listing and which is constant for different editions of a product (see ["editions"](#editions)).  "Source" products use this field to indicate which "unified" record they are associated with (if any).|
+| `updated` (required)      | The date at which the record was last updated.|
+| `images`                  | Images of the product, if available (see ["Images"](#images) below).|
+| `language`                | The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.|
 
 ## Source Records
 
-The Unified Listing contains source records pulled from sources such as [EASTIN](http://www.eastin.eu/) and [GARI](http://www.gari.info/), represented as JSON objects.
+The Unified Listing contains source products pulled from sources such as [EASTIN](http://www.eastin.eu/) and [GARI](http://www.gari.info/), represented as JSON objects.
 
-In addition to the fields described in ["Product Records"](#product-records), a source record includes the following additional fields:
+In addition to the fields described in ["Product records"](#product-records), a source record includes the following additional fields:
 
-|Field|Description|Required?|
-| --- | --- | --- |
-|sourceData|The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|Y|
+| Field                   | Description |
+| ----------------------- | ----------- |
+| `sourceData` (required) | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|
 
 
 A JSON representation of a source record with all fields looks as follows:
 
     {
-        "source":         "siva",
-        "sid":            "19449",
-        "name":           "ANS - SET PUNTATORI ANS",
-        "description":    "",
+        "source": "siva",
+        "sid": "19449",
+        "name": "ANS - SET PUNTATORI ANS",
+        "description": "",
 
-        "manufacturer":     {
-            "name":       "ASSOCIAZIONE NAZIONALE SUBVEDENTI",
-            "address":    "Via Clericetti, 22",
+        "manufacturer": {
+            "name": "ASSOCIAZIONE NAZIONALE SUBVEDENTI",
+            "address": "Via Clericetti, 22",
             "postalCode": "20133",
-            "cityTown":   "Milano",
-            "country":    "ITALY",
-            "phone":      "+39-0270632850",
-            "email":      "info@subvedenti.it",
-            "url":        "http://www.subvedenti.it/"
+            "cityTown": "Milano",
+            "country": "ITALY",
+            "phone": "+39-0270632850",
+            "email": "info@subvedenti.it",
+            "url": "http://www.subvedenti.it/"
         },
-        "status":         "discontinued",
-        "language:        "it_it",
-        "sourceData":     {
+        "status": "discontinued",
+        "language: "it_it",
+        "sourceData": {
             "ManufacturerAddress": "Via Clericetti, 22",
             "ManufacturerPostalCode": "20133",
             "ManufacturerTown": "Milano",
@@ -118,47 +116,43 @@ A JSON representation of a source record with all fields looks as follows:
             "SimilarityLevel": 0
             }
         },
-        "updated":        "2012-10-02T15:24:00+02:00"
+        "updated": "2012-10-02T15:24:00+02:00"
     }
-
-[View JSON Schema for "source" products](../../schema/sourceProduct.json)
-
 
 ## Unified Listing Records
 
-The Unified Listing also contains "unified" records, which are a summary in US English of one or more source records.  In addition to the fields mentioned in ["Product Records"](#product-records), a "unified" record supports the following additional fields:
+The Unified Listing also contains "unified" records, which are a summary in US English of one or more source products.  In addition to the fields mentioned in ["Product records"](#product-records), a "unified" record supports the following additional fields:
 
-|Field|Description|Required?|
-| --- | --- | --- |
-|sources| An array containing a list of "source" records (see ["Source Records"](#source-records) above).|Y|
-|editions| A hash containing one or more "editions" of the product (see ["Editions"](#editions) below).  At least one edition named "default" is required.|Y|
-|ontologies| A hash containing one or more "ontologies", or ways of classifying the product (see ["Ontologies"](#ontologies) below.)|
+| Field                 | Description |
+| --------------------- | ----------- |
+| `sources` (required)  | An array containing a list of "source" products (see ["Source Records"](#source-records) above). |
+| `editions` (required) | A hash containing one or more "editions" of the product (see ["Editions"](#editions) below).  At least one edition named "default" is required. |
 
 A full "unified" record in JSON format looks something like:
 
     {
-        "source":           "ul",
-        "uid":              "com.maker.win7.sample",
-        "sid":              "com.maker.win7.sample",
-        "name":             "A Sample Unified Listing Record",
-        "description":      "A record that combines 2-3 additional records' worth of information."
-        "manufacturer":     {
-            "name":             "Maker Software",
-            "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-            "postalCode":       "27707",
-            "cityTown":         "Durham",
-            "provinceRegion":   "North Carolina",
-            "country":          "United States",
-            "phone":            "(704) 555-1212",
-            "email":            "maker@maker.com",
-            "url":              "http://www.maker.com/"
+        "source": "ul",
+        "uid": "com.maker.win7.sample",
+        "sid": "com.maker.win7.sample",
+        "name": "A Sample Unified Listing Record",
+        "description": "A record that combines 2-3 additional products' worth of information."
+        "manufacturer": {
+            "name": "Maker Software",
+            "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+            "postalCode": "27707",
+            "cityTown": "Durham",
+            "provinceRegion": "North Carolina",
+            "country": "United States",
+            "phone": "(704) 555-1212",
+            "email": "maker@maker.com",
+            "url": "http://www.maker.com/"
         },
-        "status":           "active",
-        "language:          "en_us",
-        "sources":          [ "siva:2345" ],
+        "status": "active",
+        "language: "en_us",
+        "sources": [ "siva:2345" ],
         "editions": {
             "default": {
-                "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                 "settingsHandlers": [],
                 "lifeCycleManager": {}
             }
@@ -169,10 +163,8 @@ A full "unified" record in JSON format looks something like:
                 "secondaryCodes": [ "22.39.07" ]
             }
         },
-        "updated":          "2014-11-30T22:04:15Z"
+        "updated": "2014-11-30T22:04:15Z"
     }
-
-[View JSON Schema for "unified" products](../../schema/unifiedProduct.json)
 
 ## Statuses
 
@@ -180,46 +172,42 @@ The Unified Listing has a simple workflow to manage the lifecycle of all product
 
 The following table describes the allowed statutes and when they are to be used.
 
-|Status|Description|
-| --- | --- |
-|new|A product that has just been added and which has not been reviewed.|
-|active|A product that has been reviewed and which is currently available.|
-|discontinued|A product which is no longer being produced (but which may still be available on the used market).|
-|deleted|A product record which was has been deleted for administrative reasons.  Should only be used for duplicates or mistakenly-created records.  For products that are no longer available, use "discontinued" instead.|
-
-[View JSON Schema for statuses](../../schema/status.json)
+| Status         | Description |
+| -------------- | ----------- |
+| `new`          | A product that has just been added and which has not been reviewed.|
+| `active`       | A product that has been reviewed and which is currently available.|
+| `discontinued` | A product which is no longer being produced (but which may still be available on the used market).|
+| `deleted`      | A product record which was has been deleted for administrative reasons.  Should only be used for duplicates or mistakenly-created products.  For products that are no longer available, use "discontinued" instead.|
 
 ## Manufacturers
 
 The company or individual that produces a product is called a "manufacturer" in the Unified Listing.  The following table describes the available fields and how they are to be used.
 
-|Field|Description|Required?|
-| --- | --- | --- |
-|name           | The name of the manufacturer.|Y|
-|address        | The street address of the manufacturer (may also be used for the complete address).|N|
-|postalCode     | The postal code (ZIP code, etc.) of the manufacturer.|N|
-|cityTown       | The city/town in which the manufacturer is located.|N|
-|provinceRegion | The province/region in which the manufacturer is located.|N|
-|country        | The country in which the manufacturer is located.|N|
-|phone          | The phone number of the manufacturer.|N|
-|email          | An email address at which the manufacturer can be contacted.|N|
-|url            | The manufacturer's web site.|N|
+| Field             | Description |
+| ----------------- | ----------- |
+| `name` (required) | The name of the manufacturer. |
+| `address`         | The street address of the manufacturer (may also be used for the complete address). |
+| `postalCode`      | The postal code (ZIP code, etc.) of the manufacturer. |
+| `cityTown`        | The city/town in which the manufacturer is located. |
+| `provinceRegion`  | The province/region in which the manufacturer is located. |
+| `country`         | The country in which the manufacturer is located. |
+| `phone`           | The phone number of the manufacturer. |
+| `email`           | An email address at which the manufacturer can be contacted. |
+| `url`             | The manufacturer's web site. |
 
  A JSON representation of a manufacturer with all fields looks as follows:
 
-    "manufacturer":     {
-        "name":             "Maker Software",
-        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-        "postalCode":       "27707",
-        "cityTown":         "Durham",
-        "provinceRegion":   "North Carolina",
-        "country":          "United States",
-        "phone":            "(704) 555-1212",
-        "email":            "maker@maker.com",
-        "url":              "http://www.maker.com/"
+    "manufacturer": {
+        "name": "Maker Software",
+        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+        "postalCode": "27707",
+        "cityTown": "Durham",
+        "provinceRegion": "North Carolina",
+        "country": "United States",
+        "phone": "(704) 555-1212",
+        "email": "maker@maker.com",
+        "url": "http://www.maker.com/"
     }
-
-[View JSON Schema for manufacturers](../../schema/manufacturer.json)
 
 ## Images
 
@@ -285,36 +273,33 @@ The simplest set of editions represented in JSON format looks something like the
         }
     }
 
-[View JSON Schema for editions](../../schema/edition.json)
-
-
 # API REST endpoints
 
-## /api/user
+## `/api/user`
 
 Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
 create an account, log in, etc. are described [in the user management API documentation](/api/user/).
 
-## POST /api/product
+## `POST /api/product`
 
-Creates a new product record.  Regardless of the information provided, all records default to the "new" status until
+Creates a new product record.  Regardless of the information provided, all products default to the "new" status until
 they are reviewed and flagged as "active".  You must be logged in to use this REST endpoint.
 
 + Request (application/json}
 
     ```
     {
-        "source":         "mydb",
-        "sid":            "1234",
-        "name":           "My Product",
-        "description":    "My Description",
-        "manufacturer":     {
-            "name":       "Me, Inc."
+        "source": "mydb",
+        "sid": "1234",
+        "name": "My Product",
+        "description": "My Description",
+        "manufacturer": {
+            "name": "Me, Inc."
         },
-        "sourceData":     {
-            "price":  "free"
+        "sourceData": {
+            "price": "free"
         },
-        "updated":        "2012-10-02T15:24:00+02:00"
+        "updated": "2012-10-02T15:24:00+02:00"
     }
     ```
 + Response 200 (application/record+json)
@@ -325,26 +310,25 @@ they are reviewed and flagged as "active".  You must be logged in to use this RE
 
         ```
         {
-            "ok":true,
             "message":"New product submitted."
             "record": {
-                "source":         "mydb",
-                "sid":            "1234",
-                "name":           "My Product",
-                "description":    "My Description",
-                "manufacturer":     {
-                    "name":       "Me, Inc."
+                "source": "mydb",
+                "sid": "1234",
+                "name": "My Product",
+                "description": "My Description",
+                "manufacturer": {
+                    "name": "Me, Inc."
                 },
-                "status":         "new",
-                "sourceData":     {
-                    "price":  "free"
+                "status": "new",
+                "sourceData": {
+                    "price": "free"
                 },
-                "updated":        "2012-10-02T15:24:00+02:00"
+                "updated": "2012-10-02T15:24:00+02:00"
             }
         }
         ```
 
-## PUT /api/product
+## `PUT /api/product`
 
 Update an existing product.  You must provide a complete record in JSON format.  Returns the updated product record.
 You must be logged in to use this REST endpoint.
@@ -355,16 +339,16 @@ Note: If you do not submit an "updated" field, the current date will be used.
 
     ```
     {
-        "source":         "mydb",
-        "sid":            "1234",
-        "name":           "My Product",
-        "description":    "This existing record needs to be updated.",
-        "manufacturer":     {
-            "name":       "Me, Inc."
+        "source": "mydb",
+        "sid": "1234",
+        "name": "My Product",
+        "description": "This existing record needs to be updated.",
+        "manufacturer": {
+            "name": "Me, Inc."
         },
-        "status":         "new",
-        "sourceData":     {
-            "price":  "$20.00"
+        "status": "new",
+        "sourceData": {
+            "price": "$20.00"
         }
      }
     ```
@@ -377,31 +361,31 @@ Note: If you do not submit an "updated" field, the current date will be used.
 
         ```
         {
-            "ok":true,
             "message":"Product record updated."
             "record": {
-                "source":         "mydb",
-                "sid":            "1234",
-                "name":           "My Product",
-                "description":    "This existing record needs to be updated.",
-                "manufacturer":     {
-                    "name":       "Me, Inc."
+                "source": "mydb",
+                "sid": "1234",
+                "name": "My Product",
+                "description": "This existing record needs to be updated.",
+                "manufacturer": {
+                    "name": "Me, Inc."
                 },
-                "status":         "new",
-                "sourceData":     {
-                    "price":  "$20.00"
+                "status": "new",
+                "sourceData": {
+                    "price": "$20.00"
                 },
-                "updated":        "2014-12-02T15:24:00+02:00"
+                "updated": "2014-12-02T15:24:00+02:00"
             }
         }
         ```
 
-## DELETE /api/product/{source}/{sid}
+## `DELETE /api/product/{source}/{sid}`
+
 Flags the record with `source` and `sid` as deleted.  If an author is supplied, gives them credit, otherwise the
 current user is listed as the author.  You must be logged in to use this REST endpoint.
 
 + Parameters
-    + uid (required, string) ... The universal identifier of a single record.
+    + `uid` (required, string) ... The universal identifier of a single record.
 
 + Response 200 (application/json)
     + Headers
@@ -411,19 +395,17 @@ current user is listed as the author.  You must be logged in to use this REST en
 
         ```
         {
-            "ok": true,
             "message": "Record flagged as deleted."
         }
         ```
 
-## GET /api/product/{source}/{sid}{?versions,sources}
+## `GET /api/product/{source}/{sid}{?versions,sources}`
 
 Returns a single product identified by its `source` and `sid`.  Only the latest published version is displayed by
-default.  For ["unified" records](#unified-records), full source records are not included by default.
+default.  For ["unified" records](#unified-records), full source products are not included by default.
 
 + Parameters
-    + versions (optional, boolean) ... Whether or not to display the full version history for this record (including any unpublished drafts).  Defaults to "false".
-    + sources (optional, boolean) ... If this is a "unified" record, you have the option to retrieve and display the source data rather than simply displaying a list of source IDs.  Defaults to "false".
+    + `includeSources` (optional, boolean) ... If this is a "unified" record, you have the option to retrieve and display the source data rather than simply displaying a list of source IDs.  Defaults to "false".
 
 + Response 200 (application/record+json)
     + Headers
@@ -433,32 +415,31 @@ default.  For ["unified" records](#unified-records), full source records are not
 
         ```
         {
-            "ok":   true,
             "record:
             {
                 {
-                    "source":           "ul",
-                    "uid":              "com.maker.win7.sample",
-                    "sid":              "com.maker.win7.sample",
-                    "name":             "A Sample Unified Listing Record",
-                    "description":      "A record that combines 2-3 additional records' worth of information."
-                    "manufacturer":     {
-                        "name":             "Maker Software",
-                        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode":       "27707",
-                        "cityTown":         "Durham",
-                        "provinceRegion":   "North Carolina",
-                        "country":          "United States",
-                        "phone":            "(704) 555-1212",
-                        "email":            "maker@maker.com",
-                        "url":              "http://www.maker.com/"
+                    "source": "ul",
+                    "uid": "com.maker.win7.sample",
+                    "sid": "com.maker.win7.sample",
+                    "name": "A Sample Unified Listing Record",
+                    "description": "A record that combines 2-3 additional products' worth of information."
+                    "manufacturer": {
+                        "name": "Maker Software",
+                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                        "postalCode": "27707",
+                        "cityTown": "Durham",
+                        "provinceRegion": "North Carolina",
+                        "country": "United States",
+                        "phone": "(704) 555-1212",
+                        "email": "maker@maker.com",
+                        "url": "http://www.maker.com/"
                     },
-                    "status":           "active",
-                    "language:          "en_us",
-                    "sources":          [ "siva:2345" ],
+                    "status": "active",
+                    "language: "en_us",
+                    "sources": [ "siva:2345" ],
                     "editions": {
                         "default": {
-                            "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                             "settingsHandlers": [],
                             "lifeCycleManager": {}
                         }
@@ -469,87 +450,84 @@ default.  For ["unified" records](#unified-records), full source records are not
                             "secondaryCodes": [ "22.39.07" ]
                         }
                     },
-                    "updated":          "2014-11-30T22:04:15Z"
+                    "updated": "2014-11-30T22:04:15Z"
                 }
             }
         }
         ```
 
 
-## GET /api/products{?source,status,updated,offset,limit,versions,sources}
+## `GET /api/products{?source,status,updated,offset,limit,sources}`
 
 Return the list of products, optionally filtered by source, status, or date of last update.
 
 + Parameters
-    + source (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.
-    + status (optional, string) ... The product statuses to return (defaults to everything but 'deleted' records).  Can be repeated to include multiple statuses.
-    + updated (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only records updated at or after this time are returned.
-    + offset (optional, string) ... The number of records to skip in the list of results.  Used for pagination.
-    + limit (optional, string) ... The number of records to return.  Used for pagination.
-    + versions (optional, boolean) ... Whether or not to display the full version history for this record (including any unpublished drafts).  Defaults to "false".
-    + sources (optional, boolean) ... If this is set to true, combine all records according to their "unified" grouping.  If ``source`` values are specified, only unified records associated with records from the given source(s) will be included in the resutls.  Defaults to "false".
+    + `source` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.
+    + `status` (optional, string) ... The product statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+    + `updated` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
+    + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
+    + `limit` (optional, string) ... The number of products to return.  Used for pagination.
+    + `sources` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  If ``source`` values are specified, only unified products associated with products from the given source(s) will be included in the resutls.  Defaults to "false".
 
 + Response 200 (application/headers+json)
     + Headers
-        + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/records.json#
-        + Link: <https://registry.gpii.net/schema/records.json#>; rel="describedBy"
+        + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/products.json#
+        + Link: <https://registry.gpii.net/schema/products.json#>; rel="describedBy"
     + Body
 
         ```
         {
-            "ok": true,
             "total_rows": 1,
             "params": {
                 "offset": 0,
                 "limit": 1
             },
-            "records": [
+            "products": [
                 {
-                    "source":           "ul",
-                    "uid":              "com.maker.win7.sample",
-                    "sid":              "com.maker.win7.sample",
-                    "name":             "A Sample Unified Listing Record",
-                    "description":      "A record that combines 2-3 additional records' worth of information."
-                    "manufacturer":     {
-                        "name":             "Maker Software",
-                        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode":       "27707",
-                        "cityTown":         "Durham",
-                        "provinceRegion":   "North Carolina",
-                        "country":          "United States",
-                        "phone":            "(704) 555-1212",
-                        "email":            "maker@maker.com",
-                        "url":              "http://www.maker.com/"
+                    "source": "ul",
+                    "uid": "com.maker.win7.sample",
+                    "sid": "com.maker.win7.sample",
+                    "name": "A Sample Unified Listing Record",
+                    "description": "A record that combines 2-3 additional products' worth of information."
+                    "manufacturer": {
+                        "name": "Maker Software",
+                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                        "postalCode": "27707",
+                        "cityTown": "Durham",
+                        "provinceRegion": "North Carolina",
+                        "country": "United States",
+                        "phone": "(704) 555-1212",
+                        "email": "maker@maker.com",
+                        "url": "http://www.maker.com/"
                     },
-                    "status":           "active",
-                    "language:          "en_us",
-                    "sources":          [ "siva:2345" ],
+                    "status": "active",
+                    "language: "en_us",
+                    "sources": [ "siva:2345" ],
                     "editions": {
                         "default": {
-                            "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                             "settingsHandlers": [],
                             "lifeCycleManager": {}
                         }
                     }
-                    "updated":          "2014-11-30T22:04:15Z"
+                    "updated": "2014-11-30T22:04:15Z"
                 }
             ],
             "retrievedAt": "2014-05-25T11:23:32.441Z"
         }
         ```
 
-## GET /api/search{?q,source,status,sort,offset,limit,versions,sources}
- Performs a full text search of all data, returns matching products.
+## `GET /api/search{?q,sources,statuses,sortBy,offset,limit,unified}`
+
+Performs a full text search of all data, returns matching products.
 
  + Parameters
-    + q (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
-    + source (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.
-    + status (optional, string) ... The record statuses to return (defaults to everything but 'deleted' records).  Can be repeated to include multiple statuses.
-    + sort (optional,string) ... The sort order to use when displaying records.  Conforms to [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html).
-    + offset (optional, string) ... The number of records to skip in the list of results.  Used for pagination.
-    + limit (optional, string) ... The number of records to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
-    + versions (optional, boolean) ... Whether or not to display the full version history for each record (including any unpublished drafts).  Defaults to "false".
-    + sources (optional, boolean) ... If this is set to true, combine all search results according to their "unified" grouping.  Defaults to "false".
+    + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
+    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
+    + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  A record can be excluded by prepending an exclamation point in front of its name, as in ```source=!ul```.     + statuses (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+    + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
+    + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
+    + `unified` (optional, boolean) ... If this is set to true, combine all search results according to their "unified" grouping.  Defaults to "true".
 
  + Response 200 (application/search+json)
      + Headers
@@ -559,63 +537,61 @@ Return the list of products, optionally filtered by source, status, or date of l
 
          ```
          {
-             "ok": true,
              "total_rows": 1,
              "params": {
                   "q": "jaws",
                   "offset": 0,
                   "limit": 100,
                   "sort": "uid ASC",
-                  "updated": "2014-05-25T11:23:32.441Z",
+                  "updatedSince": "2014-05-25T11:23:32.441Z",
                   "statuses": [ "active" ]
              },
-             "records": [
+             "products": [
                 {
-                    "source":           "ul",
-                    "uid":              "com.maker.win7.sample",
-                    "sid":              "com.maker.win7.sample",
-                    "name":             "A Sample Unified Listing Record",
-                    "description":      "A record that combines 2-3 additional records' worth of information."
-                    "manufacturer":     {
-                        "name":             "Maker Software",
-                        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode":       "27707",
-                        "cityTown":         "Durham",
-                        "provinceRegion":   "North Carolina",
-                        "country":          "United States",
-                        "phone":            "(704) 555-1212",
-                        "email":            "maker@maker.com",
-                        "url":              "http://www.maker.com/"
+                    "source": "ul",
+                    "uid": "com.maker.win7.sample",
+                    "sid": "com.maker.win7.sample",
+                    "name": "A Sample Unified Listing Record",
+                    "description": "A record that combines 2-3 additional products' worth of information."
+                    "manufacturer": {
+                        "name": "Maker Software",
+                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                        "postalCode": "27707",
+                        "cityTown": "Durham",
+                        "provinceRegion": "North Carolina",
+                        "country": "United States",
+                        "phone": "(704) 555-1212",
+                        "email": "maker@maker.com",
+                        "url": "http://www.maker.com/"
                     },
-                    "status":           "active",
-                    "language:          "en_us",
-                    "sources":          [ "siva:2345" ],
+                    "status": "active",
+                    "language: "en_us",
+                    "sources": [ "siva:2345" ],
                     "editions": {
                         "default": {
-                            "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                             "settingsHandlers": [],
                             "lifeCycleManager": {}
                         }
                     }
-                    "updated":          "2014-11-30T22:04:15Z"
+                    "updated": "2014-11-30T22:04:15Z"
                 }
              ],
              "retrievedAt": "2014-05-25T11:23:32.441Z"
          }
          ```
 
- ## GET /api/suggest/{?q,source,status,sort,versions,sources}
- Suggest a short list of records matching the search terms.  Performs a search as in /api/search, but only returns 5
- results and does not support paging.  Equivalent to `/api/search?q=search&results=5`.  Used to suggest related records
- when building a "unified" record.
+ ## GET /api/suggest/{?q,source,status,sort}
+
+Suggest a short list of products that match the search terms.  Performs a search as in /api/search, but only returns 5
+results and does not support paging.  Equivalent to `/api/search?q=search&results=5&unified=false`.  Used to suggest related products
+when building a "unified" record.
 
  + Parameters
-     + q (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax][1] to construct more complex searches.
-     + source (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  A record can be excluded by prepending an exclamation point in front of its name, as in ```source=!ul```.
-     + status (optional, string) ... The record statuses to return (defaults to everything but 'deleted' records).  Can be repeated to include multiple statuses.
-     + sort (optional,string) ... The sort order to use when displaying records.  Conforms to [lucene's query syntax][1].
-     + versions (optional, boolean) ... Whether or not to display the full version history for each record (including any unpublished drafts).  Defaults to "false".
-     + sources (optional, boolean) ... If this is set to true, combine all search results according to their "unified" grouping.  Defaults to "false".
+     + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax][1] to construct more complex searches.
+     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
+     + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  A record can be excluded by prepending an exclamation point in front of its name, as in ```source=!ul```.
+     + `statuses` (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
 
  + Response 200 (application/search+json)
      + Headers
@@ -625,58 +601,57 @@ Return the list of products, optionally filtered by source, status, or date of l
 
          ```
          {
-             "ok": true,
              "total_rows": 1,
              "params": {
                   "q": "jaws",
-                  "updated": "2014-05-25T11:23:32.441Z",
+                  "updatedSince": "2014-05-25T11:23:32.441Z",
                   "statuses": [ "active" ]
              },
-             "records": [
+             "products": [
                 {
-                    "source":           "ul",
-                    "uid":              "com.maker.win7.sample",
-                    "sid":              "com.maker.win7.sample",
-                    "name":             "A Sample Unified Listing Record",
-                    "description":      "A record that combines 2-3 additional records' worth of information."
-                    "manufacturer":     {
-                        "name":             "Maker Software",
-                        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode":       "27707",
-                        "cityTown":         "Durham",
-                        "provinceRegion":   "North Carolina",
-                        "country":          "United States",
-                        "phone":            "(704) 555-1212",
-                        "email":            "maker@maker.com",
-                        "url":              "http://www.maker.com/"
+                    "source": "ul",
+                    "uid": "com.maker.win7.sample",
+                    "sid": "com.maker.win7.sample",
+                    "name": "A Sample Unified Listing Record",
+                    "description": "A record that combines 2-3 additional products' worth of information."
+                    "manufacturer": {
+                        "name": "Maker Software",
+                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                        "postalCode": "27707",
+                        "cityTown": "Durham",
+                        "provinceRegion": "North Carolina",
+                        "country": "United States",
+                        "phone": "(704) 555-1212",
+                        "email": "maker@maker.com",
+                        "url": "http://www.maker.com/"
                     },
-                    "status":           "active",
-                    "language:          "en_us",
-                    "sources":          [ "siva:2345" ],
+                    "status": "active",
+                    "language: "en_us",
+                    "sources": [ "siva:2345" ],
                     "editions": {
                         "default": {
-                            "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                             "settingsHandlers": [],
                             "lifeCycleManager": {}
                         }
                     }
-                    "updated":          "2014-11-30T22:04:15Z"
+                    "updated": "2014-11-30T22:04:15Z"
                 }
              ],
              "retrievedAt": "2014-05-25T11:23:32.441Z"
          }
          ```
 
- ## GET /api/updates/{?source,updated,status,offset,limit}
+ ## `GET /api/updates/{?source,updated,statuses,offset,limit}`
 
-Return a list of unified records that contain newer information than the record provided by the given source.
+Return a list of unified products that contain newer information than the record provided by the given source.
 
  + Parameters
-     + source (required, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.
-     + updated (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified records updated at or after this time are included in the comparison.
-     + status (optional, string) ... The unified record statuses to return (defaults to everything but 'deleted' records).  Can be repeated to include multiple statuses.
-     + offset (optional, string) ... The number of records to skip in the list of results.  Used for pagination.
-     + limit (optional, string) ... The number of records to return.  Used for pagination.  Set to `-1` to return all records.  Defaults to `-1`
+     + `sources` (required, string) ... Only display products from the specified sources.
+     + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified products updated at or after this time are included in the comparison.
+     + `statuses` (optional, string) ... The unified record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
+     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  Set to `-1` to return all products.  Defaults to `-1`
 
  + Response 200 (application/search+json)
      + Headers
@@ -686,42 +661,41 @@ Return a list of unified records that contain newer information than the record 
 
          ```
          {
-             "ok": true,
              "total_rows": 1,
              "params": {
                   "sources": ["Vlibank"]
-                  "updated": "2014-05-25T11:23:32.441Z",
+                  "updatedSince": "2014-05-25T11:23:32.441Z",
                   "statuses": [ "active" ]
              },
-             "records": [
+             "products": [
                 {
-                    "source":           "ul",
-                    "uid":              "com.maker.win7.sample",
-                    "sid":              "com.maker.win7.sample",
-                    "name":             "A Sample Unified Listing Record",
-                    "description":      "A record that combines 2-3 additional records' worth of information."
-                    "manufacturer":     {
-                        "name":             "Maker Software",
-                        "address":          "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode":       "27707",
-                        "cityTown":         "Durham",
-                        "provinceRegion":   "North Carolina",
-                        "country":          "United States",
-                        "phone":            "(704) 555-1212",
-                        "email":            "maker@maker.com",
-                        "url":              "http://www.maker.com/"
+                    "source": "ul",
+                    "uid": "com.maker.win7.sample",
+                    "sid": "com.maker.win7.sample",
+                    "name": "A Sample Unified Listing Record",
+                    "description": "A record that combines 2-3 additional products' worth of information."
+                    "manufacturer": {
+                        "name": "Maker Software",
+                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                        "postalCode": "27707",
+                        "cityTown": "Durham",
+                        "provinceRegion": "North Carolina",
+                        "country": "United States",
+                        "phone": "(704) 555-1212",
+                        "email": "maker@maker.com",
+                        "url": "http://www.maker.com/"
                     },
-                    "status":           "active",
-                    "language:          "en_us",
-                    "sources":          [ "siva:2345" ],
+                    "status": "active",
+                    "language: "en_us",
+                    "sources": [ "siva:2345" ],
                     "editions": {
                         "default": {
-                            "contexts":         { "OS": { "id": "android", "version": ">=0.1" } },
+                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
                             "settingsHandlers": [],
                             "lifeCycleManager": {}
                         }
                     }
-                    "updated":          "2014-11-30T22:04:15Z"
+                    "updated": "2014-11-30T22:04:15Z"
                 }
              ],
              "retrievedAt": "2014-05-25T11:23:32.441Z"
