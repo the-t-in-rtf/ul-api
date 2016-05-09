@@ -1,0 +1,18 @@
+{
+  "id":   "paging.json",
+  "description": "Common 'paging' definitions used by various REST endpoints in the UL API.",
+  "definitions": {
+    "total_rows": {
+      "type": "number",
+      "description": "The total number of rows that match the input parameters."
+    },
+    "offset": {
+      "type": "number",
+      "description": "The position of the first record to return.  Defaults to zero (the first record in the set)."
+    },
+    "limit": {
+      "type": "number",
+      "description": "The number of records to return."
+    }
+  }
+}

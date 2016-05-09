@@ -1,0 +1,10 @@
+{
+  "id": "retrieved-at.json",
+  "definitions": {
+    "retrievedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time at which information was returned by a REST endpoint."
+    }
+  }
+}

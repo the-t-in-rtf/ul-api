@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "id": "search-input.json",
+  "properties": {
+    "limit": {
+      "$ref": "paging.json#/definitions/limit"
+    },
+    "offset": {
+      "$ref": "paging.json#/definitions/offset"
+    },
+    "q": {
+      "$ref": "search-base.json#/definitions/q"
+    },
+    "sources": {
+      "$ref": "filters.json#/definitions/sources"
+    },
+    "sortBy": {
+      "$ref": "sort-by.json#/definitions/sortBy"
+    },
+    "statuses": {
+      "$ref": "filters.json#/definitions/statuses"
+    },
+    "updated": {
+      "$ref": "filters.json#/definitions/updated"
+    }
+  },
+  "required": [
+    "q"
+  ]
+}

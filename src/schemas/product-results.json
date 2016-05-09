@@ -1,0 +1,37 @@
+{
+    "type": "object",
+    "id": "product-results.json",
+    "properties": {
+        "source": {
+            "$ref": "product-base.json#/definitions/source"
+        },
+        "sid": {
+            "$ref": "product-base.json#/definitions/sid"
+        },
+        "uid": {
+            "$ref": "product-base.json#/definitions/uid"
+        },
+        "name": {
+            "$ref": "product-base.json#/definitions/name"
+        },
+        "description": {
+            "$ref": "product-base.json#/definitions/description"
+        },
+        "manufacturer": {
+            "$ref": "product-base.json#/definitions/manufacturer"
+        },
+        "status": {
+            "$ref": "product-base.json#/definitions/status"
+        },
+        "language": {
+            "$ref": "product-base.json#/definitions/language"
+        },
+        "sourceData": {
+            "$ref": "product-base.json#/definitions/sourceData"
+        },
+        "updated": {
+            "$ref": "product-base.json#/definitions/updated"
+        }
+    },
+   "required": ["source","sid","name","description", "manufacturer", "status"]
+}

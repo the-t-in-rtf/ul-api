@@ -261,18 +261,18 @@ fluid.defaults("gpii.tests.ul.api.product.get", {
                     "dataPath": "",
                     "schemaPath": "#/required",
                     "params": {
-                        "missingProperty": "source"
+                        "missingProperty": "sid"
                     },
-                    "message": "The 'source' URL parameter is required."
+                    "message": "The 'sid' URL parameter is required."
                 },
                 {
                     "keyword": "required",
                     "dataPath": "",
                     "schemaPath": "#/required",
                     "params": {
-                        "missingProperty": "sid"
+                        "missingProperty": "source"
                     },
-                    "message": "The 'sid' URL parameter is required."
+                    "message": "The 'source' URL parameter is required."
                 }
             ]
         },

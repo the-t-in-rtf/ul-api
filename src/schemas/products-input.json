@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "id": "products-input.json",
+  "properties": {
+    "includeSources": {
+      "$ref": "output.json#/definitions/includeSources"
+    },
+    "limit": {
+      "$ref": "paging.json#/definitions/limit"
+    },
+    "offset": {
+      "$ref": "paging.json#/definitions/offset"
+    },
+    "sources": {
+      "$ref": "filters.json#/definitions/sources"
+    },
+    "sortBy": {
+      "$ref": "sort-by.json#/definitions/sortBy"
+    },
+    "statuses": {
+      "$ref": "filters.json#/definitions/statuses"
+    },
+    "updated": {
+      "$ref": "filters.json#/definitions/updated"
+    }
+  }
+}

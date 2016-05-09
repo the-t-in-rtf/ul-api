@@ -1,8 +1,10 @@
 {
   "type": "object",
-  "id": "updates.json",
-  "description": "The JSON Schema used in reporting differences between the unified listing and one or more sources.",
+  "id": "search-results.json",
   "properties": {
+    "q": {
+      "$ref": "search-base.json#/definitions/q"
+    },
     "total_rows": {
       "$ref": "paging.json#/definitions/total_rows"
     },
@@ -23,6 +25,7 @@
     }
   },
   "required": [
+    "q",
     "total_rows",
     "offset",
     "limit",

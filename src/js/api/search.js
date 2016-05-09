@@ -1,7 +1,17 @@
 // API Support for GET /api/product/:source:/:id
 "use strict";
+var fluid = require("infusion");
+
+fluid.registerNamespace("gpii.ul.api.search");
+
+
+// TODO:  Write JSON Schema for Search
+
+// TODO: Write JSON Schema for "suggest" endpoint.
+
+// TODO:  Make "suggest grade" version as a derived grade with hard limits and less configurable query parameters.
+
 module.exports = function (config, quick) {
-    var fluid           = require("infusion");
     var mode            = quick ? "suggest" : "search";
     var namespace       = "gpii.ul.api." + mode;
     var search          = fluid.registerNamespace(namespace);

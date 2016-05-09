@@ -36,8 +36,11 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         var transformedOutput = fluid.model.transformWithRules(couchResponse, that.options.rules.productCouchResponseToJson);
         that.productRecord = fluid.filterKeys(transformedOutput, that.options.couchKeysToExclude, true);
 
+        // Only work with the same data validated by the schema validation middleware.
+        var input = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
+
         // Look up the sources if the "sources" flag is set in {that}.request.query.
-        if (that.options.request.params.source === "unified" && that.options.request.query.sources) {
+        if (input.source === "unified" && input.sources) {
             that.sourceReader.get({ uid: that.options.request.params.sid });
         }
         // No need to look up sources, just send what we have now.
@@ -192,7 +195,7 @@ fluid.defaults("gpii.ul.api.product.get", {
     routerOptions: {
         mergeParams: true
     },
-    schemaKey:    "product-get.json",
+    schemaKey:    "product-get-input.json",
     handlers: {
         json: {
             contentType:   "application/json",
@@ -204,15 +207,21 @@ fluid.defaults("gpii.ul.api.product.get", {
             handlerGrades: ["gpii.ul.api.product.get.handler.html"]
         }
     },
-    components: {
-        validationMiddleware: {
-            options: {
-                rules: {
-                    requestContentToValidate: {
-                        "": "params"
-                    }
-                }
-            }
+    rules: {
+        requestContentToValidate: {
+            "sid":     "params.sid",
+            "source":  "params.source",
+            "sources": "query.sources"
         }
-    }
+    },
+    distributeOptions: [
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        },
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
+        }
+    ]
 });

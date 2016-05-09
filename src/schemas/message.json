@@ -1,27 +1,16 @@
 {
     "type": "object",
     "id": "message",
-
+    "description": "The common format used for general confirmation and error messages.",
     "properties": {
-        "ok": {
+        "isError": {
             "type": "boolean",
-            "description": "Whether the request was completed successfully.  Set to 'false' if any problems occur, and 'true' otherwise."
+            "description": "Whether the request was completed successfully.  Set to 'true' if any problems occur."
         },
         "message": {
             "type": "string",
             "description": "An optional message describing the results of a REST call."
-        },
-        "errors": {
-            "type": "object",
-            "description": "An optional object containing more details about any errors encountered."
-        },
-        "record": {"$ref": "record.json"},
-        "records": {
-            "type": "array",
-            "items": {
-                "$ref": "record.json"
-            }
         }
     },
-    "required": ["ok","message"]
+    "required": ["message"]
 }
