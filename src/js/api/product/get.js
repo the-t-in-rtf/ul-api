@@ -134,10 +134,6 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     "uid": "%uid"
                 },
                 listeners: {
-                    // "onCreate.logSomething": {
-                    //     func: "console.log",
-                    //     args: ["sources dataSource URL:", "{that}.options.url"]
-                    // },
                     // Finish processing after the "sources" are read
                     "onRead.processSourcesResponse": {
                         func: "{gpii.ul.api.product.get.handler.base}.processSourcesResponse",
@@ -197,14 +193,14 @@ fluid.defaults("gpii.ul.api.product.get", {
     },
     schemaKey:    "product-get-input.json",
     handlers: {
-        json: {
-            contentType:   "application/json",
-            handlerGrades: ["gpii.ul.api.product.get.handler.base"]
-        },
         html: {
-            priority:      "after:json",
             contentType:   "text/html",
             handlerGrades: ["gpii.ul.api.product.get.handler.html"]
+        },
+        json: {
+            priority:      "after:html",
+            contentType:   "application/json",
+            handlerGrades: ["gpii.ul.api.product.get.handler.base"]
         }
     },
     rules: {
