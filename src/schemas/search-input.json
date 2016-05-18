@@ -26,5 +26,8 @@
   },
   "required": [
     "q"
-  ]
+  ],
+  "errors": {
+    "#/required/0": "You must provide a search string using the 'q' query parameter."
+  }
 }

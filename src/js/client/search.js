@@ -24,7 +24,8 @@
         ajaxOptions: {
             url:      "/api/search",
             method:   "GET",
-            dataType: "json"
+            dataType: "json",
+            traditional: true // prevent square brackets on array variables
         },
         hideOnSuccess: false,
         hideOnError:   false,
@@ -39,13 +40,12 @@
                 successMessage: { literalValue: null }
             },
             modelToRequestPayload: {
-                "":       "notfound",
-                q:        "q",
-                source:   "source",
-                status:   "status",
-                sort:     "sort",
-                versions: "versions",
-                sources:  "sources"
+                "":             "notfound",
+                q:               "q",
+                sources:         "sources",
+                statuses:        "statuses",
+                sortBy:          "sortBy",
+                includeSources:  "includeSources"
             }
         },
         selectors: {
@@ -76,12 +76,12 @@
                 excludeSource: "init",
                 args:          ["{that}"]
             },
-            sort: {
+            sortBy: {
                 funcName:      "gpii.ul.search.query.refreshOnUpdateIfHasQuery",
                 excludeSource: "init",
                 args:          ["{that}"]
             },
-            status: {
+            statuses: {
                 funcName:      "gpii.ul.search.query.refreshOnUpdateIfHasQuery",
                 excludeSource: "init",
                 args:          ["{that}"]
@@ -154,13 +154,13 @@
         }
     });
 
-    // The "sort" control that updates the sort values based on a predefined list of possible settings.
-    fluid.defaults("gpii.ul.search.sort", {
+    // The "sortBy" control that updates the sortBy values based on a predefined list of possible settings.
+    fluid.defaults("gpii.ul.search.sortBy", {
         gradeNames: ["gpii.ul.select"],
-        template:   "search-sort",
+        template:   "search-sortBy",
         selectors:  {
             initial: "",
-            select:  ".search-sort-select"
+            select:  ".search-sortBy-select"
         },
         select: {
             options: {
@@ -176,11 +176,11 @@
         }
     });
 
-    // The "status" control that updates the sort values based on a predefined list of possible settings.
-    fluid.defaults("gpii.ul.search.status", {
-        gradeNames: ["gpii.ul.status"],
+    // The "statuses" control that updates the status values based on a predefined list of possible settings.
+    fluid.defaults("gpii.ul.search.statuses", {
+        gradeNames: ["gpii.ul.statuses"],
         selectors:  {
-            select:  ".search-status-option"
+            select:  ".search-statuses-option"
         }
     });
 
@@ -216,14 +216,13 @@
         gradeNames: ["gpii.handlebars.templateAware"],
         model: {
             q:         "",
-            source:    [],
-            status:    [ "new", "active", "discontinued"],
-            sort:      "/name",
+            sources:    [],
+            statuses:    [ "new", "active", "discontinued"],
+            sortBy:      "/name",
             offset:    0,
             limit:     25,
             totalRows: 0,
-            versions:  false,
-            sources:   true,
+            includeSources:   true,
             records:   []
         },
         components: {
@@ -246,9 +245,9 @@
                     //    offset:  "{search}.model.offset",
                     //    limit:   "{search}.model.limit",
                     //    q:       "{search}.model.q",
-                    //    sort:    "{search}.model.sort",
-                    //    source:  "{search}.model.source",
-                    //    status:  "{search}.model.status"
+                    //    sortBy:    "{search}.model.sortBy",
+                    //    sources:  "{search}.model.sources",
+                    //    statuses:  "{search}.model.statuses"
                     //}
                 }
             },
@@ -301,25 +300,25 @@
                     }
                 }
             },
-            // The sorting controls
-            sort: {
-                type:          "gpii.ul.search.sort",
+            // The sortBying controls
+            sortBy: {
+                type:          "gpii.ul.search.sortBy",
                 createOnEvent: "{locationBar}.events.onReady",
-                container:     "{search}.dom.sort",
+                container:     "{search}.dom.sortBy",
                 options: {
                     model: {
-                        select:   "{search}.model.sort"
+                        select:   "{search}.model.sortBy"
                     }
                 }
             },
-            // The status filtering controls
-            status: {
-                type:          "gpii.ul.search.status",
+            // The statuses filtering controls
+            statuses: {
+                type:          "gpii.ul.search.statuses",
                 createOnEvent: "{locationBar}.events.onReady",
-                container:     "{search}.dom.status",
+                container:     "{search}.dom.statuses",
                 options: {
                     model: {
-                        select: "{search}.model.status"
+                        select: "{search}.model.statuses"
                     }
                 }
             },
@@ -360,8 +359,8 @@
             form:      ".search-query",
             topnav:    ".search-topnav",
             records:   ".search-records",
-            sort:      ".search-sort",
-            status:    ".search-status",
+            sortBy:    ".search-sortBy",
+            statuses:  ".search-statuses",
             limit:     ".search-limit",
             bottomnav: ".search-bottomnav"
         },

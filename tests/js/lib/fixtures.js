@@ -3,7 +3,7 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-var kettle = require("kettle");
+var kettle = fluid.require("%kettle");
 kettle.loadTestingSupport();
 
 require("gpii-express");

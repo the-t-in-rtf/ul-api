@@ -20,5 +20,6 @@
   },
   "required": [
     "q"
-  ]
+  ],
+  "additionalProperties": false
 }

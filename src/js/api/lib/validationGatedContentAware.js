@@ -28,7 +28,7 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
                     }
                 },
                 schemaDirs: "{gpii.ul.api}.options.schemaDirs",
-                schemaKey:  "{gpii.ul.api.validationGatedContentAware}.options.schemaKey",
+                schemaKey:  "{gpii.ul.api.validationGatedContentAware}.options.schemas.input",
                 messages: {
                     error: "The information you provided is incomplete or incorrect.  Please check the following:"
                 },

@@ -14,6 +14,8 @@ require("../lib/validationGatedContentAware");
 
 // TODO:  Put the JSON Schema headers back in
 
+// TODO:  Review and convert the way we handle "unified" records vs. the way the search does it.
+
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {
     if (!couchResponse) {
@@ -98,7 +100,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args: ["%baseUrl/_design/ul/_view/records?key=%key", { baseUrl: "{gpii.ul.api}.options.couch.urls.db" }]
+                        args: ["%baseUrl/_design/ul/_view/records?key=%key", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {
@@ -113,7 +115,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     // Report back to the user on failure.
                     "onError.sendResponse": {
                         func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { tag: "productReader.onError", message: "{arguments}.0" }] // statusCode, body
+                        args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
                         // args: [ 500, "{arguments}.0"] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -127,7 +129,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args: ["%baseUrl/_design/ul/_view/children?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.couch.urls.db" }]
+                        args:     ["%baseUrl/_design/ul/_view/children?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {
@@ -142,7 +144,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     // Report back to the user on failure.
                     "onError.sendResponse": {
                         func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { tag: "sourceReader.onError", message: "{arguments}.0" }] // statusCode, body
+                        args: [ 500, { message: "{arguments}.0" }] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
                 }
@@ -191,7 +193,9 @@ fluid.defaults("gpii.ul.api.product.get", {
     routerOptions: {
         mergeParams: true
     },
-    schemaKey:    "product-get-input.json",
+    schemas: {
+        input: "product-get-input.json"
+    },
     handlers: {
         html: {
             contentType:   "text/html",

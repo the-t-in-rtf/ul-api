@@ -2,9 +2,9 @@
 /* global fluid */
 "use strict";
 (function () {
-    fluid.defaults("gpii.ul.status", {
+    fluid.defaults("gpii.ul.statuses", {
         gradeNames: ["gpii.ul.select"],
-        template:   "common-status-edit",
+        template:   "common-statuses-edit",
         selectors:  {
             initial: "",
             select:  "notfound" // You are expected to define this in the derived grade

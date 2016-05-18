@@ -20,15 +20,16 @@
   },
   "homepage": "https://github.com/GPII/ul-api",
   "dependencies": {
-    "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#a94d9311f25d591c687d626566f9d2f01109ed26",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#1c821135fb89596b1cf5bbd398bb2ad50e874d79",
-    "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#684ddcfba3133a24c3e707fca2af67ea02945d08",
-    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#ddf45b9b55bc6511801625f09b2874b69440f898",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#6c1af329969b89712842c8a5f7e90475a1f41209",
-    "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#d95fe2b30233ad118aff8a045fd237663e07b3c2",
-    "infusion": "git://github.com/amb26/infusion.git#81ef49cdc0e78a96549c5195d9ffd42604087096",
-    "kettle": "git://github.com/amb26/kettle.git#cae26e655b57647a0a70fed4ba32b96d5e885c5e",
-    "marked": "0.3.5"
+    "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#6525dba4c6d826bd587b07a5e5195dc556839730",
+    "gpii-couch-cushion": "git://github.com/the-t-in-rtf/gpii-couch-cushion#b84771e89dcf8604090181df3d0fe71dd04337d2",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#d3a21a9247a30a9bd9d0e8a3b6ffa9152a572b03",
+    "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#514e923b36d5c617864792ccb8b0adde56c29acb",
+    "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#59bcd1ebf7def36701320d8a1fdb57fd6722ce8b",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#67b47b04ef6eb47b12f92a0399455ee19470cab5",
+    "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#e37b0b9bb9d4e3e3279cdfbca28ee61e90f0375e",
+    "infusion": "git://github.com/amb26/infusion.git#3c67d2d3d2fafbe6c21a6e9828be438eebe67299",
+    "marked": "0.3.5",
+    "qs": "6.2.0"
   },
   "devDependencies": {
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#c65f0f4d1459950bdc56be39b01af43ab4894d7b",
@@ -38,6 +39,7 @@
     "grunt-contrib-jshint": "0.9.0",
     "grunt-jsonlint": "1.0.4",
     "grunt-shell": "0.6.4",
+    "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
     "node-jqunit": "~1.1.3"
   }
 }

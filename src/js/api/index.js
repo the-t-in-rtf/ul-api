@@ -14,7 +14,7 @@ require("gpii-express-user");
 require("./docs");
 require("./product");
 //require("./products");
-//require("./search");
+require("./search");
 //require("./updates");
 //require("./sources");
 require("./404");
@@ -29,24 +29,6 @@ fluid.defaults("gpii.ul.api", {
         onReady: {
             events: {
                 productEndpointReady: "productEndpointReady"
-            }
-        }
-    },
-    couch: {
-        db:  "ul",
-        urls: {
-            base: "http://localhost:5984",
-            db:   {
-                expander: {
-                    funcName: "fluid.stringTemplate",
-                    args:     ["%baseUrl/%db", { baseUrl: "{that}.options.couch.urls.base", db: "{that}.options.couch.db" }]
-                }
-            },
-            users:   {
-                expander: {
-                    funcName: "fluid.stringTemplate",
-                    args:     ["%baseUrl/users", { baseUrl: "{that}.options.couch.urls.base" }]
-                }
             }
         }
     },
@@ -83,12 +65,18 @@ fluid.defaults("gpii.ul.api", {
         //     priority: "after:docs"
         // }
         //},
-        //search: {
-        //    type: "gpii.ul.api.products",
-        // options: {
-        //     priority: "after:docs"
-        // }
-        //},
+        search: {
+            type: "gpii.ul.api.search",
+            options: {
+                priority: "after:corsHeaders"
+            }
+        },
+        suggest: {
+            type: "gpii.ul.api.suggest",
+            options: {
+                priority: "after:corsHeaders"
+            }
+        },
         //sources: {
         //    type: "gpii.ul.api.sources.router",
         //    options: {
@@ -112,8 +100,8 @@ fluid.defaults("gpii.ul.api", {
                 // TODO:  Update this
                 app:       "{gpii.express}.options.config.app",
                 couch: {
-                    userDbName: "users",
-                    userDbUrl: "{gpii.ul.api}.options.couch.urls.users"
+                    userDbName: "users", // TODO:  Confirm whether this is used in the package
+                    userDbUrl: "{gpii.ul.api}.options.urls.usersDb"
                 }
             }
         },

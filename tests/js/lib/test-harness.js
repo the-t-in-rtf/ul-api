@@ -11,6 +11,7 @@ require("../../../");
 
 require("gpii-express");
 require("gpii-pouchdb");
+require("gpii-pouchdb-lucene");
 require("gpii-express-user");
 require("gpii-handlebars");
 
@@ -24,39 +25,64 @@ fluid.defaults("gpii.ul.api.tests.harness", {
     gradeNames:   ["fluid.modelComponent"],
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    distributeOptions: {
+        record: 1000000,
+        target: "{that gpii.express.handler}.options.timeout"
+    },
     ports: {
-        api:   7633,
-        pouch: 7634
+        api:    7633,
+        couch:  7634,
+        lucene: 7635
     },
     urls: {
-        api: {
+        lucene: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port", { port: "{that}.options.ports.api"}]
+                args:     ["http://localhost:%port/local/%dbName/_design/lucene/by_content", { port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
             }
         },
-        pouch: {
+        couch: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port", { port: "{that}.options.ports.pouch"}]
+                args:     ["http://localhost:%port/", { port: "{that}.options.ports.couch" }]
+            }
+        },
+        ulDb: {
+            expander: {
+                funcName: "fluid.stringTemplate",
+                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.ul"}]
+            }
+        },
+        usersDb: {
+            expander: {
+                funcName: "fluid.stringTemplate",
+                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.users"}]
             }
         }
     },
+    dbNames: {
+        ul:    "ul",
+        users: "users"
+    },
     events: {
-        apiReady:     null,
-        apiStopped:   null,
-        pouchStarted: null,
-        pouchStopped: null,
+        apiReady:      null,
+        apiStopped:    null,
+        luceneStarted: null,
+        luceneStopped: null,
+        pouchStarted:  null,
+        pouchStopped:  null,
         onStarted: {
             events: {
-                apiReady:     "apiReady",
-                pouchStarted: "pouchStarted"
+                apiReady:      "apiReady",
+                luceneStarted: "luceneStarted",
+                pouchStarted:  "pouchStarted"
             }
         },
         onStopped: {
             events: {
-                apiStopped:   "apiStopped",
-                pouchStopped: "pouchStopped"
+                apiStopped:    "apiStopped",
+                luceneStopped: "luceneStopped",
+                pouchStopped:  "pouchStopped"
             }
         }
     },
@@ -147,13 +173,8 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     api: {
                         type: "gpii.ul.api",
                         options: {
-                            // TODO:  investigate why "last" does not work properly here.
                             priority: "after:allSchemas",
-                            couch: {
-                                urls: {
-                                    base: "{harness}.options.urls.pouch"
-                                }
-                            },
+                            urls:     "{harness}.options.urls",
                             listeners: {
                                 "onReady.notifyParent": {
                                     func: "{harness}.events.apiReady.fire"
@@ -167,7 +188,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         pouch: {
             type: "gpii.express",
             options: {
-                port: "{harness}.options.ports.pouch",
+                port: "{harness}.options.ports.couch",
                 listeners: {
                     onStarted: "{harness}.events.pouchStarted.fire",
                     onStopped: "{harness}.events.pouchStopped.fire"
@@ -182,6 +203,22 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                                 ul:    { data: "%gpii-ul-api/tests/data/ul.json" }
                             }
                         }
+                    }
+                }
+            }
+        },
+        lucene: {
+            type: "gpii.pouch.lucene",
+            options: {
+                port: "{harness}.options.ports.lucene",
+                dbUrl: "{harness}.options.urls.couch",
+                processTimeout: 4000,
+                listeners: {
+                    "onStarted.notifyParent": {
+                        func: "{harness}.events.luceneStarted.fire"
+                    },
+                    "onShutdownComplete.notifyParent": {
+                        func: "{harness}.events.luceneStopped.fire"
                     }
                 }
             }

@@ -7,11 +7,19 @@
       "description": "The total number of rows that match the input parameters."
     },
     "offset": {
-      "type": "number",
+      "type": "string",
+      "pattern": "[0-9]+",
+      "errors": {
+        "pattern": "The starting record must be an integer."
+      },
       "description": "The position of the first record to return.  Defaults to zero (the first record in the set)."
     },
     "limit": {
-      "type": "number",
+      "type": "string",
+      "pattern": "[0-9]+",
+      "errors": {
+        "pattern": "The number of records must be an integer."
+      },
       "description": "The number of records to return."
     }
   }

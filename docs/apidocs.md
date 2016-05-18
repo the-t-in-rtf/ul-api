@@ -584,7 +584,7 @@ Performs a full text search of all data, returns matching products.
  ## GET /api/suggest/{?q,source,status,sort}
 
 Suggest a short list of products that match the search terms.  Performs a search as in /api/search, but only returns 5
-results and does not support paging.  Equivalent to `/api/search?q=search&results=5&unified=false`.  Used to suggest related products
+results and does not support paging.  Equivalent to `/api/search?q=<SEARCH>&results=5&unified=false`.  Used to suggest related products
 when building a "unified" record.
 
  + Parameters
