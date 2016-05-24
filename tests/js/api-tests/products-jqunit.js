@@ -42,11 +42,11 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
         });
     });
 
-    jqUnit.asyncTest("Look for records updated after a very old date...", function () {
+    jqUnit.asyncTest("Look for products updated after a very old date...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { updated: "1970-01-01T16:54:12.023Z" }
@@ -57,14 +57,14 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertTrue("The list should not be empty...", jsonData.records.length > 0);
             }
         });
     });
 
-    jqUnit.asyncTest("Look for records updated after a distant future date...", function () {
+    jqUnit.asyncTest("Look for products updated after a distant future date...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { updated: "3000-01-01T16:54:12.023Z" }
@@ -75,14 +75,14 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertEquals("The list should be empty...", 0, jsonData.records.length);
             }
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by source...", function () {
+    jqUnit.asyncTest("Look for products, limiting by source...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { source: "unified" }
@@ -93,10 +93,10 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 var unifiedRecordCount = jsonData.records.length;
-                jqUnit.assertTrue("The list of unified records should not be empty...", unifiedRecordCount > 0);
+                jqUnit.assertTrue("The list of unified products should not be empty...", unifiedRecordCount > 0);
 
                 jqUnit.stop();
                 var options = {
@@ -109,11 +109,11 @@ productsTests.runTests = function () {
                     testUtils.isSaneResponse(jqUnit, error, response, body);
                     var jsonData = JSON.parse(body);
 
-                    jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+                    jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
                     if (jsonData.records) {
                         var combinedRecordCount = jsonData.records.length;
-                        jqUnit.assertTrue("The list of combined records should not be empty...", combinedRecordCount > 0);
-                        jqUnit.assertTrue("There should be more combined records than unified records...", combinedRecordCount > unifiedRecordCount);
+                        jqUnit.assertTrue("The list of combined products should not be empty...", combinedRecordCount > 0);
+                        jqUnit.assertTrue("There should be more combined products than unified products...", combinedRecordCount > unifiedRecordCount);
                     }
                 });
 
@@ -122,7 +122,7 @@ productsTests.runTests = function () {
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by status...", function () {
+    jqUnit.asyncTest("Look for products, limiting by status...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products"
         };
@@ -132,10 +132,10 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 var unlimitedRecordCount = jsonData.records.length;
-                jqUnit.assertTrue("The list of records should not be empty...", unlimitedRecordCount > 0);
+                jqUnit.assertTrue("The list of products should not be empty...", unlimitedRecordCount > 0);
 
                 jqUnit.stop();
                 var options = {
@@ -148,17 +148,17 @@ productsTests.runTests = function () {
                     testUtils.isSaneResponse(jqUnit, error, response, body);
                     var jsonData = JSON.parse(body);
 
-                    jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+                    jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
                     if (jsonData.records) {
                         var deletedRecordCount = jsonData.records.length;
-                        jqUnit.assertTrue("There should be less 'deleted' records than total records...", deletedRecordCount < unlimitedRecordCount);
+                        jqUnit.assertTrue("There should be less 'deleted' products than total products...", deletedRecordCount < unlimitedRecordCount);
                     }
                 });
             }
         });
     });
 
-    jqUnit.asyncTest("Look for records, limiting by multiple statuses...", function () {
+    jqUnit.asyncTest("Look for products, limiting by multiple statuses...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { status: ["deleted"] }
@@ -169,7 +169,7 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 var deletedRecordCount = jsonData.records.length;
 
@@ -184,17 +184,17 @@ productsTests.runTests = function () {
                     testUtils.isSaneResponse(jqUnit, error, response, body);
                     var jsonData = JSON.parse(body);
 
-                    jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+                    jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
                     if (jsonData.records) {
                         var combinedRecordCount = jsonData.records.length;
-                        jqUnit.assertTrue("There should be more records from multiple statuses than from just one...", deletedRecordCount < combinedRecordCount);
+                        jqUnit.assertTrue("There should be more products from multiple statuses than from just one...", deletedRecordCount < combinedRecordCount);
                     }
                 });
             }
         });
     });
 
-    jqUnit.asyncTest("Present unified records from all sources...", function () {
+    jqUnit.asyncTest("Present unified products from all sources...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { sources: true }
@@ -205,13 +205,13 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
-                jqUnit.assertTrue("The list of records should not be empty...", jsonData.records.length > 0);
+                jqUnit.assertTrue("The list of products should not be empty...", jsonData.records.length > 0);
 
                 jsonData.records.forEach(function (record) {
-                    jqUnit.assertEquals("Only 'unified' records should be returned when sources=true", "unified", record.source);
-                    jqUnit.assertNotUndefined("All records should include sources when sources=true", record.sources);
+                    jqUnit.assertEquals("Only 'unified' products should be returned when sources=true", "unified", record.source);
+                    jqUnit.assertNotUndefined("All products should include sources when sources=true", record.sources);
                     if (record.sources) {
                         jqUnit.assertTrue("There should be at least one source record for each record when sources=true", record.sources.length >= 1);
                     }
@@ -220,7 +220,7 @@ productsTests.runTests = function () {
         });
     });
 
-    jqUnit.asyncTest("Present unified records limited by source...", function () {
+    jqUnit.asyncTest("Present unified products limited by source...", function () {
         var options = {
             "url": productsTests.config.express.baseUrl + "products",
             "qs": { sources: true }
@@ -231,10 +231,10 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 var unlimitedRecordCount = jsonData.records.length;
-                jqUnit.assertTrue("The list of records should not be empty...", unlimitedRecordCount > 0);
+                jqUnit.assertTrue("The list of products should not be empty...", unlimitedRecordCount > 0);
 
                 jqUnit.stop();
 
@@ -248,9 +248,9 @@ productsTests.runTests = function () {
 
                     var jsonData = JSON.parse(body);
 
-                    jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+                    jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
                     var limitedRecordCount = jsonData.records.length;
-                    jqUnit.assertTrue("There should be fewer records return when we limit the results by source...", limitedRecordCount < unlimitedRecordCount);
+                    jqUnit.assertTrue("There should be fewer products return when we limit the results by source...", limitedRecordCount < unlimitedRecordCount);
                 });
             }
         });
@@ -267,9 +267,9 @@ productsTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
-                jqUnit.assertTrue("The list of records should not be empty...", jsonData.records.length > 0);
+                jqUnit.assertTrue("The list of products should not be empty...", jsonData.records.length > 0);
                 var lastRecord = jsonData.records[2];
 
                 jqUnit.stop();
@@ -284,9 +284,9 @@ productsTests.runTests = function () {
 
                     var jsonData = JSON.parse(body);
 
-                    jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+                    jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
                     if (jsonData.records) {
-                        jqUnit.assertTrue("The list of records should not be empty...", jsonData.records.length > 0);
+                        jqUnit.assertTrue("The list of products should not be empty...", jsonData.records.length > 0);
                         var firstRecord = jsonData.records[0];
                         jqUnit.assertDeepEq("The last record of set 1-3 should equal the first record of set 3-3...", lastRecord, firstRecord);
                     }

@@ -35,7 +35,7 @@ gpii.ul.api.sources.request.listAllowedSources = function (sources, user) {
 
     fluid.each(sources, function (sourceOptions, source) {
         // The special character `~` applies to the current username.  If it is found in the list of sources and the user
-        // is logged in, they are given permission to add records whose source matches their username.  This is used to
+        // is logged in, they are given permission to add products whose source matches their username.  This is used to
         // power the "contribute" functionality for both manufacturer and general users.
         //
         if (source === "~" && user) {

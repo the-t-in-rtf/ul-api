@@ -156,7 +156,7 @@
                 container: "{updates}.options.selectors.output",
                 createOnEvent: "{updates}.events.onMarkupRendered",
                 options: {
-                    template: "updates-records",
+                    template: "updates-products",
                     model: {
                         message: "{updates}.model.records"
                     }

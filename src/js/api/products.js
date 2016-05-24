@@ -13,7 +13,7 @@ module.exports = function (config) {
     products.router       = express.Router();
     products.schemaHelper = require("../../schema/lib/schema-helper")(config);
 
-    // TODO: default to filtering out new and deleted records once we have more data
+    // TODO: default to filtering out new and deleted products once we have more data
     // TODO: add support for paging (offset, limit)
     // TODO: add support for versions
     // TODO: add support for comments/annotation
@@ -37,7 +37,7 @@ module.exports = function (config) {
 
         // TODO:  Convert this to an option that uses an expander.
         var options = {
-            url: gpii.ul.api.url.assembleUrl(config.couch.url, "/ul/_design/ul/_view/records")
+            url: gpii.ul.api.url.assembleUrl(config.couch.url, "/ul/_design/ul/_view/products")
         };
 
         var request = require("request");

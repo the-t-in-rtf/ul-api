@@ -1,0 +1,64 @@
+{
+  "docs": [
+    {
+      "uid": "unifiedNewer",
+      "status": "new",
+      "source": "unified",
+      "sid": "unifiedNewer",
+      "name": "sample product 1",
+      "description": "sample description 1",
+      "manufacturer": {
+        "name": "sample manufacturer 1"
+      },
+      "updated": "2015-01-01"
+    },
+    {
+      "uid": "unifiedNewer",
+      "status": "new",
+      "source": "admin",
+      "sid": "admin1",
+      "name": "sample product 1",
+      "description": "sample description 1",
+      "manufacturer": {
+        "name": "sample manufacturer 1"
+      },
+      "updated": "2014-01-01"
+    },
+    {
+      "uid": "unifiedOlder",
+      "status": "new",
+      "source": "unified",
+      "sid": "unifiedOlder",
+      "name": "sample product 2",
+      "description": "sample description 2",
+      "manufacturer": {
+        "name": "sample manufacturer 2"
+      },
+      "updated": "2013-01-01"
+    },
+    {
+      "uid": "unifiedOlder",
+      "status": "new",
+      "source": "admin",
+      "sid": "admin2",
+      "name": "sample product 2",
+      "description": "sample description 2",
+      "manufacturer": {
+        "name": "sample manufacturer 2"
+      },
+      "updated": "2014-01-01"
+    },
+    {
+      "uid": "unifiedOlder",
+      "status": "new",
+      "source": "slashed/source",
+      "sid": "slashed/sid",
+      "name": "slashed",
+      "description": "Product with slashes in its source and sid...",
+      "manufacturer": {
+        "name": "sample manufacturer 3"
+      },
+      "updated": "2014-01-01"
+    }
+  ]
+}

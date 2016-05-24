@@ -37,7 +37,7 @@ module.exports = function (config) {
         // Get the current version of the record from couch
         // TODO:  Improve this. We have to use similar code in GET /product/:source/:sid, but we can't call that API without picking apart the user's cookies and resending them.
         var options = {
-            url: config.couch.url + "_design/ul/_view/records",
+            url: config.couch.url + "_design/ul/_view/products",
             qs: { "key": JSON.stringify([ params.source, params.sid]) }
         };
         var request = require("request");

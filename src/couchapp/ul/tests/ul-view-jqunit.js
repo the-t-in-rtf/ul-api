@@ -28,7 +28,7 @@ jqUnit.test("Testing reduce function (no clusters)...",function(){
     var data    = [{"source":"child", "sid": "bar"}, {"source": "child2", "sid": "baz"}];
     var output  = reducer(["foo","foo"], data, false);
 
-    jqUnit.assertDeepEq("There should be two records...", {"child:bar": { "source": "child", "sid": "bar" }, "child2:baz": { "source": "child2", "sid": "baz"}}, output);
+    jqUnit.assertDeepEq("There should be two products...", {"child:bar": { "source": "child", "sid": "bar" }, "child2:baz": { "source": "child2", "sid": "baz"}}, output);
 });
 
 jqUnit.test("Testing rereduce function, one record split between two sets...",function(){
@@ -47,18 +47,18 @@ jqUnit.test("Testing rereduce function, no clusters...",function(){
 
     var output  = reducer(null, data, true);
 
-    jqUnit.assertDeepEq("There should be two records...", {"child:bar": { "source": "child", "sid": "bar" }, "child2:baz": { "source": "child2", "sid": "baz"}}, output);
+    jqUnit.assertDeepEq("There should be two products...", {"child:bar": { "source": "child", "sid": "bar" }, "child2:baz": { "source": "child2", "sid": "baz"}}, output);
 });
 
 
-jqUnit.test("Testing reduce with JAWS records...",function(){
+jqUnit.test("Testing reduce with JAWS products...",function(){
     var data    = require("./data/jaws.json");
     var reduced = reducer(null,data,false);
     jqUnit.assertEquals("There should be one record in the reduced output...", 1, Object.keys(reduced).length);
-    jqUnit.assertEquals("There should be seven records in the reduced 'sources' list...", 7, reduced[Object.keys(reduced)[0]].sources.length);
+    jqUnit.assertEquals("There should be seven products in the reduced 'sources' list...", 7, reduced[Object.keys(reduced)[0]].sources.length);
 });
 
-jqUnit.test("Testing rereduce with JAWS records...",function(){
+jqUnit.test("Testing rereduce with JAWS products...",function(){
     var data    = require("./data/jaws.json");
 
     var slice1    = data.slice(0,2);
@@ -73,5 +73,5 @@ jqUnit.test("Testing rereduce with JAWS records...",function(){
     var rereduced  = reducer(null, [reduced1, reduced2, reduced3 ,reduced4], true);
 
     jqUnit.assertEquals("There should be one record in the rereduced output...", 1, Object.keys(rereduced).length);
-    jqUnit.assertEquals("There should be seven records in the rereduced 'sources' list...", 7, rereduced[Object.keys(rereduced)[0]].sources.length);
+    jqUnit.assertEquals("There should be seven products in the rereduced 'sources' list...", 7, rereduced[Object.keys(rereduced)[0]].sources.length);
 });

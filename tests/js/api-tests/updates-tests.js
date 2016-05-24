@@ -111,7 +111,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
         {
             tests: [
                 {
-                    name: "Looking for records where the source is newer than the unified record...",
+                    name: "Looking for products where the source is newer than the unified record...",
                     type: "test",
                     sequence: [
                         {
@@ -137,7 +137,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
         {
             tests: [
                 {
-                    name: "Looking for records where the unified record is newer than the source record...",
+                    name: "Looking for products where the unified record is newer than the source record...",
                     type: "test",
                     sequence: [
                         {

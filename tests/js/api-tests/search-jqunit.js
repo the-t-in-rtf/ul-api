@@ -79,7 +79,7 @@ searchTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertTrue("There should be search results...", jsonData.records.length > 0);
             }
@@ -97,11 +97,11 @@ searchTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertTrue("There should be search results...", jsonData.records.length > 0);
                 jsonData.records.forEach(function (record) {
-                    jqUnit.assertEquals("All records should be 'unified'", "unified", record.source);
+                    jqUnit.assertEquals("All products should be 'unified'", "unified", record.source);
                 });
             }
         });
@@ -118,7 +118,7 @@ searchTests.runTests = function () {
             testUtils.isSaneResponse(jqUnit, error, response, body);
             var jsonData = JSON.parse(body);
 
-            jqUnit.assertNotUndefined("A list of records should have been returned...", jsonData.records);
+            jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
             if (jsonData.records) {
                 jqUnit.assertEquals("There should be exactly 5 search results...", 5, jsonData.records.length);
             }
@@ -136,7 +136,7 @@ searchTests.runTests = function () {
             var jsonData = JSON.parse(body);
 
             jqUnit.assertEquals("The response should not be 'OK'...", false, jsonData.ok);
-            jqUnit.assertUndefined("No records should have been returned...", jsonData.records);
+            jqUnit.assertUndefined("No products should have been returned...", jsonData.records);
         });
     });
 
@@ -151,15 +151,15 @@ searchTests.runTests = function () {
             var jsonData = JSON.parse(body);
 
             jqUnit.assertEquals("The response should not be 'OK'...", false, jsonData.ok);
-            jqUnit.assertUndefined("No records should have been returned...", jsonData.records);
+            jqUnit.assertUndefined("No products should have been returned...", jsonData.records);
         });
     });
 
     // TODO:  Find a meaningful test of these parameters. For example, source and status are handled exclusively by lucene, so we'd only be testing our ability to work with the output...
     /*
      source (optional, string) ... Only display products from a particular source. Can be repeated to return products from multiple sources.
-     status (optional, string) ... The record statuses to return (defaults to everything but 'deleted' records). Can be repeated to include multiple statuses.
-     sort (optional,string) ... The sort order to use when displaying records. Conforms to [lucene's query syntax][1].
+     status (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products). Can be repeated to include multiple statuses.
+     sort (optional,string) ... The sort order to use when displaying products. Conforms to [lucene's query syntax][1].
      versions (optional, boolean) ... Whether or not to display the full version history for each record (including any unpublished drafts). Defaults to "false".
      */
 };

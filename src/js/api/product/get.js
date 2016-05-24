@@ -14,7 +14,7 @@ require("../lib/validationGatedContentAware");
 
 // TODO:  Put the JSON Schema headers back in
 
-// TODO:  Review and convert the way we handle "unified" records vs. the way the search does it.
+// TODO:  Review and convert the way we handle "unified" products vs. the way the search does it.
 
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {
@@ -76,7 +76,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     gradeNames: ["gpii.express.handler"],
     errorMessages: {
         noCouchResponse: "Could not retrieve the original record from the database.  Contact an administrator for help.",
-        noCouchSourceResponse: "Could not retrieve the list of source records for the original record.  Contact an administrator for help.",
+        noCouchSourceResponse: "Could not retrieve the list of source products for the original record.  Contact an administrator for help.",
         notFound: "Could not find a record matching the specified source and id.",
         duplicateFound: "There was more than one record with the specified source and id.  Contact an administrator for help."
     },
@@ -100,7 +100,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args: ["%baseUrl/_design/ul/_view/records?key=%key", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
+                        args: ["%baseUrl/_design/ul/_view/products?key=%key", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {
@@ -122,14 +122,14 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 }
             }
         },
-        // dataSource for "sources" data (used with "unified" records when the `sources` query parameter is set)
+        // dataSource for "sources" data (used with "unified" products when the `sources` query parameter is set)
         sourceReader: {
             type: "kettle.dataSource.URL",
             options: {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl/_design/ul/_view/children?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
+                        args:     ["%baseUrl/_design/ul/_view/products?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {

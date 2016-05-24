@@ -9,11 +9,11 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("../../../");
 
-require("gpii-express");
-require("gpii-pouchdb");
-require("gpii-pouchdb-lucene");
-require("gpii-express-user");
-require("gpii-handlebars");
+fluid.require("%gpii-express");
+fluid.require("%gpii-pouchdb");
+fluid.require("%gpii-pouchdb-lucene");
+fluid.require("%gpii-express-user");
+fluid.require("%gpii-handlebars");
 
 fluid.registerNamespace("gpii.ul.api.tests.harness");
 gpii.ul.api.tests.harness.stopServer = function (that) {
@@ -95,7 +95,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
     },
     components: {
         express: {
-            type: "gpii.express",
+            type: "gpii.express.withJsonQueryParser",
             options: {
                 gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port :   "{harness}.options.ports.api",
@@ -173,7 +173,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     api: {
                         type: "gpii.ul.api",
                         options: {
-                            priority: "after:allSchemas",
+                            priority: "after:jsonQueryParser",
                             urls:     "{harness}.options.urls",
                             listeners: {
                                 "onReady.notifyParent": {
@@ -200,7 +200,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                             path: "/",
                             databases: {
                                 users: { data: "%gpii-ul-api/tests/data/users.json" },
-                                ul:    { data: "%gpii-ul-api/tests/data/ul.json" }
+                                ul:    { data: ["%gpii-ul-api/tests/data/pilot.json", "%gpii-ul-api/tests/data/views.json", "%gpii-ul-api/tests/data/whetstone.json"] }
                             }
                         }
                     }

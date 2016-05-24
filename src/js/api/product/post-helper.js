@@ -14,15 +14,15 @@ var sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../../sourc
 
 // TODO:  Convert to proper component
 // TODO:  Back this with a couch handling library, including transform rules to strip _id and _rev fields
-// TODO:  Write detailed tests for "contributed" records
+// TODO:  Write detailed tests for "contributed" products
 
-// Helper method to handle all creation of new records using POSTs to CouchDB
+// Helper method to handle all creation of new products using POSTs to CouchDB
 
-// The PUT method also allows creating new records, so we expose the same functions for both.
+// The PUT method also allows creating new products, so we expose the same functions for both.
 module.exports = function (config) {
     var schemaHelper = require("../../../../schema/lib/schema-helper")(config);
 
-    // A system generate SID for records that do not already have one (such as those created by end users). Returns a
+    // A system generate SID for products that do not already have one (such as those created by end users). Returns a
     // string like "admin-10230942093842-875".  The random number added at the end should prevent collisions unless
     // there are a significant number of updates that occur in a single millisecond.
     function generateSid() {
@@ -40,7 +40,7 @@ module.exports = function (config) {
 
         var postRecord = req.body;
 
-        // This function is only called when working with new records, so we can set the status before validating.
+        // This function is only called when working with new products, so we can set the status before validating.
         postRecord.status = "new";
 
         // TODO: Replace this with proper permission handling
@@ -50,11 +50,11 @@ module.exports = function (config) {
 
         var allowedSources = gpii.ul.api.sources.request.listAllowedSources(sources, req.session._gpii_user);
         if (allowedSources.indexOf(postRecord.source) === -1) {
-            return res.status(403).send(JSON.stringify({ok: false, message: "You are not allowed to edit records with the given source."}));
+            return res.status(403).send(JSON.stringify({ok: false, message: "You are not allowed to edit products with the given source."}));
         }
 
         // TODO: Review and sanitize this and the addition of the source (should be transform rules?)
-        // Auto-generate an SID for records that do not already have one.
+        // Auto-generate an SID for products that do not already have one.
         if (!postRecord.sid) {
             postRecord.sid = generateSid();
         }
@@ -68,7 +68,7 @@ module.exports = function (config) {
 
         if (postRecord.source === "unified" && postRecord.sid !== postRecord.uid) {
             schemaHelper.setHeaders(res, "message");
-            return res.status(400).send({"ok": false, "message": "Unified records should always have their uid set to the same value as the sid."});
+            return res.status(400).send({"ok": false, "message": "Unified products should always have their uid set to the same value as the sid."});
         }
 
         // TODO:  Confirm that the parent record exists when adding a child record.

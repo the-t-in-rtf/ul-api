@@ -5,15 +5,18 @@
   "definitions": {
     "source": {
       "type": "string",
-      "description": "The source of a record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to 'ul'."
+      "description": "The source of a record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to 'ul'.",
+      "maxLength": 50
     },
     "sid": {
       "type": "string",
-      "description": "The unique identifier to identify this record in the source database."
+      "description": "The unique identifier to identify this record in the source database.",
+      "maxLength": 50
     },
     "uid": {
       "type": "string",
-      "description": "The Universal ID ('uid') is an id that is unique in the Unified listing and which is constant for different editions of a product.  'Source' records use this field to indicate which 'unified' record they are associated with (if any)."
+      "description": "The Universal ID ('uid') is an id that is unique in the Unified listing and which is constant for different editions of a product.  'Source' records use this field to indicate which 'unified' record they are associated with (if any).",
+      "maxLength": 100
     },
     "name": {
       "type": "string",

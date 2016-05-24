@@ -21,18 +21,16 @@
   "homepage": "https://github.com/GPII/ul-api",
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#6525dba4c6d826bd587b07a5e5195dc556839730",
-    "gpii-couch-cushion": "git://github.com/the-t-in-rtf/gpii-couch-cushion#b84771e89dcf8604090181df3d0fe71dd04337d2",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#d3a21a9247a30a9bd9d0e8a3b6ffa9152a572b03",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#84279ed065b0429eb71b7f13a17916353362263a",
     "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#514e923b36d5c617864792ccb8b0adde56c29acb",
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#59bcd1ebf7def36701320d8a1fdb57fd6722ce8b",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#67b47b04ef6eb47b12f92a0399455ee19470cab5",
     "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#e37b0b9bb9d4e3e3279cdfbca28ee61e90f0375e",
     "infusion": "git://github.com/amb26/infusion.git#3c67d2d3d2fafbe6c21a6e9828be438eebe67299",
-    "marked": "0.3.5",
-    "qs": "6.2.0"
+    "marked": "0.3.5"
   },
   "devDependencies": {
-    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#c65f0f4d1459950bdc56be39b01af43ab4894d7b",
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#0769dfe14102d4ace6e774399a2171c02594b40e",
     "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#a2c5b08569ad36d953186c93c13707075b2254ff",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#2a81cb06a9787d8ae2e112e4bff1c8b3f200637c",
     "grunt": "0.4.4",

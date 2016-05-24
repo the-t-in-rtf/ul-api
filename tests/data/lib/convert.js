@@ -1,6 +1,6 @@
 // A script to generate data that can be easily used with the bulk docs API in Couch/Pouch.
 //
-// Takes 100 records (not counting design documents) from the current data via the all_docs interface and outputs data that can be immediately imported via bulk_docs
+// Takes 100 products (not counting design documents) from the current data via the all_docs interface and outputs data that can be immediately imported via bulk_docs
 //
 // Used in keeping test scenarios up to date.
 "use strict";

@@ -1,8 +1,8 @@
 // API support for "update" detection, where one or more sources are compared to the "unified" record.  Used to prepare
 // a report of updates so that vendors can see new content from other sources.
 //
-// By default, returns the list of unified records that are newer than the source.  If the `sourceNewer` param is set to
-// `true`, returns the list of unified records that are older than the source.
+// By default, returns the list of unified products that are newer than the source.  If the `sourceNewer` param is set to
+// `true`, returns the list of unified products that are older than the source.
 //
 // Both sets can be optionally filtered to only return changes after a set point by adding the `updated` parameter,
 // which should be a date in ISO 9660 format.
@@ -15,7 +15,7 @@ var request = require("request");
 var when    = require("when");
 
 // TODO: add support for filtering by statuses
-// TODO: default to filtering out new and deleted records once we have more data
+// TODO: default to filtering out new and deleted products once we have more data
 
 fluid.registerNamespace("gpii.ul.api.updates.handler");
 gpii.ul.api.updates.handler.minDate = function (dates) {
@@ -150,7 +150,7 @@ gpii.ul.api.updates.handler.handleRequest = function (that) {
         return;
     }
 
-    // Retrieve all records for the specified source that have their "uid" field set.
+    // Retrieve all products for the specified source that have their "uid" field set.
     var urlWithKeys = fluid.stringTemplate(that.options.sourceView, { keys: JSON.stringify(that.options.request.matchingSources)});
     var options = {
         url: urlWithKeys
@@ -168,7 +168,7 @@ gpii.ul.api.updates.handler.handleRequest = function (that) {
         });
         var distinctUids = Object.keys(distinctUidMap);
 
-        // Get the list of unified records based on the list of UIDs.  This must be done in batches to work around the
+        // Get the list of unified products based on the list of UIDs.  This must be done in batches to work around the
         // 7000 character limit in query strings, which we would hit with more than ~300 keys.
         var promises = [];
         for (var a = 0; a < distinctUids.length; a += 250) {

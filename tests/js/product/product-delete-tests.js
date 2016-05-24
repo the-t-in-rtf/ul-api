@@ -133,7 +133,7 @@ deleteTests.runTests = function () {
                 jqUnit.stop();
 
                 var verifyOptions = {
-                    url: deleteTests.config.couch.url + "_design/ul/_view/records",
+                    url: deleteTests.config.couch.url + "_design/ul/_view/products",
                     qs: { "key": JSON.stringify([ "Handicat", "12011"]) }
                 };
                 request.get(verifyOptions, function (error, response, body) {

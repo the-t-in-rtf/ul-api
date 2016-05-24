@@ -71,12 +71,12 @@ module.exports = function (config) {
 
         if (putRecord.source === "unified" && putRecord.sid !== putRecord.uid) {
             put.schemaHelper.setHeaders(res, "message");
-            return res.status(400).send(JSON.stringify({"ok": false, "message": "Unified records should always have their uid set to the same value as the sid."}));
+            return res.status(400).send(JSON.stringify({"ok": false, "message": "Unified products should always have their uid set to the same value as the sid."}));
         }
 
         var allowedSources = gpii.ul.api.sources.request.listAllowedSources(sources, req.session._gpii_user);
         if (allowedSources.indexOf(putRecord.source) === -1) {
-            return res.status(403).send(JSON.stringify({ok: false, message: "You are not allowed to edit records with the given source."}));
+            return res.status(403).send(JSON.stringify({ok: false, message: "You are not allowed to edit products with the given source."}));
         }
 
         // Get the current couch document so that we can get the _id and _rev parameters required for the update

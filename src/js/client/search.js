@@ -19,20 +19,28 @@
         }
     };
 
+    gpii.ul.search.query.filterAndEncode = function (payload) {
+        var filtered = fluid.filterKeys(payload, ["q", "sources", "statuses", "sortBy", "offset", "limit", "unified", "includeSources"]);
+        return gpii.express.querystring.encodeObject(filtered);
+    };
+
+    fluid.defaults("gpii.ul.search.query.filterAndEncode", {
+        gradeNames: ["fluid.standardTransformFunction"]
+    });
+
     fluid.defaults("gpii.ul.search.query", {
         gradeNames: ["gpii.handlebars.templateFormControl"],
         ajaxOptions: {
             url:      "/api/search",
             method:   "GET",
-            dataType: "json",
-            traditional: true // prevent square brackets on array variables
+            dataType: "json"
         },
         hideOnSuccess: false,
         hideOnError:   false,
         rules: {
             successResponseToModel: {
                 "":           "notfound",
-                records:      "responseJSON.records", // The "records" component will handle displaying records.
+                products:     "responseJSON.products", // The "products" component will handle displaying products.
                 totalRows:    "responseJSON.total_rows",
                 errorMessage: { literalValue: null }
             },
@@ -40,12 +48,12 @@
                 successMessage: { literalValue: null }
             },
             modelToRequestPayload: {
-                "":             "notfound",
-                q:               "q",
-                sources:         "sources",
-                statuses:        "statuses",
-                sortBy:          "sortBy",
-                includeSources:  "includeSources"
+                "": {
+                    transform: {
+                        type: "gpii.ul.search.query.filterAndEncode",
+                        inputPath: ""
+                    }
+                }
             }
         },
         selectors: {
@@ -100,11 +108,11 @@
         }
     });
 
-    fluid.registerNamespace("gpii.ul.search.records");
+    fluid.registerNamespace("gpii.ul.search.products");
 
     // TODO:  Replace this with a common paging component
-    // Return `limit` records from `array`, starting at `offset`
-    gpii.ul.search.records.pageResults = function (array, offset, limit) {
+    // Return `limit` products from `array`, starting at `offset`
+    gpii.ul.search.products.pageResults = function (array, offset, limit) {
         if (!array) { return; }
 
         // Set sensible defaults if we are not passed anything.
@@ -113,33 +121,33 @@
         return array.slice(start, end);
     };
 
-    gpii.ul.search.records.pageAndRender = function (that) {
-        that.model.pagedRecords = gpii.ul.search.records.pageResults(that.model.records, that.model.offset, that.model.limit);
+    gpii.ul.search.products.pageAndRender = function (that) {
+        that.model.pagedProducts = gpii.ul.search.products.pageResults(that.model.products, that.model.offset, that.model.limit);
         that.renderInitialMarkup();
     };
 
 
-    fluid.defaults("gpii.ul.search.records", {
+    fluid.defaults("gpii.ul.search.products", {
         gradeNames: ["gpii.handlebars.templateAware"],
         model: {
-            records:  []
+            products:  []
         },
         selectors: {
             results: ""
         },
-        template: "search-records",
+        template: "search-products",
         invokers: {
             renderInitialMarkup: {
                 func: "{that}.renderMarkup",
                 args: ["results", "{that}.options.template", "{that}.model"]
             },
             pageAndRender: {
-                funcName: "gpii.ul.search.records.pageAndRender",
+                funcName: "gpii.ul.search.products.pageAndRender",
                 args:     ["{that}"]
             }
         },
         modelListeners: {
-            records: {
+            products: {
                 func:          "{that}.pageAndRender",
                 excludeSource: "init"
             },
@@ -170,7 +178,7 @@
                 },
                 nameDesc: {
                     label: "by name, Z-A",
-                    value: "\\name"
+                    value: "\name"
                 }
             }
         }
@@ -184,7 +192,7 @@
         }
     });
 
-    // The "limit" control that updates the number of records per page based on a predefined list of possible settings.
+    // The "limit" control that updates the number of products per page based on a predefined list of possible settings.
     fluid.defaults("gpii.ul.search.limit", {
         gradeNames: ["gpii.ul.select"],
         template:   "search-limit",
@@ -195,15 +203,15 @@
         select: {
             options: {
                 twentyFive: {
-                    label: "25 records per page",
+                    label: "25 products per page",
                     value: "25"
                 },
                 fifty: {
-                    label: "50 records per page",
+                    label: "50 products per page",
                     value: "50"
                 },
                 hundred: {
-                    label: "100 records per page",
+                    label: "100 products per page",
                     value: "100"
 
                 }
@@ -222,10 +230,12 @@
             offset:    0,
             limit:     25,
             totalRows: 0,
+            unified:   true,
             includeSources:   true,
-            records:   []
+            products:   []
         },
         components: {
+            // TODO:  Wire in the new location bar relay.
             // Sync our search settings with the queryString and history, so that bookmarking and back/forward buttons
             // work as expected.  Must be a child of query so that it is created at the right time to take
             // advantage of its bindings.
@@ -261,13 +271,13 @@
                 }
             },
             // The search results, if any
-            records: {
-                type:          "gpii.ul.search.records",
+            products: {
+                type:          "gpii.ul.search.products",
                 createOnEvent: "{locationBar}.events.onReady",
-                container:     "{search}.dom.records",
+                container:     "{search}.dom.products",
                 options: {
                     model: {
-                        records: "{search}.model.records",
+                        products: "{search}.model.products",
                         offset:  "{search}.model.offset",
                         limit:   "{search}.model.limit"
                     }
@@ -322,7 +332,7 @@
                     }
                 }
             },
-            // The "records per page" controls
+            // The "products per page" controls
             limit: {
                 type:          "gpii.ul.search.limit",
                 createOnEvent: "{locationBar}.events.onReady",
@@ -358,7 +368,7 @@
             error:     ".search-error",
             form:      ".search-query",
             topnav:    ".search-topnav",
-            records:   ".search-records",
+            products:  ".search-products",
             sortBy:    ".search-sortBy",
             statuses:  ".search-statuses",
             limit:     ".search-limit",
