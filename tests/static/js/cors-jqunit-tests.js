@@ -1,7 +1,7 @@
 // Test fixtures to confirm that our CORS headers work in actual browsers.
 /* globals fluid, jqUnit, QUnit, $ */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     fluid.registerNamespace("gpii.tests.ul.api.cors");
@@ -38,7 +38,7 @@
                         },
                         {
                             func: "{testEnvironment}.requestor.makeRequest",
-                            args: ["http://localhost:6194/api/product/unified/unifiedNewer"]
+                            args: ["http://localhost:6194/api/product/unified/1421059432806-826608318"]
                         },
                         {
                             listener: "gpii.tests.ul.api.cors.examinePage",
@@ -75,7 +75,7 @@
                         },
                         {
                             func: "{testEnvironment}.requestor.makeRequest",
-                            args: ["http://localhost:6194/src/js/client/status.js"]
+                            args: ["http://localhost:6194/src/js/client/transformArray.js"]
                         },
                         {
                             listener: "gpii.tests.ul.api.cors.examinePage",
@@ -123,4 +123,3 @@
     fluid.test.runTests("gpii.tests.ul.api.cors.environment.positive");
     fluid.test.runTests("gpii.tests.ul.api.cors.environment.negative");
 })();
-

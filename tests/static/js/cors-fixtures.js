@@ -1,7 +1,7 @@
 // Test fixtures to confirm that our CORS headers work in actual browsers.
 /* globals fluid, $, XMLHttpRequest */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
     fluid.registerNamespace("gpii.test.ul.api.cors.requestor");
 
@@ -18,7 +18,7 @@
         client.setRequestHeader("Accept", "application/json");
         client.send();
     };
-    
+
     gpii.test.ul.api.cors.requestor.displayResponse = function (that, template) {
         var payload = fluid.stringTemplate(template, that.client);
         $(that.container).html(payload);
