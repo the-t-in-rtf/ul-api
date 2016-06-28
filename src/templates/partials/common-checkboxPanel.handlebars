@@ -1,0 +1,6 @@
+{{#if checkboxes}}
+    {{#each checkboxes}}
+        <input type="checkbox" name="checkbox-option" id="checkbox-{{../id}}-{{@index}}" value='{{jsonify value}}'>
+        <label for="checkbox-{{../id}}-{{@index}}">{{label}}</label>
+    {{/each}}
+{{/if}}
