@@ -20,6 +20,7 @@ fluid.registerNamespace("gpii.ul.api.tests.harness");
 gpii.ul.api.tests.harness.stopServer = function (that) {
     that.express.destroy();
     that.pouch.destroy();
+    that.lucene.events.onReadyForShutdown.fire();
 };
 
 fluid.defaults("gpii.ul.api.tests.harness", {
@@ -115,11 +116,24 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     onStopped: "{harness}.events.apiStopped.fire"
                 },
                 components: {
+                    corsHeaders: {
+                        type: "gpii.express.middleware.headerSetter",
+                        options: {
+                            priority: "after:allSchemas",
+                            headers: {
+                                cors: {
+                                    fieldName: "Access-Control-Allow-Origin",
+                                    template:  "*",
+                                    dataRules: {}
+                                }
+                            }
+                        }
+                    },
                     // Client-side Handlebars template bundles
                     inline: {
                         type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
-                            priority: "after:session",
+                            priority: "after:corsHeaders",
                             path: "/hbs",
                             templateDirs: "{harness}.options.templateDirs"
                         }
@@ -142,16 +156,6 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                             path:    "/src",
                             content: "%gpii-ul-api/src"
                         }
-                    },
-                    // Bower Components
-                    bc: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            priority: "after:session",
-                            path: "/bc",
-                            content: "%gpii-ul-api/bower_components"
-                        }
-
                     },
                     // JSON Schemas, available individually
                     schemas: {

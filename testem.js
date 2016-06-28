@@ -34,7 +34,7 @@ gpii.test.ul.api.testemHarness.createFixtures = function (that, callback) {
  *
  */
 gpii.test.ul.api.testemHarness.destroyFixtures = function (that, callback) {
-    that.harness.destroy();
+    that.harness.stopServer();
     callback();
 };
 
@@ -44,12 +44,13 @@ fluid.defaults("gpii.test.ul.api.testemHarness", {
     testemOptions: {
         // TODO:  Discuss adding tests for other client-side components where keyboard navigation and or browser state is not a concern.
         "test_page": [
-            "tests/static/cors-tests.html"
+            "tests/static/cors-tests.html",
+            "tests/static/checkboxPanel-tests.html"
         ],
-        // These only work with `testem ci`.  With plain old `testem`, the express instance is immediately destroeyed.
-        // TODO: Investigate.
-        before_tests: "{that}.createFixtures",
-        after_tests:  "{that}.destroyFixtures"
+        // We need to call these once "per run", otherwise we cannot use the harness with outside of `testem ci`, as it is immediately destroyed.
+        on_start: "{that}.createFixtures",
+        on_exit:  "{that}.destroyFixtures"
+
     },
     events: {
         constructFixtures: null,
