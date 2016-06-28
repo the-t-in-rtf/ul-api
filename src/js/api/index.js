@@ -33,6 +33,24 @@ fluid.defaults("gpii.ul.api", {
             }
         }
     },
+    rules: {
+        contextToExpose: {
+            "layout": "layout", // This is required to support custom layouts
+            "model": {
+                "user":   "req.session._gpii_user"
+            },
+            "req":  {
+                "query":  "req.query",
+                "params": "req.params"
+            }
+        }
+    },
+    distributeOptions: [
+        {
+            source: "{that}.options.rules.contextToExpose",
+            target: "{that gpii.express.singleTemplateMiddleware}.options.rules.contextToExpose"
+        }
+    ],
     components: {
         // Our public API is available for integrators to make calls against remotely.  These CORS headers make that
         // possible: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
