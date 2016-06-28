@@ -1,7 +1,7 @@
 // The "updates" report for database vendors
 /* global fluid, document, jQuery */
-"use strict";
 (function ($) {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     // Transform function to strip "unified" from the list, as we cannot compare unified to itself.

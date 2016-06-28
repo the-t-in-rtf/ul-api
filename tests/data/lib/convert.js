@@ -3,6 +3,7 @@
 // Takes 100 products (not counting design documents) from the current data via the all_docs interface and outputs data that can be immediately imported via bulk_docs
 //
 // Used in keeping test scenarios up to date.
+/* eslint-env node */
 "use strict";
 var fluid       = require("infusion");
 var namespace   = "gpii.ul.test.data.lib.convert";
@@ -70,4 +71,3 @@ request(options, function (error, response, body) {
         console.log("Saved output to file '" + filename + "'...");
     });
 });
-

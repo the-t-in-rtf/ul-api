@@ -1,4 +1,5 @@
 // A.404.handler for anything whose path doesn't match another endpoint
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

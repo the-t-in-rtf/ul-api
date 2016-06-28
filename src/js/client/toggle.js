@@ -61,8 +61,8 @@
 // }
 
 /* global fluid */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
     fluid.registerNamespace("gpii.ul.toggle");
 

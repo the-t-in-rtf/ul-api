@@ -9,9 +9,9 @@
 //
 // Your main element should be focusable (i.e. have a `tabindex` property set).
 //
-"use strict";
 /* global fluid */
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     fluid.registerNamespace("gpii.ul.hasSkipNavLink");

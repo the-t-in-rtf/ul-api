@@ -62,10 +62,9 @@ For examples of this component in action, check out the tests included with this
 */
 
 // TODO:  Add support for IE using https://github.com/devote/HTML5-History-API or similar polyfill.
-"use strict";
 /* global fluid, window, document */
-
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     fluid.registerNamespace("gpii.locationBar");

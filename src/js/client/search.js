@@ -1,7 +1,7 @@
 // Basic search component for the Unified Listing
 /* global fluid */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     fluid.registerNamespace("gpii.ul.search.query");
@@ -184,11 +184,35 @@
         }
     });
 
-    // The "statuses" control that updates the status values based on a predefined list of possible settings.
+    // The "statuses" control that updates the statuses value when checkboxes are changed.
     fluid.defaults("gpii.ul.search.statuses", {
-        gradeNames: ["gpii.ul.statuses"],
+        gradeNames: ["gpii.ul.checkboxPanel"],
+        template: "search-statuses",
+        label:    "Filter by status:",
         selectors:  {
-            select:  ".search-statuses-option"
+            initial:  ".search-statuses",
+            options:  ".search-statuses-option"
+        },
+        bindings: {
+            options: "options"
+        },
+        checkboxes: {
+            "new": {
+                label: "New",
+                value: "new"
+            },
+            active: {
+                label: "Active",
+                value: "active"
+            },
+            discontinued: {
+                label: "Discontinued",
+                value: "discontinued"
+            },
+            deleted: {
+                label: "Deleted",
+                value: "deleted"
+            }
         }
     });
 
@@ -223,16 +247,16 @@
     fluid.defaults("gpii.ul.search", {
         gradeNames: ["gpii.handlebars.templateAware"],
         model: {
-            q:         "",
-            sources:    [],
-            statuses:    [ "new", "active", "discontinued"],
-            sortBy:      "/name",
-            offset:    0,
-            limit:     25,
-            totalRows: 0,
-            unified:   true,
+            q:               "",
+            sources:         [],
+            statuses:        [ "new", "active", "discontinued"],
+            sortBy:           "/name",
+            offset:           0,
+            limit:            25,
+            totalRows:        0,
+            unified:          true,
             includeSources:   true,
-            products:   []
+            products:         []
         },
         components: {
             // TODO:  Wire in the new location bar relay.
@@ -328,7 +352,7 @@
                 container:     "{search}.dom.statuses",
                 options: {
                     model: {
-                        select: "{search}.model.statuses"
+                        checkboxOptions: "{search}.model.statuses"
                     }
                 }
             },

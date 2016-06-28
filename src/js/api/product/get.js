@@ -3,6 +3,7 @@
 // If the request content-type is "application/json", respond with the JSON source of the record.
 //
 // Otherwise, serve up an HTML version of the content.
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii = fluid.registerNamespace("gpii");

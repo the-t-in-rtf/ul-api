@@ -2,8 +2,8 @@
 // TODO:  Figure out what happens when a user contributes changes to the same record a second time.
 // Component to allow end users to contribute changes, which can be reviewed and incorporated into the unified record.
 /* global fluid */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     // The component that handles data entry, including saving changes.

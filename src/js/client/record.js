@@ -2,8 +2,8 @@
 // Component to display the view/edit interface for a single record.
 
 /* global fluid */
-"use strict";
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
     // TODO:  Fix this to enable reviewer editing of the "status" field.

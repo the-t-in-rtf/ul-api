@@ -1,6 +1,6 @@
 // handle POST /api/product
+/* eslint-env node */
 "use strict";
-
 module.exports = function (config) {
     var fluid = require("infusion");
 

@@ -1,4 +1,5 @@
 // API Support for DELETE /api/product/:source:/:sid
+/* eslint-env node */
 "use strict";
 module.exports = function (config) {
     var fluid         = require("infusion");

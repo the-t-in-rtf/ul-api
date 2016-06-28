@@ -1,3 +1,4 @@
+/* eslint-env node */
 // tests for all read methods
 "use strict";
 var fluid = require("infusion");

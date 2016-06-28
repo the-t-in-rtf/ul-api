@@ -1,3 +1,4 @@
+/* eslint-env node */
 // Launch the test harness as a standalone server to assist in manual QA.
 //
 "use strict";

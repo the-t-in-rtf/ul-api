@@ -1,3 +1,4 @@
+/* eslint-env node */
 // Test fixtures (testEnvironment, testCaseHolder)
 "use strict";
 var fluid = require("infusion");
@@ -132,3 +133,4 @@ fluid.defaults("gpii.test.ul.api.request.html", {
         accept: "text/html"
     }
 });
+

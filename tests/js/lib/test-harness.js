@@ -1,6 +1,7 @@
 // Common test harness for all Unified Listing API tests.  This harness can be launched for manual QA using the
 // `launch-test-harness.js` file in the parent directory.
 //
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 fluid.setLogging(true);

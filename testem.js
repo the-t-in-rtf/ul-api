@@ -3,6 +3,7 @@
     Set up an instance of the UL API so that we can test client-side components with testem.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");

@@ -1,3 +1,4 @@
+/* eslint-env node */
 // Unit tests for the function that removes empty entries (`null` or `undefined`).
 "use strict";
 var fluid = fluid || require("infusion");

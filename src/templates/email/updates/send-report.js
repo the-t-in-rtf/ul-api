@@ -1,3 +1,4 @@
+/* eslint-env node */
 "use strict";
 var fluid      = require("infusion");
 var updates    = fluid.registerNamespace("gpii.ul.email.updates");

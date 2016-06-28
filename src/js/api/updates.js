@@ -7,6 +7,7 @@
 // Both sets can be optionally filtered to only return changes after a set point by adding the `updated` parameter,
 // which should be a date in ISO 9660 format.
 //
+/* eslint-env node */
 "use strict";
 var fluid   = fluid || require("infusion");
 var gpii    = fluid.registerNamespace("gpii");

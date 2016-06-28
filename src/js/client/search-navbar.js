@@ -5,9 +5,9 @@
   individual controls for all pages.  The only difference is the template.
 
 */
-"use strict";
 /* global fluid */
 (function () {
+    "use strict";
     var gpii = fluid.registerNamespace("gpii");
     fluid.registerNamespace("jQuery");
 
@@ -142,7 +142,7 @@
             }
         },
         listeners: {
-            "onDomBind.wireControls": [
+            "onDomChange.wireControls": [
                 {
                     "this": "{that}.dom.navLink",
                     method: "keydown",

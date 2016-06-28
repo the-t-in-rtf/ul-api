@@ -1,3 +1,4 @@
+/* eslint-env node */
 /* Tests for the "sources" API module */
 "use strict";
 

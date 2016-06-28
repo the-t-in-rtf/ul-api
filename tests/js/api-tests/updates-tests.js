@@ -1,3 +1,4 @@
+/* eslint-env node */
 /* Tests for the "updates" API module */
 "use strict";
 

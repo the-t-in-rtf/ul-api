@@ -8,6 +8,7 @@
 // 3. A source that exactly matches their own user ID (used for contributions).
 //
 // TODO:  This module, /api/search, and /api/products should share the permissions logic that determines what sources someone is allowed to see
+/* eslint-env node */
 "use strict";
 var fluid = fluid || require("infusion");
 var gpii = fluid.registerNamespace("gpii");
@@ -88,3 +89,4 @@ fluid.defaults("gpii.ul.api.sources.router", {
         }
     }
 });
+

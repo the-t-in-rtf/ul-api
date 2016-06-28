@@ -5,6 +5,7 @@
     https://github.com/GPII/ul-api/blob/master/docs/apidocs.md
 
  */
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

@@ -1,4 +1,5 @@
 // API Support for GET /api/product/:source:/:id
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -16,10 +17,10 @@ gpii.ul.api.search.handler.base.handleRequest = function (that) {
 
 
 /**
- * 
- *  There is a hard limit of ~7,000 characters that you can use in a single query string, so we request products in 
+ *
+ *  There is a hard limit of ~7,000 characters that you can use in a single query string, so we request products in
  *  smaller batches and knit them together once the entire sequence of promises has completed.
- * 
+ *
  * @param that {Object} The handler component itself.
  * @param keys {Array} The full array of keys we are looking up.  We will only look up the full products based on the offset and limit.
  * @param dataSource {Object} The dataSource we will use to look up the products.
@@ -170,7 +171,7 @@ gpii.ul.api.search.handler.base.requestToLucene = function (that) {
     // Break down the raw query into raw parameters and those that need to become part of the `q` variable.
     // First the raw parameters
     var generatedDirectModel = fluid.model.transformWithRules(that.options.request, that.options.rules.requestToLucene);
-    
+
     // Now the "sources" and "statuses" parameters
     if (that.options.request.query.sources && that.options.request.query.sources.length > 0) {
         generatedDirectModel.q += " AND (source:" + fluid.makeArray(that.options.request.query.sources).join(" OR source:") + ") ";
@@ -178,7 +179,7 @@ gpii.ul.api.search.handler.base.requestToLucene = function (that) {
     if (that.options.request.query.statuses && that.options.request.query.statuses.length > 0) {
         generatedDirectModel.q += " AND (status:" + fluid.makeArray(that.options.request.query.statuses).join(" OR status:") + ") ";
     }
-    
+
     return generatedDirectModel;
 };
 

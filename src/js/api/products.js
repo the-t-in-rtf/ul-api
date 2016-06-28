@@ -1,4 +1,5 @@
 // API Support for GET /api/products
+/* eslint-env node */
 "use strict";
 require("../lib/url");
 module.exports = function (config) {

@@ -1,7 +1,7 @@
 // A generic component that controls and updates a single drop-down field based on a single model variable.
-"use strict";
 /* global fluid */
 (function () {
+    "use strict";
     fluid.defaults("gpii.ul.select", {
         gradeNames: ["gpii.handlebars.templateAware"],
         selectors:  {

@@ -4,6 +4,8 @@
     error handling.
 
  */
+/* eslint-env node */
+"use strict";
 var fluid = require("infusion");
 
 // TODO:  Move this to gpii-json-schema once we've exercised it a bit here.

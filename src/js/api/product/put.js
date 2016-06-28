@@ -10,6 +10,7 @@
   2.  You set it explicitly to `null`.
 
  */
+/* eslint-env node */
 "use strict";
 var fluid        = require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
@@ -90,7 +91,7 @@ module.exports = function (config) {
                 return res.status(500).send(JSON.stringify({"ok": false, "message": "There was an error retrieving the current product record..."}));
             }
 
-            var jsonData = typeof readBody === "string" ? JSON.parse(readBody): readBody;
+            var jsonData = typeof readBody === "string" ? JSON.parse(readBody) : readBody;
 
             var existingRecord = jsonData.record;
 

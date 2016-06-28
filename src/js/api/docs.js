@@ -1,6 +1,7 @@
 // Display our API docs.  Requires an instance of `gpii.express` that has a copy of `gpii-handlebars` available to render
 // the boilerplate content.
 //
+/* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");

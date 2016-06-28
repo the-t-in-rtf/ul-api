@@ -1,4 +1,5 @@
 // TODO:  Kill it with fire.
+/* eslint-env node */
 "use strict";
 
 var fluid = fluid || require("infusion");

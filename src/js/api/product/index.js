@@ -1,4 +1,5 @@
 // All handlers for /api/record
+/* eslint-env node */
 "use strict";
 var fluid = require("infusion");
 

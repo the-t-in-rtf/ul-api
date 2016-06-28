@@ -1,3 +1,4 @@
+/* eslint-env node */
 // tests for PUT /api/product
 "use strict";
 var fluid       = require("infusion");
