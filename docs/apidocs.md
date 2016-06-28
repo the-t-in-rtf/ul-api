@@ -310,7 +310,7 @@ they are reviewed and flagged as "active".  You must be logged in to use this RE
 
         ```
         {
-            "message":"New product submitted."
+            "message":"New product submitted.",
             "record": {
                 "source": "mydb",
                 "sid": "1234",
@@ -361,7 +361,7 @@ Note: If you do not submit an "updated" field, the current date will be used.
 
         ```
         {
-            "message":"Product record updated."
+            "message":"Product record updated.",
             "record": {
                 "source": "mydb",
                 "sid": "1234",
