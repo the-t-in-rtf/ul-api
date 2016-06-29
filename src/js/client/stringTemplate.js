@@ -20,10 +20,10 @@
     var gpii = fluid.registerNamespace("gpii");
 
     fluid.defaults("gpii.ul.stringTemplate", {
-        gradeNames: ["fluid.transforms.standardOutputTransformFunction"]
+        gradeNames: ["fluid.transforms.standardTransformFunction"]
     });
 
     gpii.ul.stringTemplate = function (value, transformSpec) {
-        return fluid.stringTemplate(transformSpec.template, transformSpec.terms);
+        return fluid.stringTemplate(value, transformSpec.terms);
     };
 })();

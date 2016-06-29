@@ -37,7 +37,8 @@ fluid.defaults("gpii.ul.api", {
         contextToExpose: {
             "layout": "layout", // This is required to support custom layouts
             "model": {
-                "user":   "req.session._gpii_user"
+                "user":   "req.session._gpii_user",
+                "record": "product"
             },
             "req":  {
                 "query":  "req.query",
@@ -49,6 +50,10 @@ fluid.defaults("gpii.ul.api", {
         {
             source: "{that}.options.rules.contextToExpose",
             target: "{that gpii.express.singleTemplateMiddleware}.options.rules.contextToExpose"
+        },
+        {
+            source: "{that}.options.rules.contextToExpose",
+            target: "{that gpii.ul.api.htmlMessageHandler}.options.rules.contextToExpose"
         }
     ],
     components: {

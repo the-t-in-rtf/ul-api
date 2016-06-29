@@ -7,7 +7,8 @@ var gpii  = fluid.registerNamespace("gpii");
 
 fluid.registerNamespace("gpii.ul.api.htmlMessageHandler");
 gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, context) {
-    that.options.response.status(statusCode).render(that.options.templateKey, context);
+    var filteredContext = fluid.model.transformWithRules(context, that.options.rules.contextToExpose);
+    that.options.response.status(statusCode).render(that.options.templateKey, filteredContext);
     that.events.afterResponseSent.fire(that);
 };
 

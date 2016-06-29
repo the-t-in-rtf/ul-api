@@ -1,6 +1,9 @@
 // TODO: Migrate this to a "content aware" part of the API when this feature is complete:  https://github.com/GPII/gpii-express/pull/6
 // Component to display the view/edit interface for a single record.
 
+// TODO:  Rename to product
+
+// TODO:  The renderer should be the only thing to initialize the form.
 /* global fluid */
 (function () {
     "use strict";
@@ -16,6 +19,8 @@
         }
     });
 
+
+    // TODO:  Give this "teeth" to submit changes.  It should be the only thing communicating.
     // The component that handles the binding, etc. for the "Edit" form.
     fluid.defaults("gpii.ul.record.edit", {
         gradeNames: ["gpii.handlebars.templateFormControl"],
@@ -154,7 +159,7 @@
     // listen for this component to give the go ahead, and then take over parts of the interface.
 
     fluid.defaults("gpii.ul.record", {
-        gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
+        gradeNames: ["gpii.handlebars.templateAware"],
         baseUrl:    "/api/product/",
         selectors: {
             viewport:        ".record-viewport",
@@ -196,13 +201,12 @@
                 url: {
                     transform: {
                         type: "gpii.ul.stringTemplate",
-                        template: "%baseUrl%source/%sid",
+                        input: "%baseUrl%source/%sid",
                         terms: {
                             baseUrl: "{that}.options.baseUrl",
                             source:  "{that}.options.req.query.source",
                             sid:     "{that}.options.req.query.sid"
-                        },
-                        value: "https://issues.fluidproject.org/browse/FLUID-5703" // <--- The bug that requires this unused block.
+                        }
                     }
                 }
             }
@@ -340,10 +344,10 @@
                 args: ["viewport", "{that}.options.template", "{that}.model"]
             }
         },
-        listeners: {
-            "onCreate.makeRequest": {
-                func: "{that}.makeRequest"
-            }
-        }
+        // listeners: {
+        //     "onCreate.makeRequest": {
+        //         func: "{that}.makeRequest"
+        //     }
+        // }
     });
 })();

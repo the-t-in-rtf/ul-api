@@ -48,7 +48,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         }
         // No need to look up sources, just send what we have now.
         else {
-            that.sendResponse(200, that.productRecord);
+            that.sendResponse(200, { product: that.productRecord, req: that.options.request });
         }
     }
 };
@@ -67,7 +67,7 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
             that.productRecord.sources.push(fluid.filterKeys(transformedSourceRecord, that.options.couchKeysToExclude, true));
         });
 
-        that.sendResponse(200, that.productRecord);
+        that.sendResponse(200, { product: that.productRecord, req: that.options.request });
     }
 };
 

@@ -17,14 +17,14 @@
 
 {{>record-manufacturer-view record.manufacturer}}
 
-{{#equals record.source "unified"}}
-    {{#if record.sources}}
+{{#equals source "unified"}}
+    {{#if sources}}
       <h3>Sources</h3>
 
       {{>record-sources-view record}}
   {{/if}}
 {{else}}
-  <p><a href="/record?source=unified&sid={{record.uid}}">View the unified record related to this product.</a></p>
+  <p><a href="/api/product/unified/{{record.uid}}">View the unified record related to this product.</a></p>
 {{/equals}}
 
 <div class="row record-edit-control-panel" style="display:none;">
@@ -39,7 +39,7 @@
     {{#if user}}
       <a href="/contribute?uid={{record.uid}}" class="button expand">Contribute a Change</a>
     {{else}}
-      <a href="/login" class="button expand">Log in to Contribute a Change</a>
+      <a href="/api/user/login" class="button expand">Log in to Contribute a Change</a>
     {{/if}}
   </div>
 </div>
