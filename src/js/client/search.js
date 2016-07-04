@@ -187,6 +187,14 @@
                 nameDesc: {
                     label: "by name, Z-A",
                     value: "\\name"
+                },
+                updatedDesc: {
+                    label: "by date of last update, newest first",
+                    value: "\\updated"
+                },
+                updatedAsc: {
+                    label: "by date of last update, oldest first",
+                    value: "updated"
                 }
             }
         }
@@ -197,13 +205,6 @@
         gradeNames: ["gpii.ul.checkboxPanel"],
         template: "search-statuses",
         label:    "Filter by status:",
-        selectors:  {
-            initial:  ".search-statuses",
-            options:  ".search-statuses-option"
-        },
-        bindings: {
-            options: "options"
-        },
         checkboxes: {
             "new": {
                 label: "New",
@@ -358,7 +359,7 @@
                 container:     "{search}.dom.statuses",
                 options: {
                     model: {
-                        checkboxOptions: "{search}.model.statuses"
+                        checkboxValue: "{search}.model.statuses"
                     }
                 }
             },
