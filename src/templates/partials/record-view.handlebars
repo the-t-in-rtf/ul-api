@@ -17,8 +17,8 @@
 
 {{>record-manufacturer-view record.manufacturer}}
 
-{{#equals source "unified"}}
-    {{#if sources}}
+{{#equals record.source "unified"}}
+    {{#if record.sources}}
       <h3>Sources</h3>
 
       {{>record-sources-view record}}
