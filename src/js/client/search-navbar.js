@@ -6,6 +6,7 @@
 
 */
 /* global fluid */
+<!-- TODO: replace this with the paging component included with infusion or at a minimum come up with a good reason why we can't -->
 (function () {
     "use strict";
     var gpii = fluid.registerNamespace("gpii");
@@ -68,9 +69,6 @@
         var showNavBar     = false;
         var hasPrevious    = false;
         var hasNext        = false;
-        var previousOffset = that.model.offset > that.model.limit ? that.model.offset - that.model.limit : 0;
-        var nextOffsetCandidate = that.model.offset + that.model.limit;
-        var nextOffset =  nextOffsetCandidate <= that.model.totalRows ? nextOffsetCandidate : that.model.offset;
 
         if (that.model.totalRows > 0) {
             var numPages = Math.ceil(that.model.totalRows  / that.model.limit);
@@ -88,9 +86,12 @@
                 }
 
                 hasPrevious = that.model.offset > 0;
-                hasNext     = that.model.offset < that.model.totalRows;
+                hasNext     = that.model.offset < (that.model.totalRows - that.model.limit);
             }
         }
+
+        var previousOffset = hasPrevious ? that.model.offset - that.model.limit : 0;
+        var nextOffset =  hasNext ? that.model.offset + that.model.limit : that.model.offset;
 
         that.applier.change("showNavBar",     showNavBar);
         that.applier.change("hasPrevious",    hasPrevious);

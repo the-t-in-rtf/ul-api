@@ -4,6 +4,8 @@
     "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
+    // TODO:  Use `gpii.sort` to update the order if the sort order changes.
+
     fluid.registerNamespace("gpii.ul.search.query");
 
     gpii.ul.search.query.refreshOnUpdateIfHasQuery = function (that) {
@@ -42,10 +44,12 @@
                 "":           "notfound",
                 products:     "responseJSON.products", // The "products" component will handle displaying products.
                 totalRows:    "responseJSON.total_rows",
-                errorMessage: { literalValue: null }
+                errorMessage: { literalValue: false }
             },
             errorResponseToModel: {
-                successMessage: { literalValue: null }
+                successMessage: { literalValue: false },
+                totalRows:      { literalValue: 0 },
+                products:       { literalValue: [] }
             },
             modelToRequestPayload: {
                 "": {
@@ -158,6 +162,10 @@
             limit: {
                 func:          "{that}.pageAndRender",
                 excludeSource: "init"
+            },
+            sortBy: {
+                funcName: "gpii.sort",
+                args:     ["{that}.model.products", "{that}.model.sortBy"] // dataToSort, sortCriteria
             }
         }
     });
@@ -178,7 +186,7 @@
                 },
                 nameDesc: {
                     label: "by name, Z-A",
-                    value: "\name"
+                    value: "\\name"
                 }
             }
         }
@@ -224,20 +232,43 @@
             initial: "",
             select:  ".search-limit-select"
         },
+        bindings: {
+            select: {
+                path: "select",
+                selector: "select",
+                rules: {
+                    domToModel: {
+                        "": {
+                            transform: {
+                                type:  "fluid.transforms.stringToNumber",
+                                inputPath: ""
+                            }
+                        }
+                    },
+                    modelToDom: {
+                        "": {
+                            transform: {
+                                type: "fluid.transforms.numberToString",
+                                inputPath: ""
+                            }
+                        }
+                    }
+                }
+            }
+        },
         select: {
             options: {
                 twentyFive: {
                     label: "25 products per page",
-                    value: "25"
+                    value: 25
                 },
                 fifty: {
                     label: "50 products per page",
-                    value: "50"
+                    value: 50
                 },
                 hundred: {
                     label: "100 products per page",
-                    value: "100"
-
+                    value: 100
                 }
             }
         }
@@ -260,35 +291,10 @@
         },
         components: {
             // TODO:  Wire in the new location bar relay.
-            // Sync our search settings with the queryString and history, so that bookmarking and back/forward buttons
-            // work as expected.  Must be a child of query so that it is created at the right time to take
-            // advantage of its bindings.
-            locationBar: {
-                type:          "gpii.locationBar.syncAll",
-                options: {
-                    events: {
-                        onReady: {
-                            events: {
-                                queryDataLoaded:  "queryDataLoaded",
-                                onMarkupRendered: "{search}.events.onMarkupRendered"
-                            }
-                        }
-                    }
-                    // TODO:  Add detailed tests to prevent this component from blowing away the existing model data.
-                    //model: {
-                    //    offset:  "{search}.model.offset",
-                    //    limit:   "{search}.model.limit",
-                    //    q:       "{search}.model.q",
-                    //    sortBy:    "{search}.model.sortBy",
-                    //    sources:  "{search}.model.sources",
-                    //    statuses:  "{search}.model.statuses"
-                    //}
-                }
-            },
             // The main query form
             query: {
                 type:          "gpii.ul.search.query",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.form",
                 options: {
                     model: "{search}.model"
@@ -297,7 +303,7 @@
             // The search results, if any
             products: {
                 type:          "gpii.ul.search.products",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.products",
                 options: {
                     model: {
@@ -310,7 +316,7 @@
             // The top pagination bar.
             topnav: {
                 type:          "gpii.ul.search.navbar",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.topnav",
                 options: {
                     model: {
@@ -324,7 +330,7 @@
             // The bottom pagination bar
             bottomnav: {
                 type:          "gpii.ul.search.navbar",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.bottomnav",
                 options: {
                     model: {
@@ -334,10 +340,10 @@
                     }
                 }
             },
-            // The sortBying controls
+            // The sort controls
             sortBy: {
                 type:          "gpii.ul.search.sortBy",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.sortBy",
                 options: {
                     model: {
@@ -348,7 +354,7 @@
             // The statuses filtering controls
             statuses: {
                 type:          "gpii.ul.search.statuses",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.statuses",
                 options: {
                     model: {
@@ -359,7 +365,7 @@
             // The "products per page" controls
             limit: {
                 type:          "gpii.ul.search.limit",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.dom.limit",
                 options: {
                     model: {
@@ -370,7 +376,7 @@
             // A toggle to show/hide the search options
             optionsToggle: {
                 type: "gpii.ul.toggle",
-                createOnEvent: "{locationBar}.events.onReady",
+                createOnEvent: "{gpii.ul.search}.events.onDomChange",
                 container:     "{search}.container",
                 options: {
                     selectors: {

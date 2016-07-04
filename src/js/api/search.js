@@ -4,6 +4,8 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
+require("gpii-sort");
+
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
 fluid.registerNamespace("gpii.ul.api.search");
@@ -47,7 +49,7 @@ gpii.ul.api.search.handler.base.processSearchResponse = function (that, luceneRe
         that.options.next({isError: true, statusCode: 500, params: that.options.request.searchParams, message: "No response from Lucene, can't prepare search results."});
     }
     if (luceneResponse.rows && luceneResponse.rows.length > 0) {
-        // Hold on to the relevant search results so that we can order the final results and to include sources if requested.
+        // Hold on to the relevant search results so that we can order the final results and include sources if requested.
         var promise;
         var dataSource;
         if (that.options.request.searchParams.unified) {
@@ -77,9 +79,9 @@ gpii.ul.api.search.handler.base.processSearchResponse = function (that, luceneRe
             promise = gpii.ul.api.search.handler.base.getFullRecords(that, nonUnifiedKeys, that.nonUnifiedRecordReader);
         }
 
-        that.options.request.slicedLuceneKeys = that.options.request.luceneKeys.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
+        // that.options.request.slicedLuceneKeys = that.options.request.luceneKeys.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
 
-        promise = gpii.ul.api.search.handler.base.getFullRecords(that, that.options.request.slicedLuceneKeys, dataSource);
+        promise = gpii.ul.api.search.handler.base.getFullRecords(that, that.options.request.luceneKeys, dataSource);
         promise.then(that.processFullRecordResponse);
     }
     else {
@@ -127,7 +129,7 @@ gpii.ul.api.search.handler.base.processFullRecordResponse = function (that, couc
         // Iterate through the raw search results from that.options.request and add them to the final results in order:
         var distinctUids = [];
 
-        fluid.each(that.options.request.slicedLuceneKeys, function (uid) {
+        fluid.each(that.options.request.luceneKeys, function (uid) {
             if (uid && distinctUids.indexOf(uid) === -1) {
                 distinctUids.push(uid);
 
@@ -153,9 +155,13 @@ gpii.ul.api.search.handler.base.processFullRecordResponse = function (that, couc
             });
         });
 
-        fluid.each(that.options.request.slicedLuceneKeys, function (row) {
+        fluid.each(that.options.request.luceneKeys, function (row) {
             products.push(recordsBySource[row[0]][row[1]]);
         });
+    }
+
+    if (that.options.request.query.sortBy) {
+        gpii.sort(products, that.options.request.query.sortBy)
     }
 
     that.sendResponse(200, { total_rows: products.length, params: that.options.request.searchParams, products: products});
@@ -188,7 +194,6 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
     rules: {
         requestToLucene: {
             q:      "query.q",
-            sort:   "query.sortBy",
             limit:  { literalValue: 1000 }
         }
     },

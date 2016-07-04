@@ -1,9 +1,12 @@
 // TODO: Migrate this to a "content aware" part of the API when this feature is complete:  https://github.com/GPII/gpii-express/pull/6
 // Component to display the view/edit interface for a single record.
 
-// TODO:  Rename to product
+// TODO:  Rename "record" to "product" throughout
 
 // TODO:  The renderer should be the only thing to initialize the form.
+
+// TODO:  The view component should still be capable of rerendering on model changes?  Refresh?  Different page?
+
 /* global fluid */
 (function () {
     "use strict";
@@ -18,7 +21,6 @@
             select:  ""
         }
     });
-
 
     // TODO:  Give this "teeth" to submit changes.  It should be the only thing communicating.
     // The component that handles the binding, etc. for the "Edit" form.
