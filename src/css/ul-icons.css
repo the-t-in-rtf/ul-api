@@ -1,0 +1,31 @@
+/* TODO:  Kill this with fire once we have P4A icons again (check with @danayo) */
+@font-face {
+    font-family: 'ul-icons';
+    src:    url('../fonts/ul-icons.eot?e5ifsz');
+    src:    url('../fonts/ul-icons.eot?e5ifsz#iefix') format('embedded-opentype'),
+        url('../fonts/ul-icons.ttf?e5ifsz') format('truetype'),
+        url('../fonts/ul-icons.woff?e5ifsz') format('woff'),
+        url('../fonts/ul-icons.svg?e5ifsz#ul-icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="ul-icon-"], [class*=" ul-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'ul-icons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ul-icon-settings:before {
+    content: "\2699";
+}
+
