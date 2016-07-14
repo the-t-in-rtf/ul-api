@@ -4,8 +4,6 @@
     "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
-    // TODO:  Use `gpii.sort` to update the order if the sort order changes.
-
     fluid.registerNamespace("gpii.ul.search.query");
 
     gpii.ul.search.query.refreshOnUpdateIfHasQuery = function (that) {
@@ -21,6 +19,14 @@
         }
     };
 
+    gpii.ul.search.query.submitForm = function (that, event) {
+        // Fire an event that other components can listen to, for example, so that the results component can toggle a "loading..." message.
+        // TODO:  Make our client-side dataSource fire an event that we can listen to instead of handling it this way.
+        that.events.onStartLoading.fire();
+
+        gpii.handlebars.templateFormControl.submitForm(that, event);
+    };
+
     gpii.ul.search.query.filterAndEncode = function (payload) {
         var filtered = fluid.filterKeys(payload, ["q", "sources", "statuses", "sortBy", "offset", "limit", "unified", "includeSources"]);
         return gpii.express.querystring.encodeObject(filtered);
@@ -32,13 +38,16 @@
 
     fluid.defaults("gpii.ul.search.query", {
         gradeNames: ["gpii.handlebars.templateFormControl"],
+        hideOnSuccess: false,
+        hideOnError: false,
         ajaxOptions: {
             url:      "/api/search",
             method:   "GET",
-            dataType: "json"
+            dataType: "json",
+            headers: {
+                accept: "application/json"
+            }
         },
-        hideOnSuccess: false,
-        hideOnError:   false,
         rules: {
             successResponseToModel: {
                 "":           "notfound",
@@ -76,9 +85,13 @@
         bindings: {
             q: "q"
         },
+        events: {
+            onStartLoading: "{gpii.ul.search}.events.onStartLoading",
+            onStopLoading:  "{gpii.ul.search}.events.onStopLoading"
+        },
         invokers: {
             submitForm: {
-                funcName: "gpii.handlebars.templateFormControl.submitForm",
+                funcName: "gpii.ul.search.query.submitForm",
                 args:     ["{that}", "{arguments}.0"]
             }
         },
@@ -108,13 +121,16 @@
             "onCreate.fireIfReady": {
                 funcName:      "gpii.ul.search.query.refreshIfHasQuery",
                 args:          ["{that}"]
+            },
+            "requestReceived.notifyParent": {
+                func: "{that}.events.onStopLoading.fire"
             }
         }
     });
 
     fluid.registerNamespace("gpii.ul.search.products");
 
-    // TODO:  Replace this with a common paging component
+    // TODO:  Review the common paging component and confirm whether we can replace this.
     // Return `limit` products from `array`, starting at `offset`
     gpii.ul.search.products.pageResults = function (array, offset, limit) {
         if (!array) { return; }
@@ -130,9 +146,17 @@
         that.renderInitialMarkup();
     };
 
+    gpii.ul.search.products.toggleLoading = function (that, state) {
+        var resultsElement = that.locate("results");
+        resultsElement.toggleClass("loading", state);
+    };
 
     fluid.defaults("gpii.ul.search.products", {
         gradeNames: ["gpii.handlebars.templateAware"],
+        events: {
+            onStartLoading: "{gpii.ul.search}.events.onStartLoading",
+            onStopLoading:  "{gpii.ul.search}.events.onStopLoading"
+        },
         model: {
             products:  []
         },
@@ -166,6 +190,16 @@
             sortBy: {
                 funcName: "gpii.sort",
                 args:     ["{that}.model.products", "{that}.model.sortBy"] // dataToSort, sortCriteria
+            }
+        },
+        listeners: {
+            "onStartLoading": {
+                funcName: "gpii.ul.search.products.toggleLoading",
+                args:     ["{that}", true]
+            },
+            "onStopLoading": {
+                funcName: "gpii.ul.search.products.toggleLoading",
+                args:     ["{that}", false]
             }
         }
     });
@@ -278,6 +312,10 @@
     // The wrapper component that wires together all controls.
     fluid.defaults("gpii.ul.search", {
         gradeNames: ["gpii.handlebars.templateAware"],
+        events: {
+            onStartLoading: null,
+            onStopLoading:  null
+        },
         model: {
             q:               "",
             sources:         [],
@@ -291,7 +329,22 @@
             products:         []
         },
         components: {
-            // TODO:  Wire in the new location bar relay.
+            // The component that relays changes between the URL, browser history, and model
+            relay: {
+                type: "gpii.locationBar",
+                options: {
+                    model: {
+                        "q": "{gpii.ul.search}.model.q",
+                        "sources": "{gpii.ul.search}.model.sources",
+                        "statuses": "{gpii.ul.search}.model.statuses",
+                        "sortBy": "{gpii.ul.search}.model.sortBy",
+                        "offset": "{gpii.ul.search}.model.offset",
+                        "limit": "{gpii.ul.search}.model.limit",
+                        "unified": "{gpii.ul.search}.model.unified",
+                        "includeSources": "{gpii.ul.search}.model.includeSources"
+                    }
+                }
+            },
             // The main query form
             query: {
                 type:          "gpii.ul.search.query",

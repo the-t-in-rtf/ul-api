@@ -8,15 +8,52 @@ require("gpii-sort");
 
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
-fluid.registerNamespace("gpii.ul.api.search");
+// Marker grade to allow us to distribute options to our two pieces of middleware.
+fluid.defaults("gpii.ul.api.search.middleware", {
+    gradeNames: ["gpii.express.middleware"]
+});
 
-fluid.registerNamespace("gpii.ul.api.search.handler.base");
+fluid.registerNamespace("gpii.ul.api.search.middleware.html");
 
-gpii.ul.api.search.handler.base.handleRequest = function (that) {
-    var searchPromise = that.searchReader.get(gpii.ul.api.search.handler.base.requestToLucene(that));
-    searchPromise.then(that.processSearchResponse);
+/**
+ *
+ * A simple "gating" function to ensure that the form is only rendered if the client accepts the right content type.
+ * This must be a separate piece of middleware and must be loaded before the schema validation because we serve the
+ * initial form whether or not we have query data.
+ *
+ * @param that {Object} The middleware component itself.
+ * @param request {Object} The Express request object.
+ * @param response {Object} The Express response object.
+ * @param next {Function} The next piece of middleware in the chain.
+ */
+gpii.ul.api.search.middleware.html.renderFormOrDefer = function (that, request, response, next) {
+    if (request.accepts(that.options.contentTypes)) {
+        gpii.express.singleTemplateMiddleware.renderForm(that, request, response);
+    }
+    else {
+        next();
+    }
 };
 
+// A component to serve up the search form.
+fluid.defaults("gpii.ul.api.search.middleware.html", {
+    gradeNames: ["gpii.ul.api.search.middleware", "gpii.express.singleTemplateMiddleware"],
+    templateKey: "pages/search.handlebars",
+    contentTypes: ["text/html"],
+    invokers: {
+        middleware: {
+            funcName: "gpii.ul.api.search.middleware.html.renderFormOrDefer",
+            args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"] //request, response, next
+        }
+    }
+});
+
+fluid.registerNamespace("gpii.ul.api.search.handler");
+
+gpii.ul.api.search.handler.handleRequest = function (that) {
+    var searchPromise = that.searchReader.get(gpii.ul.api.search.handler.requestToLucene(that));
+    searchPromise.then(that.processSearchResponse);
+};
 
 /**
  *
@@ -27,7 +64,7 @@ gpii.ul.api.search.handler.base.handleRequest = function (that) {
  * @param keys {Array} The full array of keys we are looking up.  We will only look up the full products based on the offset and limit.
  * @param dataSource {Object} The dataSource we will use to look up the products.
  */
-gpii.ul.api.search.handler.base.getFullRecords = function (that, keys, dataSource) {
+gpii.ul.api.search.handler.getFullRecords = function (that, keys, dataSource) {
     var promises = [];
 
     for (var a = 0; a < keys.length; a += that.options.fullRecordsPerRequest) {
@@ -36,8 +73,7 @@ gpii.ul.api.search.handler.base.getFullRecords = function (that, keys, dataSourc
     return fluid.promise.sequence(promises);
 };
 
-
-gpii.ul.api.search.handler.base.processSearchResponse = function (that, luceneResponse) {
+gpii.ul.api.search.handler.processSearchResponse = function (that, luceneResponse) {
     // Reuse the rules we used to generate the "user parameters" that were validated by our upstream JSON Schema validation middleware.
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
@@ -76,12 +112,12 @@ gpii.ul.api.search.handler.base.processSearchResponse = function (that, luceneRe
 
             that.options.request.luceneKeys = nonUnifiedKeys;
 
-            promise = gpii.ul.api.search.handler.base.getFullRecords(that, nonUnifiedKeys, that.nonUnifiedRecordReader);
+            promise = gpii.ul.api.search.handler.getFullRecords(that, nonUnifiedKeys, that.nonUnifiedRecordReader);
         }
 
         // that.options.request.slicedLuceneKeys = that.options.request.luceneKeys.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
 
-        promise = gpii.ul.api.search.handler.base.getFullRecords(that, that.options.request.luceneKeys, dataSource);
+        promise = gpii.ul.api.search.handler.getFullRecords(that, that.options.request.luceneKeys, dataSource);
         promise.then(that.processFullRecordResponse);
     }
     else {
@@ -97,7 +133,7 @@ gpii.ul.api.search.handler.base.processSearchResponse = function (that, luceneRe
  * @param couchResponses {Array} An array of responses from CouchDB.
  *
  */
-gpii.ul.api.search.handler.base.processFullRecordResponse = function (that, couchResponses) {
+gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResponses) {
     if (!couchResponses) {
         that.options.next({isError: true, params: that.options.request.searchParams, statusCode: 500, message: "No response from CouchDB, can't prepare final search results."});
     }
@@ -173,7 +209,7 @@ gpii.ul.api.search.handler.base.processFullRecordResponse = function (that, couc
  *
  * @param that {Object} The handler component itself.
  */
-gpii.ul.api.search.handler.base.requestToLucene = function (that) {
+gpii.ul.api.search.handler.requestToLucene = function (that) {
     // Break down the raw query into raw parameters and those that need to become part of the `q` variable.
     // First the raw parameters
     var generatedDirectModel = fluid.model.transformWithRules(that.options.request, that.options.rules.requestToLucene);
@@ -189,9 +225,10 @@ gpii.ul.api.search.handler.base.requestToLucene = function (that) {
     return generatedDirectModel;
 };
 
-fluid.defaults("gpii.ul.api.search.handler.base", {
-    gradeNames: ["gpii.express.handler", "gpii.schema.validationMiddleware.handlesQueryData"],
+fluid.defaults("gpii.ul.api.search.handler", {
+    gradeNames: ["gpii.express.handler"],
     rules: {
+        requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate",
         requestToLucene: {
             q:      "query.q",
             limit:  { literalValue: 1000 }
@@ -208,7 +245,7 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
                 listeners: {
                     // Report back to the user on failure.
                     "onError.sendResponse": {
-                        func: "{gpii.ul.api.search.handler.base}.handleError",
+                        func: "{gpii.ul.api.search.handler}.handleError",
                         args: ["{arguments}.0"]
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -228,7 +265,7 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
                 termMap: {},
                 listeners: {
                     "onError.sendResponse": {
-                        func: "{gpii.ul.api.search.handler.base}.handleError",
+                        func: "{gpii.ul.api.search.handler}.handleError",
                         args: ["{arguments}.0"]
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -247,7 +284,7 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
                 termMap: {},
                 listeners: {
                     "onError.sendResponse": {
-                        func: "{gpii.ul.api.search.handler.base}.handleError",
+                        func: "{gpii.ul.api.search.handler}.handleError",
                         args: ["{arguments}.0"]
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -258,7 +295,7 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
     invokers: {
         // TODO:  Replace this with a handler function that calls the required dataSource get methods and chains them together as a promise.
         handleRequest: {
-            funcName: "gpii.ul.api.search.handler.base.handleRequest",
+            funcName: "gpii.ul.api.search.handler.handleRequest",
             args:    ["{that}"]
         },
         handleError: {
@@ -266,96 +303,94 @@ fluid.defaults("gpii.ul.api.search.handler.base", {
             args: [{ isError: true, statusCode: 500, message: "{arguments}.0"}] // error
         },
         processSearchResponse: {
-            funcName: "gpii.ul.api.search.handler.base.processSearchResponse",
+            funcName: "gpii.ul.api.search.handler.processSearchResponse",
             args:     ["{that}", "{arguments}.0"]
         },
         processFullRecordResponse: {
-            funcName: "gpii.ul.api.search.handler.base.processFullRecordResponse",
+            funcName: "gpii.ul.api.search.handler.processFullRecordResponse",
             args:     ["{that}", "{arguments}.0"]
         }
     }
 });
 
-// TODO: Check to see if we have done the renderer bit somewhere else.
-fluid.defaults("gpii.ul.api.search.handlers.html", {
-    gradeNames: ["gpii.ul.api.search.handler.base"],
-    invokers: {
-        sendResponse: {
-            funcName: "",
-            args:     ["{that}", "{arguments}.0"]
-        }
-    }
-});
-
-// TODO: add support for versions
-
-fluid.registerNamespace("gpii.ul.api.search.middleware.formByDefault");
-
-/**
- *
- * We want to send the search form if a) The client accepts HTML and b) there is no query data.  We need to do this
- * separately to avoid falling afoul of the JSON Schema Validation that takes place directly after this middleware.
- *
- * @param that {Object} The middleware component itself.
- * @param request {Object} The Express request object.
- * @param response {Object} The Express response object.
- * @param next {Function} The next piece of middleware in the chain.
- */
-gpii.ul.api.search.middleware.formByDefault.serveInitialFormIfNeeded = function (that, request, response, next) {
-    if (request.accepts(that.options.contentTypes) && !request.query.q) {
-        gpii.express.singleTemplateMiddleware.renderForm(that, request, response);
-    }
-    else {
-        next();
-    }
-};
-
-// A component to serve up the search form.
-fluid.defaults("gpii.ul.api.search.middleware.formByDefault", {
-    gradeNames: ["gpii.express.singleTemplateMiddleware"],
-    templateKey: "pages/search.handlebars",
-    contentTypes: ["text/html"],
-    invokers: {
-        middleware: {
-            funcName: "gpii.ul.api.search.middleware.formByDefault.serveInitialFormIfNeeded",
-            args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"] //request, response, next
-        }
-    }
+fluid.defaults("gpii.ul.api.search.middleware.json", {
+    gradeNames: ["gpii.ul.api.search.middleware", "gpii.express.middleware.requestAware"],
+    handlerGrades: ["gpii.ul.api.search.handler"]
 });
 
 fluid.defaults("gpii.ul.api.search", {
-    gradeNames: ["gpii.ul.api.validationGatedContentAware"],
+    gradeNames: ["gpii.express.router"],
     path: "/search",
     searchDefaults: {
         offset:  0,
         limit:   250,
         unified: false
     },
-    distributeOptions: {
-        source: "{that}.options.searchDefaults",
-        target: "{that gpii.ul.api.search.handler.base}.options.searchDefaults"
+    events: {
+        onSchemasDereferenced: null
     },
-    schemas: {
-        input:  "search-input.json",
-        output: "search-results.json"
-    },
-    handlers: {
-        json: {
-            contentType:   ["application/json"],
-            handlerGrades: ["gpii.ul.api.search.handler.base"]
+    rules: {
+        requestContentToValidate: {
+            "includeSources": "query.includeSources",
+            "limit":          "query.limit",
+            "offset":         "query.offset",
+            "q":              "query.q",
+            "sortBy":         "query.sortBy",
+            "sources":        "query.sources",
+            "statuses":       "query.statuses",
+            "unified":        "query.unified"
         }
     },
+    distributeOptions: {
+        source: "{that}.options.searchDefaults",
+        target: "{that > gpii.ul.api.search.middleware}.options.searchDefaults"
+    },
+    schemas: {
+        output: "search-results.json"
+    },
     components: {
-        // Middleware to serve the HTML form if we have no query data
-        serveInitialForm: {
-            type: "gpii.ul.api.search.middleware.formByDefault",
+        // Middleware to serve the HTML form.
+        htmlForm: {
+            type: "gpii.ul.api.search.middleware.html",
             options: {
-                priority: "before:validationMiddleware"
+                priority: "first"
             }
         },
+        // The JSON middleware requires valid input to access....
         validationMiddleware: {
+            type: "gpii.schema.validationMiddleware",
             options: {
-                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"]
+                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
+                priority:   "after:htmlForm",
+                rules: {
+                    requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate",
+                    validationErrorsToResponse: {
+                        isError:    { literalValue: true },
+                        statusCode: { literalValue: 400 },
+                        message: {
+                            literalValue: "{that}.options.messages.error"
+                        },
+                        fieldErrors: ""
+                    }
+                },
+                schemaDirs: "{gpii.ul.api}.options.schemaDirs",
+                schemaKey:  "search-input.json",
+                messages: {
+                    error: "The information you provided is incomplete or incorrect.  Please check the following:"
+                },
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.search}.events.onSchemasDereferenced.fire"
+                    }
+                }
+            }
+        },
+        // Middleware to serve a JSON payload.
+        jsonMiddleware: {
+            type: "gpii.ul.api.search.middleware.json",
+            options: {
+                priority: "after:validationMiddleware",
+                rules: "{gpii.ul.api.search}.options.rules"
             }
         }
     }
@@ -364,8 +399,9 @@ fluid.defaults("gpii.ul.api.search", {
 fluid.defaults("gpii.ul.api.suggest", {
     gradeNames: ["gpii.ul.api.search"],
     path: "/suggest",
-    schemas: {
-        input: "suggest-input.json"
+    distributeOptions: {
+        record: "suggest-input.json",
+        target: "{that gpii.schema.validationMiddleware}.options.schemaKey"
     },
     searchDefaults: {
         offset:  0,

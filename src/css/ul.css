@@ -1,11 +1,5 @@
 .loading {
-    border:     1px solid #cccccc;
-    opacity:    .25;
-    text-align: center;
-    vertical-align: middle;
-    font-size:  2em;
-    min-height: 10em;
-    padding-top: 10%;
+    opacity:        .25;
 }
 
 .top-bar {

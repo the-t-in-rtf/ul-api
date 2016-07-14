@@ -30,7 +30,7 @@
     "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#6580b1167be05ffd935c498c02590a69eaa0561d",
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#c66207050ba764cbdbce401db725d2932c8fcbce",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#b4fb0746633683eb3c8fd6ea0719ee4c1bcd52f5",
-    "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#98c237ffc6f859e92156b5329f059553a03ec3da",
+    "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#8717757473afca38c938dd60802b0bf97b965f77",
     "gpii-sort": "git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20",
     "infusion": "2.0.0-dev.20160519T222603Z.754d2c6"
   },
