@@ -4,9 +4,15 @@
   "description": "The Unified Listing API and tests.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run testem-tests && npm run node-tests",
-    "node-tests": "node tests/node-tests.js",
-    "testem-tests": "testem ci"
+    "bundle": "npm run bundle:http; npm run bundle:https; npm run bundle:url",
+    "bundle:http": "node node_modules/browserify/bin/cmd.js -s http node_modules/http-browserify/index.js -o browserify/http.js && node node_modules/uglify/bin/uglify -s browserify/http.js -o browserify/http.min.js ",
+    "bundle:https": "node node_modules/browserify/bin/cmd.js -s https node_modules/https-browserify/index.js -o browserify/https.js && node node_modules/uglify/bin/uglify -s browserify/https.js -o browserify/https.min.js ",
+    "bundle:url": "node node_modules/browserify/bin/cmd.js -s urlModule node_modules/url/url.js -o browserify/urlModule.js && node node_modules/uglify/bin/uglify -s browserify/urlModule.js -o browserify/urlModule.min.js ",
+    "postinstall": "npm run bundle",
+    "pretest": "npm run bundle",
+    "test": "npm run tests:browser; npm run tests:node",
+    "tests:node": "node tests/node-tests.js",
+    "tests:browser": "testem ci"
   },
   "repository": {
     "type": "git",
@@ -29,6 +35,7 @@
     "infusion": "2.0.0-dev.20160519T222603Z.754d2c6"
   },
   "devDependencies": {
+    "browserify": "13.0.1",
     "foundation-sites": "5.5.2",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#716aead4128c3d81b732b4e2e230db0bc407b8b8",
     "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#231989f3b81e9bfce0770c0abe8c2d132f34bbc8",
@@ -37,10 +44,15 @@
     "grunt-eslint": "18.1.0",
     "grunt-jsonlint": "1.0.4",
     "handlebars": "4.0.5",
-    "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
+    "http-browserify": "1.7.0",
+    "https-browserify": "0.0.1",
+    "jsonlint": "1.6.0",
+    "kettle": "git://github.com/the-t-in-rtf/kettle.git#0e40aecf6363e9da33af208022b039d3e0c0cff3",
     "marked": "0.3.5",
     "moment": "2.13.0",
     "node-jqunit": "1.1.4",
-    "pagedown": "1.1.0"
+    "pagedown": "1.1.0",
+    "uglify": "0.1.5",
+    "url": "0.11.0"
   }
 }

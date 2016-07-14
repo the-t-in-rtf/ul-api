@@ -45,7 +45,8 @@ fluid.defaults("gpii.test.ul.api.testemHarness", {
         // TODO:  Discuss adding tests for other client-side components where keyboard navigation and or browser state is not a concern.
         "test_page": [
             "tests/static/cors-tests.html",
-            "tests/static/checkboxPanel-tests.html"
+            "tests/static/checkboxPanel-tests.html",
+            "tests/static/dataSource-tests.html"
         ],
         // We need to call these once "per run", otherwise we cannot use the harness with outside of `testem ci`, as it is immediately destroyed.
         on_start: "{that}.createFixtures",
