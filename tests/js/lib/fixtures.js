@@ -16,40 +16,32 @@ gpii.test.browser.loadTestingSupport();
 require("./test-harness");
 
 fluid.defaults("gpii.test.ul.api.caseHolder", {
-    gradeNames: ["gpii.test.express.caseHolder.base"],
-    sequenceStart: [
-        { // This sequence point is required because of a QUnit bug - it defers the start of sequence by 13ms "to avoid any current callbacks" in its words
-            func: "{testEnvironment}.events.constructFixtures.fire"
+    gradeNames: ["gpii.test.express.caseHolder"],
+    // kill off our fixtures when the tests are finished, and wait for them to die.
+    sequenceEnd: [
+        {
+            func: "{testEnvironment}.stopFixtures"
         },
         {
             listener: "fluid.identity",
-            event: "{testEnvironment}.events.onReady"
+            event: "{testEnvironment}.events.onFixturesStopped"
         }
     ]
 });
 
-fluid.defaults("gpii.test.ul.api.caseHolder.withBrowser", {
-    gradeNames: ["gpii.test.browser.caseHolder.withStandardStart"],
-    // Manually kill off our fixtures when the tests are finished, and wait for them to die.
-    sequenceEnd: [
-        {
-            func: "{testEnvironment}.harness.stopServer"
-        },
-        {
-            func: "{testEnvironment}.browser.end"
-        },
-        {
-            listener: "fluid.identity",
-            event: "{testEnvironment}.events.onAllDone"
-        }
-    ]
-});
+fluid.registerNamespace("gpii.test.ul.api.testEnvironment");
+
+gpii.test.ul.api.testEnvironment.stopFixtures = function (that) {
+    that.harness.stopServer();
+};
 
 fluid.defaults("gpii.test.ul.api.testEnvironment", {
     gradeNames: ["fluid.test.testEnvironment"],
+    hangWait: 6000,
     ports: {
-        api:   7639,
-        pouch: 7638
+        api:    7639,
+        pouch:  7638,
+        lucene: 7637
     },
     urls: {
         // We have to duplicate a bit of the work the harness usually does because the harness hasn't been created yet
@@ -65,12 +57,12 @@ fluid.defaults("gpii.test.ul.api.testEnvironment", {
         constructFixtures: null,
         onHarnessStarted:  null,
         onHarnessStopped:  null,
-        onAllDone: {
+        onFixturesStopped: {
             events: {
                 onHarnessStopped: "onHarnessStopped"
             }
         },
-        onReady: {
+        onFixturesConstructed: {
             events: {
                 onHarnessStarted: "onHarnessStarted"
             }
@@ -84,31 +76,63 @@ fluid.defaults("gpii.test.ul.api.testEnvironment", {
                 ports: "{testEnvironment}.options.ports",
                 listeners: {
                     "onStarted.notifyEnvironment": {
-                        func: "{gpii.test.ul.api.testEnvironment}.events.onHarnessStarted.fire"
+                        func: "{testEnvironment}.events.onHarnessStarted.fire"
                     },
                     "onStopped.notifyEnvironment": {
-                        func: "{gpii.test.ul.api.testEnvironment}.events.onHarnessStopped.fire"
+                        func: "{testEnvironment}.events.onHarnessStopped.fire"
                     }
                 }
             }
         }
+    },
+    invokers: {
+        stopFixtures: {
+            funcName: "gpii.test.ul.api.testEnvironment.stopFixtures",
+            args:     ["{that}"]
+        }
     }
 });
+
+fluid.defaults("gpii.test.ul.api.caseHolder.withBrowser", {
+    gradeNames: ["gpii.test.browser.caseHolder.withStandardStart", "gpii.test.ul.api.caseHolder.withStandardFinish"]
+});
+
+fluid.registerNamespace("gpii.test.ul.api.testEnvironment.withBrowser");
+gpii.test.ul.api.testEnvironment.withBrowser.stopFixtures = function (that) {
+    that.harness.stopServer();
+    that.browser.end();
+};
+
 
 fluid.defaults("gpii.test.ul.api.testEnvironment.withBrowser", {
     gradeNames: ["gpii.test.ul.api.testEnvironment", "gpii.test.browser.environment"],
     events: {
-        onAllDone: {
+        onFixturesStopped: {
             events: {
                 onBrowserDone:    "onBrowserDone",
                 onHarnessStopped: "onHarnessStopped"
             }
         },
-        onReady: {
+        onFixturesConstructed: {
             events: {
                 onHarnessStarted: "onHarnessStarted",
                 onBrowserReady:   "onBrowserReady"
             }
+        }
+    },
+    components: {
+        browser: {
+            options: {
+                events: {
+                    stopFixtures: "{testEnvironment}.events.stopFixtures"
+                }
+            }
+        }
+    },
+    invokers: {
+        stopFixtures: {
+            funcName: "gpii.test.ul.api.testEnvironment.withBrowser.stopFixtures",
+            args:     ["{that}"]
         }
     }
 });

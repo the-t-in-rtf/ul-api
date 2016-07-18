@@ -4,7 +4,6 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-fluid.setLogging(true);
 
 var gpii  = fluid.registerNamespace("gpii");
 
@@ -18,13 +17,13 @@ fluid.require("%gpii-handlebars");
 
 fluid.registerNamespace("gpii.ul.api.tests.harness");
 gpii.ul.api.tests.harness.stopServer = function (that) {
-    that.express.destroy();
-    that.pouch.destroy();
+    gpii.express.stopServer(that.express);
+    gpii.express.stopServer(that.pouch);
     that.lucene.events.onReadyForShutdown.fire();
 };
 
 fluid.defaults("gpii.ul.api.tests.harness", {
-    gradeNames:   ["fluid.modelComponent"],
+    gradeNames:   ["fluid.component"],
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     distributeOptions: {
@@ -112,8 +111,12 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                     }
                 },
                 listeners: {
-                    onReady:   "{harness}.events.apiReady.fire",
-                    onStopped: "{harness}.events.apiStopped.fire"
+                    onReady:   {
+                        func: "{harness}.events.apiReady.fire"
+                    },
+                    onStopped: {
+                        func: "{harness}.events.apiStopped.fire"
+                    }
                 },
                 components: {
                     corsHeaders: {
@@ -195,8 +198,12 @@ fluid.defaults("gpii.ul.api.tests.harness", {
             options: {
                 port: "{harness}.options.ports.couch",
                 listeners: {
-                    onStarted: "{harness}.events.pouchStarted.fire",
-                    onStopped: "{harness}.events.pouchStopped.fire"
+                    onStarted: {
+                        func: "{harness}.events.pouchStarted.fire"
+                    },
+                    onStopped: {
+                        func: "{harness}.events.pouchStopped.fire"
+                    }
                 },
                 components: {
                     pouch: {

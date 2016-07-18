@@ -38,7 +38,7 @@
     "browserify": "13.0.1",
     "foundation-sites": "5.5.2",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#716aead4128c3d81b732b4e2e230db0bc407b8b8",
-    "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#231989f3b81e9bfce0770c0abe8c2d132f34bbc8",
+    "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#2c8ef1e9afee0033f983dae42e9c4af7ef1cb72a",
     "gpii-test-browser": "git://github.com/the-t-in-rtf/gpii-test-browser#bb64399e45417baa18aa943b8e98ef6e0f50b321",
     "grunt": "1.0.1",
     "grunt-eslint": "18.1.0",
