@@ -15,8 +15,8 @@
     {
       "uid": "unifiedNewer",
       "status": "new",
-      "source": "admin",
-      "sid": "admin1",
+      "source": "existing",
+      "sid": "contrib1",
       "name": "sample product 1",
       "description": "sample description 1",
       "manufacturer": {
@@ -39,8 +39,8 @@
     {
       "uid": "unifiedOlder",
       "status": "new",
-      "source": "admin",
-      "sid": "admin2",
+      "source": "existing",
+      "sid": "contrib2",
       "name": "sample product 2",
       "description": "sample description 2",
       "manufacturer": {

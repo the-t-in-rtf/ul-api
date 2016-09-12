@@ -48,7 +48,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         }
         // No need to look up sources, just send what we have now.
         else {
-            that.sendResponse(200, { product: that.productRecord, req: that.options.request });
+            that.sendResponse(200, that.productRecord);
         }
     }
 };
@@ -64,10 +64,13 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
         // per-record basis.
         fluid.each(couchResponse.rows, function (couchRecord) {
             var transformedSourceRecord = fluid.model.transformWithRules(couchRecord, that.options.rules.sourceCouchResponseToJson);
-            that.productRecord.sources.push(fluid.filterKeys(transformedSourceRecord, that.options.couchKeysToExclude, true));
+
+            if (transformedSourceRecord.source !== "unified") {
+                that.productRecord.sources.push(fluid.filterKeys(transformedSourceRecord, that.options.couchKeysToExclude, true));
+            }
         });
 
-        that.sendResponse(200, { product: that.productRecord, req: that.options.request });
+        that.sendResponse(200, that.productRecord);
     }
 };
 
@@ -130,7 +133,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args:     ["%baseUrl/_design/ul/_view/products?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
+                        args:     ["%baseUrl/_design/ul/_view/records_by_uid?key=\"%uid\"", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {

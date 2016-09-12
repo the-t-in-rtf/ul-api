@@ -517,17 +517,15 @@ Return the list of products, optionally filtered by source, status, or date of l
         }
         ```
 
-## `GET /api/search{?q,sources,statuses,sortBy,offset,limit,unified}`
+## `GET /api/search{?q,statuses,sortBy,offset,limit,unified}`
 
 Performs a full text search of all data, returns matching products.
 
  + Parameters
     + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
-    + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  A record can be excluded by prepending an exclamation point in front of its name, as in ```source=!ul```.     + statuses (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
-    + `unified` (optional, boolean) ... If this is set to true, combine all search results according to their "unified" grouping.  Defaults to "true".
 
  + Response 200 (application/search+json)
      + Headers
@@ -590,7 +588,6 @@ when building a "unified" record.
  + Parameters
      + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax][1] to construct more complex searches.
      + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
-     + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  A record can be excluded by prepending an exclamation point in front of its name, as in ```source=!ul```.
      + `statuses` (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
 
  + Response 200 (application/search+json)
@@ -642,9 +639,9 @@ when building a "unified" record.
          }
          ```
 
- ## `GET /api/updates/{?source,updated,statuses,offset,limit}`
+ ## `GET /api/updates/{?sources,updated,statuses,offset,limit}`
 
-Return a list of unified products that contain newer information than the record provided by the given source.
+Return a list of unified products that contain newer information than the record provided by the given sources.
 
  + Parameters
      + `sources` (required, string) ... Only display products from the specified sources.

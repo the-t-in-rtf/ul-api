@@ -16,15 +16,16 @@ require("./docs");
 require("./product");
 //require("./products");
 require("./search");
+require("./sources");
 //require("./updates");
-//require("./sources");
 require("./404");
 
 fluid.defaults("gpii.ul.api", {
-    gradeNames:   ["gpii.express.router"],
+    gradeNames:   ["gpii.express.router", "gpii.express.user.withRequiredMiddleware"],
     path:         "/api",
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    sessionKey:   "_ul_user",
     events: {
         productEndpointReady: null,
         onReady: {
@@ -54,6 +55,10 @@ fluid.defaults("gpii.ul.api", {
         {
             source: "{that}.options.rules.contextToExpose",
             target: "{that gpii.ul.api.htmlMessageHandler}.options.rules.contextToExpose"
+        },
+        {
+            source: "{that}.options.sessionKey",
+            target: "{that gpii.express.handler}.options.sessionKey"
         }
     ],
     components: {
@@ -72,10 +77,19 @@ fluid.defaults("gpii.ul.api", {
                 }
             }
         },
+        session: {
+            type: "gpii.express.middleware.session",
+            options: {
+                priority: "after:corsHeaders",
+                sessionOptions: {
+                    secret: "Printer, printer take a hint-ter."
+                }
+            }
+        },
         product: {
             type: "gpii.ul.api.product",
             options: {
-                priority: "after:corsHeaders",
+                priority: "after:session",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.ul.api}.events.productEndpointReady.fire"
@@ -116,7 +130,6 @@ fluid.defaults("gpii.ul.api", {
         //        couch: "{gpii.express}.options.config.couch"
         //    }
         //},
-        // TODO:  Confirm that this is working in context by rerunning the tests from gpii-express-user
         user: {
             type: "gpii.express.user.api",
             options: {
@@ -126,6 +139,12 @@ fluid.defaults("gpii.ul.api", {
                 couch: {
                     userDbName: "users", // TODO:  Confirm whether this is used in the package
                     userDbUrl: "{gpii.ul.api}.options.urls.usersDb"
+                },
+                components: {
+                    // Replace the user API's session middleware so that ours will be used instead.
+                    session: {
+                        type: "fluid.component"
+                    }
                 }
             }
         },

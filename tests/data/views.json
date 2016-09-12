@@ -3,11 +3,11 @@
     {
       "_id": "_design/ul",
       "views": {
-        "bysource": {
-          "map": "function (doc) {\n    if (doc.uid) {\n        emit(doc.source, doc);\n    }\n}"
+        "records_by_uid": {
+          "map": "function (doc) {\n    if (doc.uid) { emit(doc.uid, doc); }\n}"
         },
-        "byuid": {
-          "map": "function (doc) {\n    if (doc.uid) {\n        emit(doc.uid, doc);\n    }\n}"
+        "records_by_source": {
+          "map": "function (doc) {\n    if (doc.uid) {\n        emit(doc.source, doc);\n    }\n}"
         },
         "products": {
           "map": "function(doc) {\n    if (doc.source && doc.sid) {\n        emit([doc.source, doc.sid],doc);\n    }\n}"

@@ -1,0 +1,16 @@
+{
+  "docs": [
+    {
+      "uid": "deletedRecord",
+      "status": "deleted",
+      "source": "unified",
+      "sid": "deletedRecord",
+      "name": "Deleted record",
+      "description": "This record has been deleted...",
+      "manufacturer": {
+        "name": "sample manufacturer 1"
+      },
+      "updated": "2015-01-01"
+    }
+  ]
+}

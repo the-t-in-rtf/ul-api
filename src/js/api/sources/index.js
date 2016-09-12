@@ -16,11 +16,10 @@ var gpii = fluid.registerNamespace("gpii");
 var fs   = require("fs");
 var path = require("path");
 
-var sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "sources.json"), { encoding: "utf8"}));
-
 require("gpii-express");
 
 fluid.registerNamespace("gpii.ul.api.sources");
+gpii.ul.api.sources.sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "sources.json"), { encoding: "utf8"}));
 
 fluid.registerNamespace("gpii.ul.api.sources.request");
 gpii.ul.api.sources.request.handleRequest = function (that) {
@@ -80,7 +79,7 @@ fluid.defaults("gpii.ul.api.sources.router", {
     gradeNames:    ["gpii.express.requestAware.router"],
     path:          "/sources",
     handlerGrades: "gpii.ul.api.sources.request",
-    sources:       sources,
+    sources:       gpii.ul.api.sources.sources,
     dynamicComponents: {
         requestHandler: {
             options: {

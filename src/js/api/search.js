@@ -5,6 +5,7 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-sort");
+require("./sources");
 
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
@@ -62,13 +63,13 @@ gpii.ul.api.search.handler.handleRequest = function (that) {
  *
  * @param that {Object} The handler component itself.
  * @param keys {Array} The full array of keys we are looking up.  We will only look up the full products based on the offset and limit.
- * @param dataSource {Object} The dataSource we will use to look up the products.
+ *
  */
-gpii.ul.api.search.handler.getFullRecords = function (that, keys, dataSource) {
+gpii.ul.api.search.handler.getFullRecords = function (that, keys) {
     var promises = [];
 
     for (var a = 0; a < keys.length; a += that.options.fullRecordsPerRequest) {
-        promises.push(dataSource.get({keys: keys.slice(a, a + that.options.fullRecordsPerRequest)}));
+        promises.push(that.unifiedRecordReader.get({keys: keys.slice(a, a + that.options.fullRecordsPerRequest)}));
     }
     return fluid.promise.sequence(promises);
 };
@@ -86,42 +87,24 @@ gpii.ul.api.search.handler.processSearchResponse = function (that, luceneRespons
     }
     if (luceneResponse.rows && luceneResponse.rows.length > 0) {
         // Hold on to the relevant search results so that we can order the final results and include sources if requested.
-        var promise;
-        var dataSource;
-        if (that.options.request.searchParams.unified) {
-            dataSource = that.unifiedRecordReader;
-            //  We do it this was because a) we want distinct uids only, first occurrence first, and b) we need to preserve the order.
-            var distinctKeys = {};
-            var unifiedKeys  = [];
-            fluid.each(luceneResponse.rows, function (record) {
-                if (!distinctKeys[record.fields.uid]) {
-                    distinctKeys[record.fields.uid] = true;
-                    unifiedKeys.push(record.fields.uid);
-                }
-            });
+        //  We do it this was because a) we want distinct uids only, first occurrence first, and b) we need to preserve the order.
+        var distinctKeys = {};
+        var unifiedKeys  = [];
+        fluid.each(luceneResponse.rows, function (record) {
+            if (!distinctKeys[record.fields.uid]) {
+                distinctKeys[record.fields.uid] = true;
+                unifiedKeys.push(record.fields.uid);
+            }
+        });
 
-            that.options.request.luceneKeys = unifiedKeys;
+        // We cannot sort or page here, because we don't yet have the full records.
+        // TODO: Discuss with Antranig
+        that.options.request.luceneKeys = unifiedKeys;
 
-        }
-        else {
-            dataSource = that.nonUnifiedRecordReader;
-
-            var nonUnifiedKeys = luceneResponse.rows.map(function (record) {
-                return [record.fields.source, record.fields.sid];
-            });
-
-            that.options.request.luceneKeys = nonUnifiedKeys;
-
-            promise = gpii.ul.api.search.handler.getFullRecords(that, nonUnifiedKeys, that.nonUnifiedRecordReader);
-        }
-
-        // that.options.request.slicedLuceneKeys = that.options.request.luceneKeys.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
-
-        promise = gpii.ul.api.search.handler.getFullRecords(that, that.options.request.luceneKeys, dataSource);
-        promise.then(that.processFullRecordResponse);
+        gpii.ul.api.search.handler.getFullRecords(that, that.options.request.luceneKeys).then(that.processFullRecordResponse);
     }
     else {
-        that.sendResponse(404, { total_rows: 0, params: that.options.request.searchParams, message: "No search results found."});
+        that.sendResponse(404, { total_rows: 0, products: [], params: that.options.request.searchParams, retrievedAt: (new Date()).toISOString() });
     }
 };
 
@@ -139,68 +122,60 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
     }
 
     var products = [];
-    if (that.options.request.searchParams.unified) {
-        var unifiedRecordsByUid = {};
-        var childrenByUid       = {};
-        fluid.each(couchResponses, function (couchResponse) {
-            fluid.each(couchResponse.rows, function (row) {
-                if (row.value.source === "unified") {
-                    unifiedRecordsByUid[row.value.uid] = row.value;
+    var unifiedRecordsByUid = {};
+    var childrenByUid       = {};
+    fluid.each(couchResponses, function (couchResponse) {
+        fluid.each(couchResponse.rows, function (row) {
+            var productRecord = fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove);
+            if (productRecord.source === "unified") {
+                unifiedRecordsByUid[productRecord.uid] = productRecord;
+            }
+            else {
+                if (!childrenByUid[productRecord.uid]) {
+                    childrenByUid[productRecord.uid] = [];
                 }
-                else {
-                    if (!childrenByUid[row.value.uid]) {
-                        childrenByUid[row.value.uid] = [];
-                    }
-                    childrenByUid[row.value.uid].push(row.value);
-                }
-            });
-        });
-
-        fluid.each(unifiedRecordsByUid, function (unifiedRecord, uid) {
-            if (childrenByUid[uid]) {
-                unifiedRecord.sources = childrenByUid[uid];
+                childrenByUid[productRecord.uid].push(productRecord);
             }
         });
+    });
 
-        // Iterate through the raw search results from that.options.request and add them to the final results in order:
-        var distinctUids = [];
+    // Filter the source records according to the source permissions
+    var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+    var allowedSources = gpii.ul.api.sources.request.listAllowedSources(gpii.ul.api.sources.sources, user);
 
-        fluid.each(that.options.request.luceneKeys, function (uid) {
-            if (uid && distinctUids.indexOf(uid) === -1) {
-                distinctUids.push(uid);
-
-                // Look up the full record from the upstream results.
-                var unifiedRecord = unifiedRecordsByUid[uid];
-                if (unifiedRecord) {
-                    products.push(unifiedRecord);
-                }
-                else {
-                    fluid.log("Unable to retrieve full record for uid `" + uid + "`...");
-                }
-            }
-        });
-    }
-    else {
-        var recordsBySource = {};
-        fluid.each(couchResponses, function (couchResponse) {
-            fluid.each(couchResponse.rows, function (row) {
-                if (!recordsBySource[row.value.source]) {
-                    recordsBySource[row.value.source] = {};
-                }
-                recordsBySource[row.value.source][row.value.sid] = row.value;
+    fluid.each(unifiedRecordsByUid, function (unifiedRecord, uid) {
+        if (childrenByUid[uid]) {
+            unifiedRecord.sources = childrenByUid[uid].filter(function (sourceRecord) {
+                return allowedSources.indexOf(sourceRecord.source) !== -1;
             });
-        });
+        }
+    });
 
-        fluid.each(that.options.request.luceneKeys, function (row) {
-            products.push(recordsBySource[row[0]][row[1]]);
-        });
-    }
+    // Iterate through the raw search results from that.options.request and add them to the final results in order:
+    var distinctUids = [];
+
+    fluid.each(that.options.request.luceneKeys, function (uid) {
+        if (uid && distinctUids.indexOf(uid) === -1) {
+            distinctUids.push(uid);
+
+            // Look up the full record from the upstream results.
+            var unifiedRecord = unifiedRecordsByUid[uid];
+            if (unifiedRecord) {
+                products.push(unifiedRecord);
+            }
+            else {
+                fluid.log("Unable to retrieve full record for uid `" + uid + "`...");
+            }
+        }
+    });
 
     if (that.options.request.query.sortBy) {
-        gpii.sort(products, that.options.request.query.sortBy)
+        gpii.sort(products, that.options.request.query.sortBy);
     }
 
-    that.sendResponse(200, { total_rows: products.length, params: that.options.request.searchParams, products: products});
+    var pagedProducts = products.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
+
+    that.sendResponse(200, { total_rows: products.length, params: that.options.request.searchParams, products: pagedProducts, retrievedAt: (new Date()).toISOString()});
 };
 
 /**
@@ -227,6 +202,7 @@ gpii.ul.api.search.handler.requestToLucene = function (that) {
 
 fluid.defaults("gpii.ul.api.search.handler", {
     gradeNames: ["gpii.express.handler"],
+    couchFieldsToRemove: ["_id", "_rev"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate",
         requestToLucene: {
@@ -252,33 +228,13 @@ fluid.defaults("gpii.ul.api.search.handler", {
                 }
             }
         },
-        // dataSource for "sources" data (used with "unified" products when the `sources` query parameter is set)
-        nonUnifiedRecordReader: {
-            type: "gpii.express.dataSource.urlEncodedJson",
-            options: {
-                url: {
-                    expander: {
-                        funcName: "fluid.stringTemplate",
-                        args: ["%baseUrl/_design/ul/_view/products", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
-                    }
-                },
-                termMap: {},
-                listeners: {
-                    "onError.sendResponse": {
-                        func: "{gpii.ul.api.search.handler}.handleError",
-                        args: ["{arguments}.0"]
-                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
-                    }
-                }
-            }
-        },
         unifiedRecordReader: {
             type: "gpii.express.dataSource.urlEncodedJson",
             options: {
                 url: {
                     expander: {
                         funcName: "fluid.stringTemplate",
-                        args: ["%baseUrl/_design/ul/_view/byuid", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
+                        args: ["%baseUrl/_design/ul/_view/records_by_uid", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
                     }
                 },
                 termMap: {},
@@ -293,7 +249,6 @@ fluid.defaults("gpii.ul.api.search.handler", {
         }
     },
     invokers: {
-        // TODO:  Replace this with a handler function that calls the required dataSource get methods and chains them together as a promise.
         handleRequest: {
             funcName: "gpii.ul.api.search.handler.handleRequest",
             args:    ["{that}"]
@@ -341,10 +296,10 @@ fluid.defaults("gpii.ul.api.search", {
             "unified":        "query.unified"
         }
     },
-    distributeOptions: {
+    distributeOptions: [{
         source: "{that}.options.searchDefaults",
-        target: "{that > gpii.ul.api.search.middleware}.options.searchDefaults"
-    },
+        target: "{that gpii.express.handler}.options.searchDefaults"
+    }],
     schemas: {
         output: "search-results.json"
     },

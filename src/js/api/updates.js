@@ -210,7 +210,7 @@ fluid.defaults("gpii.ul.api.updates.router", {
     sourceView: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/%dbName/_design/ul/_view/bysource?keys=%keys", "{that}.options.couch"]
+            args:     ["http://localhost:%port/%dbName/_design/ul/_view/records_by_source?keys=%keys", "{that}.options.couch"]
         }
     },
     unifiedView: {

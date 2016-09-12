@@ -19,29 +19,17 @@ fluid.registerNamespace("gpii.ul.api.tests.harness");
 gpii.ul.api.tests.harness.stopServer = function (that) {
     gpii.express.stopServer(that.express);
     gpii.express.stopServer(that.pouch);
-    that.lucene.events.onReadyForShutdown.fire();
 };
 
 fluid.defaults("gpii.ul.api.tests.harness", {
     gradeNames:   ["fluid.component"],
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
-    distributeOptions: {
-        record: 1000000,
-        target: "{that gpii.express.handler}.options.timeout"
-    },
     ports: {
         api:    7633,
-        couch:  7634,
-        lucene: 7635
+        couch:  7634
     },
     urls: {
-        lucene: {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/local/%dbName/_design/lucene/by_content", { port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
-            }
-        },
         couch: {
             expander: {
                 funcName: "fluid.stringTemplate",
@@ -66,30 +54,27 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         users: "users"
     },
     events: {
-        apiReady:      null,
-        apiStopped:    null,
-        luceneStarted: null,
-        luceneStopped: null,
-        pouchStarted:  null,
-        pouchStopped:  null,
-        onStarted: {
+        apiReady:          null,
+        apiStopped:        null,
+        constructFixtures: null,
+        pouchStarted:      null,
+        pouchStopped:      null,
+        onFixturesConstructed: {
             events: {
                 apiReady:      "apiReady",
-                luceneStarted: "luceneStarted",
                 pouchStarted:  "pouchStarted"
             }
         },
-        onStopped: {
+        onFixturesStopped: {
             events: {
                 apiStopped:    "apiStopped",
-                luceneStopped: "luceneStopped",
                 pouchStopped:  "pouchStopped"
             }
-        }
+        },
+        stopFixtures: null
     },
-    invokers: {
-        // Pass through requests to "stop" the component to the underlying components
-        stopServer: {
+    listeners: {
+        stopFixtures: {
             funcName: "gpii.ul.api.tests.harness.stopServer",
             args:     ["{that}"]
         }
@@ -97,6 +82,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
     components: {
         express: {
             type: "gpii.express.withJsonQueryParser",
+            createOnEvent: "constructFixtures",
             options: {
                 gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port :   "{harness}.options.ports.api",
@@ -195,6 +181,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
         },
         pouch: {
             type: "gpii.express",
+            createOnEvent: "constructFixtures",
             options: {
                 port: "{harness}.options.ports.couch",
                 listeners: {
@@ -207,20 +194,69 @@ fluid.defaults("gpii.ul.api.tests.harness", {
                 },
                 components: {
                     pouch: {
-                        type: "gpii.pouch",
+                        type: "gpii.pouch.express",
                         options: {
                             path: "/",
                             databases: {
                                 users: { data: "%gpii-ul-api/tests/data/users.json" },
-                                ul:    { data: ["%gpii-ul-api/tests/data/pilot.json", "%gpii-ul-api/tests/data/views.json", "%gpii-ul-api/tests/data/whetstone.json"] }
+                                ul:    { data: ["%gpii-ul-api/tests/data/pilot.json", "%gpii-ul-api/tests/data/deleted.json", "%gpii-ul-api/tests/data/updates.json", "%gpii-ul-api/tests/data/views.json", "%gpii-ul-api/tests/data/whetstone.json"] }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+});
+
+// A harness that includes search integration (loads more slowly).
+fluid.registerNamespace("gpii.ul.api.tests.harness.withLucene");
+gpii.ul.api.tests.harness.stopServer.withLucene = function (that) {
+    gpii.ul.api.tests.harness.stopServer(that);
+    that.lucene.events.onReadyForShutdown.fire();
+};
+
+fluid.defaults("gpii.ul.api.tests.harness.withLucene", {
+    gradeNames:   ["gpii.ul.api.tests.harness"],
+    ports: {
+        lucene: 7635
+    },
+    urls: {
+        lucene: {
+            expander: {
+                funcName: "fluid.stringTemplate",
+                args:     ["http://localhost:%port/local/%dbName/_design/lucene/by_content", { port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
+            }
+        }
+    },
+    events: {
+        luceneStarted:     null,
+        luceneStopped:     null,
+        onFixturesConstructed: {
+            events: {
+                apiReady:      "apiReady",
+                luceneStarted: "luceneStarted",
+                pouchStarted:  "pouchStarted"
+            }
         },
+        onFixturesStopped: {
+            events: {
+                apiStopped:    "apiStopped",
+                luceneStopped: "luceneStopped",
+                pouchStopped:  "pouchStopped"
+            }
+        }
+    },
+    listeners: {
+        stopFixtures: {
+            funcName: "gpii.ul.api.tests.harness.stopServer.withLucene",
+            args:     ["{that}"]
+        }
+    },
+    components: {
         lucene: {
             type: "gpii.pouch.lucene",
+            createOnEvent: "constructFixtures",
             options: {
                 port: "{harness}.options.ports.lucene",
                 dbUrl: "{harness}.options.urls.couch",

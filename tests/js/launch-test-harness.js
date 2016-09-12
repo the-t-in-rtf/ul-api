@@ -3,6 +3,8 @@
 //
 "use strict";
 var fluid = require("infusion");
+fluid.setLogging(true);
+
 var gpii  = fluid.registerNamespace("gpii");
 
 require("./lib/test-harness");
@@ -10,7 +12,7 @@ require("./lib/test-harness");
 // Uncomment this to display the router diagram on startup.
 // fluid.require("%gpii-express/tests/js/lib/diagramAllRoutes.js");
 
-gpii.ul.api.tests.harness({
+gpii.ul.api.tests.harness.withLucene({
     // Uncomment this to display the router diagram on startup.
     // listeners: {
     //     "onStarted.diagramRoutes": {
@@ -39,5 +41,13 @@ gpii.ul.api.tests.harness({
         "api":    6914,
         "couch":  6915,
         "lucene": 6916
+    },
+    listeners: {
+        "onCreate.constructFixtures": {
+            func: "{that}.events.constructFixtures.fire"
+        },
+        "onDestroy.stopFixtures": {
+            func: "{that}.events.stopFixtures.fire"
+        }
     }
 });
