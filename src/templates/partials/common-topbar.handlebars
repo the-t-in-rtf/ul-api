@@ -1,8 +1,21 @@
-<div class="row collapse ul-topbar">
-    <div class="column large-9 medium-12 small-12">
-        {{>common-topbar-nav-menu}}
+<div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
+    <div class="row">
+        <div class="column small-3 small-offset-9 right">
+            <div class="title-bar-title">Menu</div>
+            <button class="menu-icon" type="button" data-toggle></button>
+        </div>
     </div>
-    <div class="column large-3 medium-12 small-12">
-        <div class="controls-viewport"></div>
+</div>
+
+<div class="top-bar" id="main-menu">
+    <div class="top-bar-right">
+        <ul class="menu center vertical medium-horizontal expanded">
+            <li><h3><a href="/">Unified Listing</a></h3></li>
+            <li {{#equals . "search"}} class="active"{{/equals}}><a href="/api/search">Search</a></li>
+            <li {{#equals . "contribute"}} class="active"{{/equals}}><a href="/contributors">Contribute</a></li>
+            <li {{#equals . "manufacturers"}} class="active"{{/equals}}><a href="/manufacturers">For Manufacturers</a></li>
+            <li{{#equals . "databases"}} class="active"{{/equals}}><a href="/databases">For Database Administrators</a></li>
+            <li><div class="controls-viewport"></div></li>
+        </ul>
     </div>
 </div>

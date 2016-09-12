@@ -2,8 +2,9 @@
     opacity:        .25;
 }
 
-.top-bar {
-    margin-bottom: 1em;
+.column.small-12 {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 label.required:after {
@@ -11,6 +12,15 @@ label.required:after {
     color:   red;
 }
 
+.user-controls-toggle::after {
+    position: relative;
+    margin-top: -2.2em;
+    left: 90%;
+}
+
+.user-menu {
+    margin-top: 0.4em;
+}
 /* Adapted from: http://websiteaccessibility.donaldevans.com/?p=1020 */
 .topbar-skip-link {
     position: absolute;
@@ -34,37 +44,22 @@ label.required:after {
     width:    auto;
 }
 
+.top-bar {
+    background-color: black;
+    color: white;
+}
+
+.top-bar + * {
+    margin-top: 1em;
+}
+
+.top-bar ul {
+    background-color: inherit;
+}
+
 .ul-simulate-button {
     margin-bottom: 1.25rem;
 }
-
-.user-menu {
-    width: 100%;
-}
-
-.user-menu li:nth-child(odd) {
-    background-color: #fff;
-}
-
-.user-menu li {
-    width: 100%;
-}
-
-.user-controls {
-    /*color: #ffffff;*/
-    width: 100%;
-}
-
-.user-controls-toggle {
-    width: 100%;
-}
-
-.user-controls-toggle .button {
-    /*background-color: #333;*/
-    /*color: #fff;*/
-    padding-bottom: 1rem;
-}
-
 
 .left-off-canvas-menu {
     background: inherit;
@@ -83,21 +78,12 @@ label.required:after {
     height:        1.5em;
 }
 
-.row.ul-topbar {
+body > .row {
     max-width: inherit;
 }
 
 select.ul-updates-sources-control {
     height: inherit;
-}
-
-.user-controls-toggle::after {
-    border-color: #ffffff transparent transparent transparent;
-}
-
-
-.top-bar {
-    margin-bottom: 0.1em;
 }
 
 .search-topnav .pagination-centered {
