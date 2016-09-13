@@ -4,9 +4,7 @@
   "description": "The Unified Listing API and tests.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run tests:browser; npm run tests:node",
-    "tests:node": "node tests/node-tests.js",
-    "tests:browser": "testem ci"
+    "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
   },
   "repository": {
     "type": "git",
