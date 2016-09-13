@@ -1,1 +1,0 @@
-This directory contains browserify-bundled dependencies generated post-install.

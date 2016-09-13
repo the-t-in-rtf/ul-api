@@ -2,10 +2,12 @@
 /* Tests for the "sources" API module */
 "use strict";
 var fluid = require("infusion");
+var gpii = fluid.registerNamespace("gpii");
 
-require("./lib/fixtures");
+require("../../");
+gpii.ul.api.loadTestingSupport();
 
-// TODO: Update sources so it can pass these tests... :|
+// TODO: Update sources so it can pass these tests... :| Required before "updates" can work meaningfully.
 
 // Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
@@ -13,14 +15,13 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
     expected: {
         anonymous: {
             "sources": [
-                "public"
+                "unified"
             ]
         },
         loggedIn: {
             "sources": [
-                "admin",
-                "private",
-                "public"
+                "unified",
+                "existing"
             ]
         }
     },
@@ -38,7 +39,8 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
                         {
                             event:    "{anonymousRequest}.events.onComplete",
                             listener: "jqUnit.assertDeepEq",
-                            args:     ["The results should be as expected...", "{testEnvironment}.expected.anonymous", "{arguments}.0"]
+                            // listener: "console.log",
+                            args:     ["The results should be as expected...", "{that}.options.expected.anonymous", "@expand:JSON.parse({arguments}.0)"]
                         },
                         {
                             func: "jqUnit.assertEquals",
@@ -52,7 +54,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
                     sequence: [
                         {
                             func: "{loginRequest}.send",
-                            args: [{ name: "admin", password: "admin" }]
+                            args: [{ username: "existing", password: "password" }]
                         },
                         {
                             listener: "fluid.identity",
@@ -64,7 +66,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
                         {
                             event:    "{loggedInRequest}.events.onComplete",
                             listener: "jqUnit.assertDeepEq",
-                            args:     ["The response should be as expected...", "{testEnvironment}.expected.loggedIn", "{arguments}.0"]
+                            args:     ["The response should be as expected...", "{that}.options.expected.loggedIn", "@expand:JSON.parse({arguments}.0)"]
                         },
                         {
                             func: "jqUnit.assertEquals",
@@ -89,7 +91,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
         loginRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/user/signin",
+                endpoint: "api/user/login",
                 method:   "POST"
             }
         },

@@ -28,7 +28,8 @@ fluid.defaults("gpii.test.ul.api.caseHolder", {
 
 // An environment for tests that don't require lucene (it's faster).
 fluid.defaults("gpii.test.ul.api.testEnvironment", {
-    gradeNames: ["gpii.test.express.testEnvironment", "gpii.ul.api.tests.harness"]
+    gradeNames: ["gpii.test.express.testEnvironment", "gpii.ul.api.tests.harness"],
+    port: "{that}.options.ports.api"
 });
 
 

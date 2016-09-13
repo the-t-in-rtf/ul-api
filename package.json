@@ -29,16 +29,17 @@
     "infusion": "2.0.0-dev.20160902T155354Z.b963420"
   },
   "devDependencies": {
-    "eslint": "3.4.0",
+    "eslint": "3.5.0",
     "fluid-grunt-eslint": "18.1.2",
     "foundation-sites": "6.2.3",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#c5f401181b1f021e13400bf7a5d117880cb18b16",
     "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#c87dbcb7ee8f09c6402af9d926546e81fff5ed16",
     "gpii-webdriver": "git://github.com/the-t-in-rtf/gpii-webdriver#4b4e405989c1007d7efb505e9e1ae8a6064787a3",
     "grunt": "1.0.1",
+    "istanbul": "0.4.5",
     "jsonlint": "1.6.2",
     "kettle": "1.1.0",
-    "moment": "2.14.1",
+    "moment": "2.15.0",
     "node-jqunit": "1.1.4"
   }
 }

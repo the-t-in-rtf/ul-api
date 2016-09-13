@@ -6,7 +6,8 @@ var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
 
-require("../lib/fixtures");
+require("../../../");
+gpii.ul.api.loadTestingSupport();
 
 fluid.defaults("gpii.tests.ul.api.product.get.request", {
     gradeNames: ["gpii.test.ul.api.request"],
@@ -226,7 +227,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         requestSourceRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/admin/admin1?sources=true"
+                endpoint: "api/product/existing/contrib1?sources=true"
             }
         }
     },
@@ -304,8 +305,8 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "sources": [{
                 "uid":          "unifiedNewer",
                 "status":       "new",
-                "source":       "admin",
-                "sid":          "admin1",
+                "source":       "existing",
+                "sid":          "contrib1",
                 "name":         "sample product 1",
                 "description":  "sample description 1",
                 "manufacturer": { "name": "sample manufacturer 1" },
@@ -314,9 +315,9 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         },
         source:  {
             "uid":          "unifiedNewer",
-            "source":       "admin",
+            "source":       "existing",
             "status":       "new",
-            "sid":          "admin1",
+            "sid":          "contrib1",
             "name":         "sample product 1",
             "description":  "sample description 1",
             "manufacturer": { "name": "sample manufacturer 1" },

@@ -5,7 +5,8 @@ var fluid = require("infusion");
 fluid.setLogging(false);
 var gpii  = fluid.registerNamespace("gpii");
 
-require("./lib/fixtures");
+require("../../");
+gpii.ul.api.loadTestingSupport();
 
 // jqUnit.asyncTest("Confirm that a search returns an error if no query is passed...", function () {
 //     var options = {

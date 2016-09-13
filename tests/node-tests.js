@@ -3,3 +3,5 @@
 //
 "use strict";
 require("./js/product");
+require("./js/search");
+require("./js/sources");

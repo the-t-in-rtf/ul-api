@@ -84,7 +84,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
             type: "gpii.express.withJsonQueryParser",
             createOnEvent: "constructFixtures",
             options: {
-                gradeNames: ["gpii.express.user.withRequiredMiddleware"],
+                // gradeNames: ["gpii.express.user.withRequiredMiddleware"],
                 port :   "{harness}.options.ports.api",
                 templateDirs: "{harness}.options.templateDirs",
                 events: {

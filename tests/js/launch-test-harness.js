@@ -10,39 +10,37 @@ var gpii  = fluid.registerNamespace("gpii");
 require("./lib/test-harness");
 
 // Uncomment this to display the router diagram on startup.
-// fluid.require("%gpii-express/tests/js/lib/diagramAllRoutes.js");
+fluid.require("%gpii-express/tests/js/lib/diagramAllRoutes.js");
 
 gpii.ul.api.tests.harness.withLucene({
-    // Uncomment this to display the router diagram on startup.
-    // listeners: {
-    //     "onStarted.diagramRoutes": {
-    //         funcName: "console.log",
-    //         args: [
-    //             "ROUTER DIAGRAM:",
-    //             {
-    //                 expander: {
-    //                     funcName: "JSON.stringify",
-    //                     args: [
-    //                         {
-    //                             expander: {
-    //                                 funcName: "gpii.test.express.diagramAllRoutes",
-    //                                 args: ["{harness}.express"]
-    //                             }
-    //                         },
-    //                         null,
-    //                         2
-    //                     ]
-    //                 }
-    //             }
-    //         ]
-    //     }
-    // },
     ports: {
         "api":    6914,
         "couch":  6915,
         "lucene": 6916
     },
     listeners: {
+        // Uncomment this to display the router diagram on startup.
+        "onFixturesConstructed.diagramRoutes": {
+            funcName: "console.log",
+            args: [
+                "ROUTER DIAGRAM:",
+                {
+                    expander: {
+                        funcName: "JSON.stringify",
+                        args: [
+                            {
+                                expander: {
+                                    funcName: "gpii.test.express.diagramAllRoutes",
+                                    args: ["{harness}.express"]
+                                }
+                            },
+                            null,
+                            2
+                        ]
+                    }
+                }
+            ]
+        },
         "onCreate.constructFixtures": {
             func: "{that}.events.constructFixtures.fire"
         },

@@ -141,12 +141,12 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
 
     // Filter the source records according to the source permissions
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
-    var allowedSources = gpii.ul.api.sources.request.listAllowedSources(gpii.ul.api.sources.sources, user);
+    var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user);
 
     fluid.each(unifiedRecordsByUid, function (unifiedRecord, uid) {
         if (childrenByUid[uid]) {
             unifiedRecord.sources = childrenByUid[uid].filter(function (sourceRecord) {
-                return allowedSources.indexOf(sourceRecord.source) !== -1;
+                return visibleSources.indexOf(sourceRecord.source) !== -1;
             });
         }
     });
