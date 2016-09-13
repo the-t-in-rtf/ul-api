@@ -2,6 +2,11 @@
 // tests for POST /api/product
 "use strict";
 var fluid       = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
+
+require("../../../");
+gpii.ul.api.loadTestingSupport();
+
 var namespace   = "gpii.ul.product.post.tests";
 var postTests    = fluid.registerNamespace(namespace);
 

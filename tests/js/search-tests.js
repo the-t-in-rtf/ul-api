@@ -8,6 +8,7 @@ var gpii  = fluid.registerNamespace("gpii");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
+// TODO: Convert this
 // jqUnit.asyncTest("Confirm that a search returns an error if no query is passed...", function () {
 //     var options = {
 //         "url": searchTests.config.express.baseUrl + "search"

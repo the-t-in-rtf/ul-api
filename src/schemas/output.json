@@ -4,6 +4,9 @@
   "definitions": {
     "includeSources": {
       "type": "boolean"
+    },
+    "unified": {
+      "type": "boolean"
     }
   }
 }

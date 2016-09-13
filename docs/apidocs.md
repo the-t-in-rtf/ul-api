@@ -399,7 +399,7 @@ current user is listed as the author.  You must be logged in to use this REST en
         }
         ```
 
-## `GET /api/product/{source}/{sid}{?versions,sources}`
+## `GET /api/product/{source}/{sid}{?includeSources}`
 
 Returns a single product identified by its `source` and `sid`.  Only the latest published version is displayed by
 default.  For ["unified" records](#unified-records), full source products are not included by default.
@@ -457,17 +457,17 @@ default.  For ["unified" records](#unified-records), full source products are no
         ```
 
 
-## `GET /api/products{?source,status,updated,offset,limit,sources}`
+## `GET /api/products{?sources,status,updated,offset,limit,unified}`
 
 Return the list of products, optionally filtered by source, status, or date of last update.
 
 + Parameters
-    + `source` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.
+    + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  If this is omitted, records from all visible sources are displayed.
     + `status` (optional, string) ... The product statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
     + `updated` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.
-    + `sources` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  If ``source`` values are specified, only unified products associated with products from the given source(s) will be included in the resutls.  Defaults to "false".
+    + `unified` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  Defaults to `true`.  If this is set to `true` and `sources` is set, the `unified` source is automatically added to the list of `sources` (see above).
 
 + Response 200 (application/headers+json)
     + Headers
@@ -517,9 +517,14 @@ Return the list of products, optionally filtered by source, status, or date of l
         }
         ```
 
-## `GET /api/search{?q,statuses,sortBy,offset,limit,unified}`
+Although the default behavior is to display all records grouped by the associated "unified" record, this endpoint can
+also be used to list the records from one or more sources, for example, to display contributions from the user `sample1`,
+you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 
-Performs a full text search of all data, returns matching products.
+
+## `GET /api/search{?q,statuses,sortBy,offset,limit}`
+
+Performs a full text search of all data, returns matching products, grouped by the "unified" record they are associated with.
 
  + Parameters
     + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.

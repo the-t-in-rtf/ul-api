@@ -7,7 +7,7 @@
           "map": "function (doc) {\n    if (doc.uid) { emit(doc.uid, doc); }\n}"
         },
         "records_by_source": {
-          "map": "function (doc) {\n    if (doc.uid) {\n        emit(doc.source, doc);\n    }\n}"
+          "map": "function (doc) {\n    if (doc.source) {\n        emit(doc.source, doc);\n    }\n}"
         },
         "products": {
           "map": "function(doc) {\n    if (doc.source && doc.sid) {\n        emit([doc.source, doc.sid],doc);\n    }\n}"

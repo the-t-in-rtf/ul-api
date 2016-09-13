@@ -7,8 +7,6 @@ var gpii = fluid.registerNamespace("gpii");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-// TODO: Update sources so it can pass these tests... :| Required before "updates" can work meaningfully.
-
 // Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
@@ -39,7 +37,6 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
                         {
                             event:    "{anonymousRequest}.events.onComplete",
                             listener: "jqUnit.assertDeepEq",
-                            // listener: "console.log",
                             args:     ["The results should be as expected...", "{that}.options.expected.anonymous", "@expand:JSON.parse({arguments}.0)"]
                         },
                         {

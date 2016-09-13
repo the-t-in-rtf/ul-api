@@ -1,10 +1,13 @@
 /* eslint-env node */
 // tests for PUT /api/product
 "use strict";
-var fluid       = require("infusion");
+var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 var namespace   = "gpii.ul.product.put.tests";
 var putTests    = fluid.registerNamespace(namespace);
 
+require("../../../");
+gpii.ul.api.loadTestingSupport();
 
 putTests.loader = require("../../../../../config/lib/config-loader");
 putTests.config = putTests.loader.loadConfig(require("../../../../../config/test-pouch.json"));

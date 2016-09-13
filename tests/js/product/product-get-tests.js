@@ -235,6 +235,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         noParams: {
             "isError": true,
             "message": "The information you provided is incomplete or incorrect.  Please check the following:",
+            "statusCode": 400,
             "fieldErrors": [
                 {
                     "keyword": "required",
@@ -259,6 +260,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         oneParam: {
             "isError": true,
             "message": "The information you provided is incomplete or incorrect.  Please check the following:",
+            "statusCode": 400,
             "fieldErrors": [{
                 "keyword": "required",
                 "dataPath": "",
@@ -271,6 +273,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         },
         missing: {
             isError: true,
+            "statusCode": 404,
             message: "Could not find a record matching the specified source and id."
         },
         existing: {
@@ -329,9 +332,8 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.product.get.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9753,
-        couch:  3579,
-        lucene: 9451
+        api:    9752,
+        couch:  2579
     },
     components: {
         testCaseHolder: {

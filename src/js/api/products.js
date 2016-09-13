@@ -1,114 +1,209 @@
 // API Support for GET /api/products
 /* eslint-env node */
 "use strict";
-require("../lib/url");
-module.exports = function (config) {
-    var fluid             = require("infusion");
-    var gpii              = fluid.registerNamespace("gpii");
-    var namespace         = "gpii.ul.api.products";
-    var products          = fluid.registerNamespace(namespace);
+var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 
-    var express = require("../../../node_modules/gpii-express/node_modules/express");
-    products.arrayHelper  = require("../lib/array-helper")(config);
-    products.queryHelper  = require("../lib/query-helper")(config);
-    products.router       = express.Router();
-    products.schemaHelper = require("../../schema/lib/schema-helper")(config);
+require("gpii-sort");
+require("./sources");
 
-    // TODO: default to filtering out new and deleted products once we have more data
-    // TODO: add support for paging (offset, limit)
-    // TODO: add support for versions
-    // TODO: add support for comments/annotation
+fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
-    products.router.use("/", function (req, res) {
-        var myRes = res;
+fluid.registerNamespace("gpii.ul.api.products.handler");
 
-        var params = {};
+// Sources has definitions like key: { view: // allowed roles, edit: //allowed roles}
+gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
+    return fluid.transform(sources, function (value) {
+        return value === username ? "~" : value;
+    });
+};
 
-        var arrayFields  = ["source", "status"];
-        products.queryHelper.parseArrayFields(params, req, arrayFields);
+gpii.ul.api.products.handler.handleRequest = function (that) {
+    var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+    var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
-        var dateFields    = ["updated"];
-        products.queryHelper.parseDateFields(params, req, dateFields);
+    // The list of desired sources is an array of source names, i.e. ["unified", "Handicat"]
+    var desiredSources = userOptions.sources ? userOptions.sources : Object.keys(gpii.ul.api.sources.sources);
+    if (userOptions.unified && userOptions.sources.indexOf("unified") === -1) {
+        desiredSources.push("unified");
+    }
 
-        var booleanFields = ["versions", "sources"];
-        products.queryHelper.parseBooleanFields(params, req, booleanFields);
+    // Resolve a datasource that matches our username to ~ for the permission check.
+    var resolvedSourceKeys = user ? gpii.ul.api.products.handler.resolveSourceKeys(desiredSources, user.username) : desiredSources;
+    var filteredSourceDefinitions = fluid.filterKeys(gpii.ul.api.sources.sources, resolvedSourceKeys);
 
-        var numberFields  = ["offset", "limit"];
-        products.queryHelper.parseNumberFields(params, req, numberFields);
+    var allowedSourceKeys = gpii.ul.api.sources.request.listReadableSources(filteredSourceDefinitions, user);
 
-        // TODO:  Convert this to an option that uses an expander.
-        var options = {
-            url: gpii.ul.api.url.assembleUrl(config.couch.url, "/ul/_design/ul/_view/products")
-        };
+    // Whatever sources the user asks to see, their "receipt" will only ever reflect the ones they have permissiont to view.
+    userOptions.sources = allowedSourceKeys;
 
-        var request = require("request");
-        request(options, function (error, response, body) {
-            if (error) {
-                products.schemaHelper.setHeaders(myRes, "message");
-                res.status(500).send({ "ok": false, "message": body.error});
-                return;
-            }
+    // Save the user params for the "receipt" we will deliver later.
+    that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
 
-            var matchingProducts = [];
+    that.couchReader.get({keys: allowedSourceKeys });
+};
 
-            var data = JSON.parse(body);
-            if (data.rows) {
-                data.rows.forEach(function (row) {
-                    var record = row.value;
-                    var includeRecord = true;
+gpii.ul.api.products.handler.processCouchResponse = function (that, couchResponse) {
+    if (!couchResponse) {
+        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 500, message: "No response from CouchDB, can't retrieve product records."});
+    }
 
-                    // Exclude anything that doesn't match the selected status(es)
-                    if (params.status && params.status.indexOf(record.status) === -1) {
-                        includeRecord = false;
-                    }
+    var products = [];
 
-                    // Exclude anything that doesn't match the selected source(es)
-                    if (params.source && params.source.indexOf(record.source) === -1) {
-                        includeRecord = false;
-                    }
-
-                    // Exclude anything that doesn't match the selected update date
-                    if (params.updated && (new Date(record.updated) < params.updated)) {
-                        includeRecord = false;
-                    }
-
-                    if (includeRecord) {
-                        matchingProducts.push(record);
-                    }
-                });
-            }
-
-            if (params.sources) {
-                var uniqueKeyMap = {};
-                matchingProducts.map(function (entry) { uniqueKeyMap[entry.uid] = true; });
-                var keys = Object.keys(uniqueKeyMap);
-
-                // TODO:  Convert this to an option that uses an expander.
-                // Since we are making a second upstream request to get the unified view, we can apply our offset and limits to the list of keys and use that for the total count
-                var sourceRequestOptions = {
-                    url:  gpii.ul.api.url.assembleUrl(config.couch.url, "/ul/_design/ul/_list/unified/unified"),
-                    qs: { "keys": JSON.stringify(products.arrayHelper.applyLimits(keys, params)) }
-                };
-
-                var sourceRequest = require("request");
-                sourceRequest(sourceRequestOptions, function (error2, response2, body2) {
-                    if (error2) {
-                        myRes.status(500).send({ "ok": false, "message": body2.error});
-                        return;
-                    }
-                    var records = JSON.parse(body2);
-                    products.schemaHelper.setHeaders(myRes, "records");
-                    myRes.status(200).send({ "ok": true, params: params, total_rows: keys.length, records: products.arrayHelper.applyLimits(records, params) });
-                });
+    if (that.options.request.productsParams.unified) {
+        var unifiedRecordsByUid = {};
+        var childrenByUid       = {};
+        fluid.each(couchResponse.rows, function (row) {
+            var productRecord = fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove);
+            if (productRecord.source === "unified") {
+                unifiedRecordsByUid[productRecord.uid] = productRecord;
             }
             else {
-                products.schemaHelper.setHeaders(myRes, "records");
-                myRes.status(200).send({ "ok": "true", "total_rows": matchingProducts.length, "params": params, "records": products.arrayHelper.applyLimits(matchingProducts, params)});
+                if (!childrenByUid[productRecord.uid]) {
+                    childrenByUid[productRecord.uid] = [];
+                }
+                childrenByUid[productRecord.uid].push(productRecord);
             }
         });
 
+        fluid.each(unifiedRecordsByUid, function (unifiedRecord, uid) {
+            if (childrenByUid[uid]) {
+                unifiedRecord.sources = childrenByUid[uid];
+            }
+            products.push(unifiedRecord);
+        });
+    }
+    else {
+        fluid.each(couchResponse.rows, function (row) {
+            products.push(fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove));
+        });
+    }
 
-    });
+    // Sort the results.
+    if (that.options.request.productsParams.sortBy) {
+        gpii.sort(products, that.options.request.productsParams.sortBy);
+    }
 
-    return products;
+    // Page the results.
+    var pagedProducts = products.slice(that.options.request.productsParams.offset, that.options.request.productsParams.offset + that.options.request.productsParams.limit);
+
+    that.sendResponse(200, { total_rows: products.length, params: that.options.request.productsParams, products: pagedProducts, retrievedAt: (new Date()).toISOString()});
 };
+
+fluid.defaults("gpii.ul.api.products.handler", {
+    gradeNames: ["gpii.express.handler"],
+    couchFieldsToRemove: ["_id", "_rev"],
+    rules: {
+        requestContentToValidate: "{gpii.ul.api.products}.options.rules.requestContentToValidate"
+    },
+    timeout: 60000, // TODO:  We need to tune this in the extreme.  This is just so we can write the tests.
+    fullRecordsPerRequest: 50,
+    components: {
+        couchReader: {
+            type: "gpii.express.dataSource.urlEncodedJson",
+            options: {
+                url: {
+                    expander: {
+                        funcName: "fluid.stringTemplate",
+                        args:    ["%baseUrl%viewPath", { baseUrl: "{gpii.ul.api}.options.urls.ulDb", viewPath: "/_design/ul/_view/records_by_source"}]
+                    }
+                },
+                termMap: {},
+                listeners: {
+                    "onRead.sendResponse": {
+                        func: "{gpii.ul.api.products.handler}.processCouchResponse",
+                        args: ["{arguments}.0"]
+                    },
+                    // Report back to the user on failure.
+                    "onError.sendResponse": {
+                        func: "{gpii.ul.api.products.handler}.handleError",
+                        args: ["{arguments}.0"]
+                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
+                    }
+                }
+            }
+        }
+    },
+    invokers: {
+        handleRequest: {
+            funcName: "gpii.ul.api.products.handler.handleRequest",
+            args:    ["{that}"]
+        },
+        handleError: {
+            func: "{that}.options.next",
+            args: [{ isError: true, statusCode: 500, message: "{arguments}.0"}] // error
+        },
+        processCouchResponse: {
+            funcName: "gpii.ul.api.products.handler.processCouchResponse",
+            args:     ["{that}", "{arguments}.0"]
+        }
+    }
+});
+
+fluid.defaults("gpii.ul.api.products.middleware", {
+    gradeNames: ["gpii.express.middleware.requestAware"],
+    handlerGrades: ["gpii.ul.api.products.handler"]
+});
+
+fluid.defaults("gpii.ul.api.products", {
+    gradeNames: ["gpii.express.router"],
+    path: "/products",
+    events: {
+        onSchemasDereferenced: null
+    },
+    rules: {
+        requestContentToValidate: {
+            "": "query"
+        }
+    },
+    schemas: {
+        output: "products-results.json"
+    },
+    defaultParams: {
+        offset:  0,
+        limit:   250,
+        unified: true
+    },
+    distributeOptions: {
+        source: "{that}.options.defaultParams",
+        target: "{that gpii.express.handler}.options.defaultParams"
+    },
+    components: {
+        // The JSON middleware requires valid input to access....
+        validationMiddleware: {
+            type: "gpii.schema.validationMiddleware",
+            options: {
+                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
+                rules: {
+                    requestContentToValidate: "{gpii.ul.api.products}.options.rules.requestContentToValidate",
+                    validationErrorsToResponse: {
+                        isError:    { literalValue: true },
+                        statusCode: { literalValue: 400 },
+                        message: {
+                            literalValue: "{that}.options.messages.error"
+                        },
+                        fieldErrors: ""
+                    }
+                },
+                schemaDirs: "{gpii.ul.api}.options.schemaDirs",
+                schemaKey:  "products-input.json",
+                messages: {
+                    error: "The information you provided is incomplete or incorrect.  Please check the following:"
+                },
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.products}.events.onSchemasDereferenced.fire"
+                    }
+                }
+            }
+        },
+        // Middleware to serve a JSON payload with the list of products.
+        jsonMiddleware: {
+            type: "gpii.ul.api.products.middleware",
+            options: {
+                priority: "after:validationMiddleware",
+                rules: "{gpii.ul.api.products}.options.rules"
+            }
+        }
+    }
+});

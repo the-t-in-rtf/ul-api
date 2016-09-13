@@ -1,6 +1,11 @@
 // API Support for DELETE /api/product/:source:/:sid
 /* eslint-env node */
 "use strict";
+
+// TODO:  Check permissions based on something like:
+// var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+// gpii.ul.api.sources.request.listWritableSources(gpii.ul.api.sources.sources, that.options.request.session.user);
+
 module.exports = function (config) {
     var fluid         = require("infusion");
     var namespace     = "gpii.ul.api.products.delete";

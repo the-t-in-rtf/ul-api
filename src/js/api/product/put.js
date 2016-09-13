@@ -23,6 +23,11 @@ var path = require("path");
 
 require("../../sources");
 
+// TODO:  Check permissions based on something like:
+// var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+// gpii.ul.api.sources.request.listWritableSources(gpii.ul.api.sources.sources, that.options.request.session.user);
+
+
 // TODO:  Turn this into part of our options block.
 var sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../sources/sources.json"), { encoding: "utf8"}));
 

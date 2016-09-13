@@ -7,7 +7,9 @@
 // 2. Any sources whose visibility options include one of their roles.
 // 3. A source that exactly matches their own user ID (used for contributions).
 //
-// TODO:  This module, /api/search, and /api/products should share the permissions logic that determines what sources someone is allowed to see
+// TODO:  Ensure that no one can create a user whose username matches a key in sources.json
+// TODO:  Ensure that everyone's "personal" source is visible to them.
+
 /* eslint-env node */
 "use strict";
 var fluid = fluid || require("infusion");
@@ -24,13 +26,21 @@ gpii.ul.api.sources.sources = JSON.parse(fs.readFileSync(path.resolve(__dirname,
 fluid.registerNamespace("gpii.ul.api.sources.request");
 gpii.ul.api.sources.request.handleRequest = function (that) {
 
-    var user = that.options.request && that.options.request.session && that.options.request.session._gpii_user ? that.options.request.session._gpii_user : null;
-    var visibleSources = gpii.ul.api.sources.request.listAllowedSources(that.options.sources, user);
+    var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+    var visibleSources = gpii.ul.api.sources.request.listReadableSources(that.options.sources, user);
 
     that.sendResponse(200, { sources: visibleSources });
 };
 
-gpii.ul.api.sources.request.listAllowedSources = function (sources, user) {
+gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
+    return gpii.ul.api.sources.request.listSources(sources, user, "view")
+};
+
+gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
+    return gpii.ul.api.sources.request.listSources(sources, user, "edit")
+};
+
+gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
     var visibleSources = [];
 
     fluid.each(sources, function (sourceOptions, source) {
@@ -45,12 +55,12 @@ gpii.ul.api.sources.request.listAllowedSources = function (sources, user) {
             var hasPermission = false;
 
             // Some sources (like the unified source) are visible to everyone. These have a virtual "wildcard" role (*).
-            if (sourceOptions.view.indexOf("*") !== -1) {
+            if (sourceOptions[permission] && sourceOptions[permission].indexOf("*") !== -1) {
                 hasPermission = true;
             }
             // Everything else is based on the user's roles.
             else if (!hasPermission && user && user.roles) {
-                fluid.each(sourceOptions.view, function (role) {
+                fluid.each(sourceOptions[permission], function (role) {
                     if (!hasPermission && user.roles.indexOf(role) !== -1) {
                         hasPermission = true;
                     }
@@ -67,6 +77,7 @@ gpii.ul.api.sources.request.listAllowedSources = function (sources, user) {
 };
 
 fluid.defaults("gpii.ul.api.sources.request", {
+    gradeNames: ["gpii.express.handler"],
     invokers: {
         handleRequest: {
             funcName: "gpii.ul.api.sources.request.handleRequest",
@@ -76,16 +87,13 @@ fluid.defaults("gpii.ul.api.sources.request", {
 });
 
 fluid.defaults("gpii.ul.api.sources.router", {
-    gradeNames:    ["gpii.express.requestAware.router"],
+    gradeNames:    ["gpii.express.middleware.requestAware"],
     path:          "/sources",
-    handlerGrades: "gpii.ul.api.sources.request",
+    handlerGrades: ["gpii.ul.api.sources.request"],
     sources:       gpii.ul.api.sources.sources,
-    dynamicComponents: {
-        requestHandler: {
-            options: {
-                sources: "{router}.options.sources"
-            }
-        }
+    distributeOptions: {
+        source: "{that}.options.sources",
+        target: "{that gpii.express.handler}.options.sources"
     }
 });
 

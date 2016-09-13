@@ -169,8 +169,8 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
         }
     });
 
-    if (that.options.request.query.sortBy) {
-        gpii.sort(products, that.options.request.query.sortBy);
+    if (that.options.request.searchParams.sortBy) {
+        gpii.sort(products, that.options.request.searchParams.sortBy);
     }
 
     var pagedProducts = products.slice(that.options.request.searchParams.offset, that.options.request.searchParams.offset + that.options.request.searchParams.limit);
@@ -278,22 +278,14 @@ fluid.defaults("gpii.ul.api.search", {
     path: "/search",
     searchDefaults: {
         offset:  0,
-        limit:   250,
-        unified: false
+        limit:   250
     },
     events: {
         onSchemasDereferenced: null
     },
     rules: {
         requestContentToValidate: {
-            "includeSources": "query.includeSources",
-            "limit":          "query.limit",
-            "offset":         "query.offset",
-            "q":              "query.q",
-            "sortBy":         "query.sortBy",
-            "sources":        "query.sources",
-            "statuses":       "query.statuses",
-            "unified":        "query.unified"
+            "": "query"
         }
     },
     distributeOptions: [{
@@ -360,7 +352,6 @@ fluid.defaults("gpii.ul.api.suggest", {
     },
     searchDefaults: {
         offset:  0,
-        limit:   5,
-        unified: false
+        limit:   5
     }
 });

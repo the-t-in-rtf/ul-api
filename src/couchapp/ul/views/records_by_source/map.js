@@ -1,5 +1,5 @@
 function (doc) {
-    if (doc.uid) {
+    if (doc.source) {
         emit(doc.source, doc);
     }
 }

@@ -2,8 +2,8 @@
   "type": "object",
   "id": "products-input.json",
   "properties": {
-    "includeSources": {
-      "$ref": "output.json#/definitions/includeSources"
+    "unified": {
+      "$ref": "output.json#/definitions/unified"
     },
     "limit": {
       "$ref": "paging.json#/definitions/limit"

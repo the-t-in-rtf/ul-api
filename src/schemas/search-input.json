@@ -11,9 +11,6 @@
     "q": {
       "$ref": "search-base.json#/definitions/q"
     },
-    "sources": {
-      "$ref": "filters.json#/definitions/sources"
-    },
     "sortBy": {
       "$ref": "sort-by.json#/definitions/sortBy"
     },
