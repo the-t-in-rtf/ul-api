@@ -46,7 +46,6 @@ gpii.ul.api.tests.products.checkResultsByStatus = function (message, expected, a
     jqUnit.assertEquals(message + " (no records with the wrong status)", 0, recordsWithWrongStatus);
 };
 
-// Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {

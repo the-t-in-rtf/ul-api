@@ -17,7 +17,6 @@ gpii.ul.api.tests.docs.checkResults = function (body) {
     });
 };
 
-// Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.docs.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [

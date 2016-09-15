@@ -7,7 +7,6 @@ var gpii = fluid.registerNamespace("gpii");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-// Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
