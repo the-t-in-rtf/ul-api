@@ -19,7 +19,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
         loggedIn: {
             "sources": [
                 "unified",
-                "existing"
+                "~existing"
             ]
         }
     },

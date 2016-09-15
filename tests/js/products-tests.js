@@ -368,7 +368,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
         authorizedSourceRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?sources=%22existing%22&unified=false"
+                endpoint: "api/products?sources=%22~existing%22&unified=false"
             }
         }
     }
