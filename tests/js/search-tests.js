@@ -8,22 +8,6 @@ var gpii  = fluid.registerNamespace("gpii");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-// TODO: Convert this
-// jqUnit.asyncTest("Confirm that a search returns an error if no query is passed...", function () {
-//     var options = {
-//         "url": searchTests.config.express.baseUrl + "search"
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertEquals("The response should not be 'OK'...", false, jsonData.ok);
-//         jqUnit.assertUndefined("No products should have been returned...", jsonData.records);
-//     });
-// });
-
 var jqUnit = require("node-jqunit");
 
 fluid.registerNamespace("gpii.tests.ul.api.product.search");
