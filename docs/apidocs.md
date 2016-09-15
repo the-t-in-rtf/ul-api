@@ -22,7 +22,7 @@ All products in the Unified Listing have the following common fields:
 | `name` (required)         | The name of the product.|
 | `sid` (required)          | The unique identifier to identify this record in the source database.|
 | `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "ul".|
-| `status` (required)       | The status of this record.  Current supported values are listed below under ["Statuses"](#statuses).|
+| `status` (required)       | The status of this record.  Current supported values are listed below under ["status"](#statuses).|
 | `uid` (required)          | The Universal ID ("uid") is an id that is unique in the Unified listing and which is constant for different editions of a product (see ["editions"](#editions)).  "Source" products use this field to indicate which "unified" record they are associated with (if any).|
 | `updated` (required)      | The date at which the record was last updated.|
 | `images`                  | Images of the product, if available (see ["Images"](#images) below).|
@@ -273,6 +273,19 @@ The simplest set of editions represented in JSON format looks something like the
         }
     }
 
+# Encoding of Query Variables
+
+All query string variables must be [percent encoded](https://tools.ietf.org/html/rfc3986#section-2.1) stringified JSON.
+As an example, if you wish to set the query variable `q` to ``myString`, the query string should look something like:
+
+`?q=%22myString%22`
+
+If you wish to set the query variable `status` to only display `new` and `deleted` records, the query string should look
+something like:
+
+`?status=%5B%22deleted%22,%22new%22%5D`
+
+
 # API REST endpoints
 
 ## `/api/user`
@@ -462,8 +475,8 @@ default.  For ["unified" records](#unified-records), full source products are no
 Return the list of products, optionally filtered by source, status, or date of last update.
 
 + Parameters
-    + `sources` (optional, string) ... Only display products from a particular source.  Can be repeated to return products from multiple sources.  If this is omitted, records from all visible sources are displayed.
-    + `status` (optional, string) ... The product statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+    + `sources` (optional, string) ... Only display products from a particular source.  If this is omitted, records from all visible sources are displayed. For a single value, you can supply a string. For multiple values, you must supply an array
+    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
     + `updated` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.
@@ -522,13 +535,14 @@ also be used to list the records from one or more sources, for example, to displ
 you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 
 
-## `GET /api/search{?q,statuses,sortBy,offset,limit}`
+## `GET /api/search{?q,status,sortBy,offset,limit}`
 
 Performs a full text search of all data, returns matching products, grouped by the "unified" record they are associated with.
 
  + Parameters
     + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
+    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
 
@@ -547,7 +561,7 @@ Performs a full text search of all data, returns matching products, grouped by t
                   "limit": 100,
                   "sort": "uid ASC",
                   "updatedSince": "2014-05-25T11:23:32.441Z",
-                  "statuses": [ "active" ]
+                  "status": [ "active" ]
              },
              "products": [
                 {
@@ -593,7 +607,7 @@ when building a "unified" record.
  + Parameters
      + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax][1] to construct more complex searches.
      + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
-     + `statuses` (optional, string) ... The record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+     + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
 
  + Response 200 (application/search+json)
      + Headers
@@ -607,7 +621,7 @@ when building a "unified" record.
              "params": {
                   "q": "jaws",
                   "updatedSince": "2014-05-25T11:23:32.441Z",
-                  "statuses": [ "active" ]
+                  "status": [ "active" ]
              },
              "products": [
                 {
@@ -644,14 +658,14 @@ when building a "unified" record.
          }
          ```
 
- ## `GET /api/updates/{?sources,updated,statuses,offset,limit}`
+ ## `GET /api/updates/{?sources,updated,status,offset,limit}`
 
 Return a list of unified products that contain newer information than the record provided by the given sources.
 
  + Parameters
      + `sources` (required, string) ... Only display products from the specified sources.
-     + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified products updated at or after this time are included in the comparison.
-     + `statuses` (optional, string) ... The unified record statuses to return (defaults to everything but 'deleted' products).  Can be repeated to include multiple statuses.
+     + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product records updated at or after this time are included in the comparison.
+     + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
      + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
      + `limit` (optional, string) ... The number of products to return.  Used for pagination.  Set to `-1` to return all products.  Defaults to `-1`
 
@@ -667,7 +681,7 @@ Return a list of unified products that contain newer information than the record
              "params": {
                   "sources": ["Vlibank"]
                   "updatedSince": "2014-05-25T11:23:32.441Z",
-                  "statuses": [ "active" ]
+                  "status": [ "active" ]
              },
              "products": [
                 {

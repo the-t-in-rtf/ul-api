@@ -8,8 +8,6 @@
 // 3. A source that exactly matches their own user ID (used for contributions).
 //
 // TODO:  Ensure that no one can create a user whose username matches a key in sources.json
-// TODO:  Ensure that everyone's "personal" source is visible to them.
-
 /* eslint-env node */
 "use strict";
 var fluid = fluid || require("infusion");
@@ -40,8 +38,17 @@ gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
     return gpii.ul.api.sources.request.listSources(sources, user, "edit")
 };
 
+/**
+ *
+ * List sources for which the current user has the specified permission.
+ *
+ * @param sources
+ * @param user {Object} - A
+ * @param permission {String} - Typically "view" or "edit".
+ * @returns {Array}
+ */
 gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
-    var visibleSources = [];
+    var sourcesWithPermission = [];
 
     fluid.each(sources, function (sourceOptions, source) {
         // The special character `~` applies to the current username.  If it is found in the list of sources and the user
@@ -49,7 +56,7 @@ gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
         // power the "contribute" functionality for both manufacturer and general users.
         //
         if (source === "~" && user) {
-            visibleSources.push(user.username);
+            sourcesWithPermission.push("~" + user.username);
         }
         else {
             var hasPermission = false;
@@ -68,12 +75,12 @@ gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
             }
 
             if (hasPermission) {
-                visibleSources.push(source);
+                sourcesWithPermission.push(source);
             }
         }
     });
 
-    return visibleSources;
+    return sourcesWithPermission;
 };
 
 fluid.defaults("gpii.ul.api.sources.request", {

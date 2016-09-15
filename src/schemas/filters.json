@@ -7,7 +7,7 @@
       "format": "date-time",
       "description": "Return only records created at or after this time (in ISO 8601 format)."
     },
-    "statuses": {
+    "status": {
       "anyOf": [
         {  "$ref": "product-base.json#/definitions/status" },
         {
@@ -16,13 +16,21 @@
             "$ref": "product-base.json#/definitions/status"
           }
         }
-      ]
+      ],
+      "errors": {
+        "anyOf": "Invalid status.  See the API docs for supported values."
+      }
     },
     "sources": {
-      "type": "array",
-      "items": {
-        "$ref": "product-base.json#/definitions/source"
-      }
+      "anyOf": [
+        { "$ref": "product-base.json#/definitions/source" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "product-base.json#/definitions/source"
+          }
+        }
+      ]
     },
     "filters": {
       "type": "object",
@@ -30,8 +38,8 @@
         "updated": {
           "$ref": "filters.json#/definitions/updated"
         },
-        "statuses": {
-          "$ref": "filters.json#/definitions/statuses"
+        "status": {
+          "$ref": "filters.json#/definitions/status"
         },
         "sources": {
           "$ref": "filters.json#/definitions/sources"

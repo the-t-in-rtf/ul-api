@@ -23,7 +23,7 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
     // The list of desired sources is an array of source names, i.e. ["unified", "Handicat"]
-    var desiredSources = userOptions.sources ? userOptions.sources : Object.keys(gpii.ul.api.sources.sources);
+    var desiredSources = userOptions.sources ? fluid.makeArray(userOptions.sources) : Object.keys(gpii.ul.api.sources.sources);
     if (userOptions.unified && userOptions.sources.indexOf("unified") === -1) {
         desiredSources.push("unified");
     }
@@ -34,13 +34,41 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
 
     var allowedSourceKeys = gpii.ul.api.sources.request.listReadableSources(filteredSourceDefinitions, user);
 
-    // Whatever sources the user asks to see, their "receipt" will only ever reflect the ones they have permissiont to view.
-    userOptions.sources = allowedSourceKeys;
+    // Throw a 401 error if any of the requested sources are not visible.  This check is only relevant if the user
+    // specified a source variable, as the default is to filter "all sources" down to "all visible sources for this user".
+    // This error is also reported for non-existent sources, but we should not clarify this, as it would allow people
+    // to trawl through and determine valid usernames by requesting ~{username} until they got a 401 instead of a 404.
+    if (userOptions.sources && allowedSourceKeys.length < desiredSources.length) {
+        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 401, message: "You do not have permission to view one or more of the sources you requested."});
+    }
+    else {
+        // Whatever sources the user asks to see, their "receipt" will only ever reflect the ones they have permissiont to view.
+        userOptions.sources = allowedSourceKeys;
 
-    // Save the user params for the "receipt" we will deliver later.
-    that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
+        // Save the user params for the "receipt" we will deliver later.
+        that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
 
-    that.couchReader.get({keys: allowedSourceKeys });
+        that.couchReader.get({keys: allowedSourceKeys });
+    }
+};
+
+gpii.ul.api.products.handler.matchesFilters = function (that, record) {
+    // Filter by status
+    if (that.options.request.productsParams.status && fluid.makeArray(that.options.request.productsParams.status).indexOf(record.status) === -1) {
+        return false;
+    }
+
+    // Filter by last updated
+    if (that.options.request.productsParams.updated) {
+        var recordUpdated = new Date(record.updated);
+        var includeAfter = new Date(that.options.request.productsParams.updated);
+
+        if (recordUpdated < includeAfter) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
 gpii.ul.api.products.handler.processCouchResponse = function (that, couchResponse) {
@@ -67,15 +95,19 @@ gpii.ul.api.products.handler.processCouchResponse = function (that, couchRespons
         });
 
         fluid.each(unifiedRecordsByUid, function (unifiedRecord, uid) {
-            if (childrenByUid[uid]) {
-                unifiedRecord.sources = childrenByUid[uid];
+            if (gpii.ul.api.products.handler.matchesFilters(that, unifiedRecord)) {
+                if (childrenByUid[uid]) {
+                    unifiedRecord.sources = childrenByUid[uid];
+                }
+                products.push(unifiedRecord);
             }
-            products.push(unifiedRecord);
         });
     }
     else {
         fluid.each(couchResponse.rows, function (row) {
-            products.push(fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove));
+            if (gpii.ul.api.products.handler.matchesFilters(that, row)) {
+                products.push(fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove));
+            }
         });
     }
 

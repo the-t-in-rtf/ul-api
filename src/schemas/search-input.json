@@ -14,8 +14,8 @@
     "sortBy": {
       "$ref": "sort-by.json#/definitions/sortBy"
     },
-    "statuses": {
-      "$ref": "filters.json#/definitions/statuses"
+    "status": {
+      "$ref": "filters.json#/definitions/status"
     },
     "updated": {
       "$ref": "filters.json#/definitions/updated"

@@ -227,7 +227,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         requestSourceRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/existing/contrib1?sources=true"
+                endpoint: "api/product/~existing/contrib1?sources=true"
             }
         }
     },

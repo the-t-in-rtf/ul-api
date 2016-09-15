@@ -15,7 +15,7 @@
     {
       "uid": "unifiedNewer",
       "status": "new",
-      "source": "existing",
+      "source": "~existing",
       "sid": "contrib1",
       "name": "sample product 1",
       "description": "sample description 1",
@@ -39,7 +39,7 @@
     {
       "uid": "unifiedOlder",
       "status": "new",
-      "source": "existing",
+      "source": "~existing",
       "sid": "contrib2",
       "name": "sample product 2",
       "description": "sample description 2",

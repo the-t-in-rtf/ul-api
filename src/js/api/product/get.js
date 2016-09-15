@@ -13,9 +13,11 @@ require("gpii-json-schema");
 
 require("../lib/validationGatedContentAware");
 
+// TODO:  Add tests and confirm that permission checking works for /api/product/SOURCE/.
+
 // TODO:  Put the JSON Schema headers back in
 
-// TODO:  Review and convert the way we handle "unified" products vs. the way the search does it.
+// TODO:  Review and convert the way we handle "unified" products vs. the way the search and "product" do it.
 
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {

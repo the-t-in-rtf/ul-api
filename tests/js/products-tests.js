@@ -9,205 +9,6 @@ var jqUnit = require("node-jqunit");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-// jqUnit.asyncTest("Look for products updated after a very old date...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products",
-//         "qs": { updated: "1970-01-01T16:54:12.023Z" }
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             jqUnit.assertTrue("The list should not be empty...", jsonData.records.length > 0);
-//         }
-//     });
-// });
-//
-// jqUnit.asyncTest("Look for products updated after a distant future date...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products",
-//         "qs": { updated: "3000-01-01T16:54:12.023Z" }
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             jqUnit.assertEquals("The list should be empty...", 0, jsonData.records.length);
-//         }
-//     });
-// });
-//
-// jqUnit.asyncTest("Look for products, limiting by source...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products",
-//         "qs": { source: "unified" }
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             var unifiedRecordCount = jsonData.records.length;
-//             jqUnit.assertTrue("The list of unified products should not be empty...", unifiedRecordCount > 0);
-//
-//             jqUnit.stop();
-//             var options = {
-//                 "url": productsTests.config.express.baseUrl + "products",
-//                 "qs": { source: ["unified", "Vlibank"] }
-//             };
-//             request.get(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 testUtils.isSaneResponse(jqUnit, error, response, body);
-//                 var jsonData = JSON.parse(body);
-//
-//                 jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//                 if (jsonData.records) {
-//                     var combinedRecordCount = jsonData.records.length;
-//                     jqUnit.assertTrue("The list of combined products should not be empty...", combinedRecordCount > 0);
-//                     jqUnit.assertTrue("There should be more combined products than unified products...", combinedRecordCount > unifiedRecordCount);
-//                 }
-//             });
-//
-//
-//         }
-//     });
-// });
-//
-// jqUnit.asyncTest("Look for products, limiting by status...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products"
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             var unlimitedRecordCount = jsonData.records.length;
-//             jqUnit.assertTrue("The list of products should not be empty...", unlimitedRecordCount > 0);
-//
-//             jqUnit.stop();
-//             var options = {
-//                 "url": productsTests.config.express.baseUrl + "products",
-//                 "qs": { status: ["deleted"] }
-//             };
-//             request.get(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 testUtils.isSaneResponse(jqUnit, error, response, body);
-//                 var jsonData = JSON.parse(body);
-//
-//                 jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//                 if (jsonData.records) {
-//                     var deletedRecordCount = jsonData.records.length;
-//                     jqUnit.assertTrue("There should be less 'deleted' products than total products...", deletedRecordCount < unlimitedRecordCount);
-//                 }
-//             });
-//         }
-//     });
-// });
-//
-// jqUnit.asyncTest("Look for products, limiting by multiple statuses...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products",
-//         "qs": { status: ["deleted"] }
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             var deletedRecordCount = jsonData.records.length;
-//
-//             jqUnit.stop();
-//             var options = {
-//                 "url": productsTests.config.express.baseUrl + "products",
-//                 "qs": { status: ["deleted", "new", "active"] }
-//             };
-//             request.get(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 testUtils.isSaneResponse(jqUnit, error, response, body);
-//                 var jsonData = JSON.parse(body);
-//
-//                 jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//                 if (jsonData.records) {
-//                     var combinedRecordCount = jsonData.records.length;
-//                     jqUnit.assertTrue("There should be more products from multiple statuses than from just one...", deletedRecordCount < combinedRecordCount);
-//                 }
-//             });
-//         }
-//     });
-// });
-//
-//
-// jqUnit.asyncTest("Present unified products limited by source...", function () {
-//     var options = {
-//         "url": productsTests.config.express.baseUrl + "products",
-//         "qs": { sources: true }
-//     };
-//     request.get(options, function (error, response, body) {
-//         jqUnit.start();
-//
-//         testUtils.isSaneResponse(jqUnit, error, response, body);
-//         var jsonData = JSON.parse(body);
-//
-//         jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//         if (jsonData.records) {
-//             var unlimitedRecordCount = jsonData.records.length;
-//             jqUnit.assertTrue("The list of products should not be empty...", unlimitedRecordCount > 0);
-//
-//             jqUnit.stop();
-//
-//             var limitedOptions = {
-//                 "url": productsTests.config.express.baseUrl + "products",
-//                 "qs": { sources: true, source: "Vlibank" }
-//             };
-//             request.get(limitedOptions, function (error, response, body) {
-//                 jqUnit.start();
-//                 testUtils.isSaneResponse(jqUnit, error, response, body);
-//
-//                 var jsonData = JSON.parse(body);
-//
-//                 jqUnit.assertNotUndefined("A list of products should have been returned...", jsonData.records);
-//                 var limitedRecordCount = jsonData.records.length;
-//                 jqUnit.assertTrue("There should be fewer products return when we limit the results by source...", limitedRecordCount < unlimitedRecordCount);
-//             });
-//         }
-//     });
-// });
-
-// TODO: Test filtering by a single status
-// TODO: Test filtering using multiple statuses fields
-// TODO: Filter using an array of statuses.
-
-// TODO: Confirm that we can filter by other sources once we're logged in
-
-// TODO: Confirm that both array and multiple parameter sources=foo&sources=bar notation are supported.
-
-// TODO: Confirm that we can get just the data for "our" source by setting unified to false.// TODO: Test sorting
-
-// TODO: Port "updated" tests from jqUnit code.
-
-// TODO: Test JSON  Schema validation by requesting a non-existant status
-
 fluid.registerNamespace("gpii.ul.api.tests.products");
 
 gpii.ul.api.tests.products.checkResults = function (message, expected, actual, minRecords) {
@@ -234,6 +35,17 @@ gpii.ul.api.tests.products.checkSecondPage = function (secondBody, firstRequest)
     jqUnit.assertDeepEq("The last record from the first page should equal the first record from the second page...", lastFirstPageRecord, firstSecondPageRecord);
 };
 
+gpii.ul.api.tests.products.checkResultsByStatus = function (message, expected, actual, minRecords, statuses) {
+    gpii.ul.api.tests.products.checkResults(message, expected, actual, minRecords);
+
+    var recordsWithWrongStatus = 0;
+    fluid.each(actual.products, function (record) {
+        recordsWithWrongStatus += statuses.indexOf(record.status) !== -1 ? 0 : 1;
+    });
+
+    jqUnit.assertEquals(message + " (no records with the wrong status)", 0, recordsWithWrongStatus);
+};
+
 // Each test has a request instance of `kettle.test.request.http` or `gpii.test.ul.api.request`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
@@ -251,6 +63,62 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                 "unified",
                 "existing"
             ]
+        },
+        singleStatus: {
+            "params": {
+                "sources": ["unified"],
+                "status":  "deleted",
+                "unified": true,
+                "offset": 0,
+                "limit": 250
+            }
+        },
+        multiStatus: {
+            "params": {
+                "sources": ["unified"],
+                "status": ["deleted", "new"],
+                "unified": true,
+                "offset": 0,
+                "limit": 250
+            }
+        },
+        invalidStatus: {
+            isError: true
+        },
+        distantFuture: {
+            "total_rows": 0,
+            "params": {
+                "updated":  "3000-01-01T16:54:12.023Z",
+                "sources": [
+                    "unified"
+                ],
+                "offset": 0,
+                "limit": 250,
+                "unified": true
+            }
+        },
+        distantPast: {
+            "params": {
+                "updated":  "1970-01-01T16:54:12.023Z",
+                "sources": [
+                    "unified"
+                ],
+                "offset": 0,
+                "limit": 250,
+                "unified": true
+            }
+        },
+        unauthorizedSource: {
+            isError: true,
+            message: "You do not have permission to view one or more of the sources you requested."
+        },
+        authorizedSource: {
+            "params": {
+                "sources": ["~existing"],
+                "offset": 0,
+                "limit": 250,
+                "unified": false
+            }
         }
     },
     rawModules: [
@@ -296,6 +164,137 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                             args:      ["@expand:JSON.parse({arguments}.0)", "{firstPageRequest}"] // secondBody, firstRequest
                         }
                     ]
+                },
+                {
+                    name: "Testing requesting records using a single status string...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{singleStatusRequest}.send"
+                        },
+                        {
+                            event:     "{singleStatusRequest}.events.onComplete",
+                            listener:  "gpii.ul.api.tests.products.checkResultsByStatus",
+                            args:      ["Requesting a single status should return the expected results...", "{that}.options.expected.singleStatus", "@expand:JSON.parse({arguments}.0)", 1, ["deleted"]] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{singleStatusRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Testing requesting records using an array of status strings...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{multiStatusRequest}.send"
+                        },
+                        {
+                            event:     "{multiStatusRequest}.events.onComplete",
+                            listener:  "gpii.ul.api.tests.products.checkResultsByStatus",
+                            args:      ["Requesting a single status should return the expected results...", "{that}.options.expected.multiStatus", "@expand:JSON.parse({arguments}.0)", 2, ["deleted", "new"]] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{multiStatusRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Testing requesting an invalid status...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{invalidStatusRequest}.send"
+                        },
+                        {
+                            event:     "{invalidStatusRequest}.events.onComplete",
+                            listener:  "jqUnit.assertLeftHand",
+                            args:      ["A validation error should have been returned...", "{that}.options.expected.invalidStatus", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 400, "{invalidStatusRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Testing limiting results by 'last updated' field (distant future)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{updatedFutureRequest}.send"
+                        },
+                        {
+                            event:     "{updatedFutureRequest}.events.onComplete",
+                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            args:      ["The defaults should return the expected results...", "{that}.options.expected.distantFuture", "@expand:JSON.parse({arguments}.0)", 0] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{updatedFutureRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Testing limiting results by 'last updated' field (distant past)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{updatedLongAgoRequest}.send"
+                        },
+                        {
+                            event:     "{updatedLongAgoRequest}.events.onComplete",
+                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            args:      ["The defaults should return the expected results...", "{that}.options.expected.distantPast", "@expand:JSON.parse({arguments}.0)", 1] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{updatedLongAgoRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Request an unauthorized source...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{unauthorizedSourceRequest}.send"
+                        },
+                        {
+                            event:     "{unauthorizedSourceRequest}.events.onComplete",
+                            listener:  "jqUnit.assertLeftHand",
+                            args:      ["The request should not have been successful...", "{that}.options.expected.unauthorizedSource", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 401, "{unauthorizedSourceRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Request an authorized source...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{loginRequest}.send",
+                            args: [{ username: "existing", password: "password"}]
+                        },
+                        {
+                            event:     "{loginRequest}.events.onComplete",
+                            listener:  "{authorizedSourceRequest}.send"
+                        },
+                        {
+                            event:     "{authorizedSourceRequest}.events.onComplete",
+                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            args:      ["We should be able to see records from our private source...", "{that}.options.expected.authorizedSource", "@expand:JSON.parse({arguments}.0)", 2] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{authorizedSourceRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
                 }
             ]
         }
@@ -321,6 +320,55 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
             type: "gpii.test.ul.api.request",
             options: {
                 endpoint: "api/products?offset=9&limit=1"
+            }
+        },
+        singleStatusRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?status=%22deleted%22"
+            }
+        },
+        multiStatusRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?status=%5B%22deleted%22,%22new%22%5D"
+            }
+        },
+        invalidStatusRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?status=%22bogus%22"
+            }
+        },
+        updatedFutureRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?updated=%223000-01-01T16:54:12.023Z%22"
+            }
+        },
+        updatedLongAgoRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?updated=%221970-01-01T16:54:12.023Z%22"
+            }
+        },
+        unauthorizedSourceRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sources=%22~existing%22"
+            }
+        },
+        loginRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/user/login",
+                method:   "POST"
+            }
+        },
+        authorizedSourceRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sources=%22existing%22&unified=false"
             }
         }
     }
