@@ -1,13 +1,19 @@
-// Unofficial API to pull the list of sources the user is allowed to see.  Used only to populate controls in the
-// "updates" report.
-//
-// Users are allowed to see:
-//
-// 1. Any sources whose visibility options include the special role `*`.
-// 2. Any sources whose visibility options include one of their roles.
-// 3. A source that exactly matches their own user ID (used for contributions).
-//
-// TODO:  Ensure that no one can create a user whose username matches a key in sources.json
+/*
+
+    GET /api/sources, returns the list of sources the user is allowed to see.  Used to populate controls in the
+    "updates" report.
+
+    Users are allowed to see:
+
+    1. Any sources whose visibility options include the special role `*`.
+    2. Any sources whose visibility options include one of their roles.
+    3. A source that exactly matches their own user ID (used for contributions).
+
+
+    Some of the static functions defined here are also used in /api/products and /api/product, to confirm that the user
+    is allowed to view one or more records from a particular source.
+
+ */
 /* eslint-env node */
 "use strict";
 var fluid = fluid || require("infusion");
@@ -22,6 +28,18 @@ fluid.registerNamespace("gpii.ul.api.sources");
 gpii.ul.api.sources.sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "sources.json"), { encoding: "utf8"}));
 
 fluid.registerNamespace("gpii.ul.api.sources.request");
+
+/**
+ *
+ * Handle a single incoming request.  Compares the current user to the full list of sources and returns those for which
+ * the user has permission.  Used in the "updates" interface.
+ *
+ * Fulfills the standard contract for a `gpii.express.handler` instance:
+ * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
+ *
+ * @param that - The component itself.
+ *
+ */
 gpii.ul.api.sources.request.handleRequest = function (that) {
 
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
@@ -30,22 +48,41 @@ gpii.ul.api.sources.request.handleRequest = function (that) {
     that.sendResponse(200, { sources: visibleSources });
 };
 
+/**
+ *
+ * A static function to filter a list of source definitions and return only those the current user can "view".
+ *
+ * @param sources {Object} A map of source definitions, keyed by name.
+ * @param user {Object} The current object, as stored in the request session by gpii-express-user.
+ * @returns {Array} An array of sources the current user can "view".
+ *
+ */
 gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
     return gpii.ul.api.sources.request.listSources(sources, user, "view")
 };
 
+/**
+ *
+ * A static function to filter a list of source definitions and return only those the current user can "edit".
+ *
+ * @param sources {Object} A map of source definitions, keyed by name.
+ * @param user {Object} The current object, as stored in the request session by gpii-express-user.
+ * @returns {Array} An array of sources the current user can "edit".
+ *
+ */
 gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
     return gpii.ul.api.sources.request.listSources(sources, user, "edit")
 };
 
 /**
  *
- * List sources for which the current user has the specified permission.
+ * A static function to filter a list of source definitions down to those for which the current user has a specified permission.
  *
- * @param sources
- * @param user {Object} - A
- * @param permission {String} - Typically "view" or "edit".
- * @returns {Array}
+ * @param sources {Object} A map of source definitions, keyed by name.
+ * @param user {Object} The current object, as stored in the request session by gpii-express-user.
+ * @param permission {String} - The permission to look for, either "view" or "edit".
+ * @returns {Array} An array of sources for which the current user has the selected permission.
+ *
  */
 gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
     var sourcesWithPermission = [];
