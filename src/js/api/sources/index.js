@@ -7,8 +7,7 @@
 
     1. Any sources whose visibility options include the special role `*`.
     2. Any sources whose visibility options include one of their roles.
-    3. A source that exactly matches their own user ID (used for contributions).
-
+    3. A source that exactly matches a tilde followed by their own user ID (used for contributions).
 
     Some of the static functions defined here are also used in /api/products and /api/product, to confirm that the user
     is allowed to view one or more records from a particular source.
