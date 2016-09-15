@@ -7,7 +7,7 @@ var gpii = fluid.registerNamespace("gpii");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
+fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
         anonymous: {
@@ -100,7 +100,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.sources.environment", {
+fluid.defaults("gpii.tests.ul.api.sources.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
         api:    9786,
@@ -108,9 +108,9 @@ fluid.defaults("gpii.ul.api.tests.sources.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.ul.api.tests.sources.caseHolder"
+            type: "gpii.tests.ul.api.sources.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.ul.api.tests.sources.environment");
+fluid.test.runTests("gpii.tests.ul.api.sources.environment");

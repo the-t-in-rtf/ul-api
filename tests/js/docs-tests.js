@@ -9,15 +9,15 @@ var jqUnit = require("node-jqunit");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-fluid.registerNamespace("gpii.ul.api.tests.docs");
+fluid.registerNamespace("gpii.tests.ul.api.docs");
 
-gpii.ul.api.tests.docs.checkResults = function (body) {
+gpii.tests.ul.api.docs.checkResults = function (body) {
     fluid.each(["/api/products", "/api/search", "Unified Listing API"], function (stringToMatch) {
         jqUnit.assertTrue("The output should contain the string '" + stringToMatch + "'...", body.indexOf(stringToMatch) !== -1);
     });
 };
 
-fluid.defaults("gpii.ul.api.tests.docs.caseHolder", {
+fluid.defaults("gpii.tests.ul.api.docs.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
         {
@@ -32,7 +32,7 @@ fluid.defaults("gpii.ul.api.tests.docs.caseHolder", {
                         },
                         {
                             event:    "{docsRequest}.events.onComplete",
-                            listener: "gpii.ul.api.tests.docs.checkResults",
+                            listener: "gpii.tests.ul.api.docs.checkResults",
                             args:     ["{arguments}.0"]
                         },
                         {
@@ -57,7 +57,7 @@ fluid.defaults("gpii.ul.api.tests.docs.caseHolder", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.docs.environment", {
+fluid.defaults("gpii.tests.ul.api.docs.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
         api:    9776,
@@ -65,9 +65,9 @@ fluid.defaults("gpii.ul.api.tests.docs.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.ul.api.tests.docs.caseHolder"
+            type: "gpii.tests.ul.api.docs.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.ul.api.tests.docs.environment");
+fluid.test.runTests("gpii.tests.ul.api.docs.environment");

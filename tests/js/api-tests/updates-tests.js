@@ -16,7 +16,7 @@ require("../lib/assembleurl");
 require("../lib/saneresponse");
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
-fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
+fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
     gradeNames: ["fluid.test.testCaseHolder"],
     expected: {
         unifiedNewer: {
@@ -95,7 +95,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
         sequenceStart: "noexpand"
     },
     moduleSource: {
-        funcName: "gpii.ul.api.tests.addRequiredSequences",
+        funcName: "gpii.tests.ul.api.addRequiredSequences",
         args:     ["{that}.options.sequenceStart", "{that}.options.rawModules"]
     },
     sequenceStart: [
@@ -127,7 +127,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
                             func: "{sourceNewerRequest}.send"
                         },
                         {
-                            listener: "gpii.ul.api.tests.isSaneResponse",
+                            listener: "gpii.tests.ul.api.isSaneResponse",
                             event: "{sourceNewerRequest}.events.onComplete",
                             args: ["{sourceNewerRequest}.nativeResponse", "{arguments}.0", 200, "{that}.options.expected.sourceNewer"]
                         }
@@ -153,7 +153,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
                             func: "{unifiedNewerRequest}.send"
                         },
                         {
-                            listener: "gpii.ul.api.tests.isSaneResponse",
+                            listener: "gpii.tests.ul.api.isSaneResponse",
                             event:    "{unifiedNewerRequest}.events.onComplete",
                             args:     ["{unifiedNewerRequest}.nativeResponse", "{arguments}.0", 200, "{that}.options.expected.unifiedNewer"]
                         }
@@ -172,7 +172,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
             options: {
                 path: {
                     expander: {
-                        funcName: "gpii.ul.api.tests.assembleUrl",
+                        funcName: "gpii.tests.ul.api.assembleUrl",
                         args:     ["{testEnvironment}.options.baseUrl", "api/user/signin"]
                     }
 
@@ -186,7 +186,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
             options: {
                 path: {
                     expander: {
-                        funcName: "gpii.ul.api.tests.assembleUrl",
+                        funcName: "gpii.tests.ul.api.assembleUrl",
                         args:     ["{testEnvironment}.options.baseUrl", "api/updates?source=admin&sourceNewer=true"]
                     }
                 },
@@ -199,7 +199,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
             options: {
                 path: {
                     expander: {
-                        funcName: "gpii.ul.api.tests.assembleUrl",
+                        funcName: "gpii.tests.ul.api.assembleUrl",
                         args:     ["{testEnvironment}.options.baseUrl", "api/user/signin"]
                     }
 
@@ -213,7 +213,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
             options: {
                 path: {
                     expander: {
-                        funcName: "gpii.ul.api.tests.assembleUrl",
+                        funcName: "gpii.tests.ul.api.assembleUrl",
                         args:     ["{testEnvironment}.options.baseUrl", "api/updates?source=admin"]
                     }
                 },
@@ -224,7 +224,7 @@ fluid.defaults("gpii.ul.api.tests.updates.caseHolder", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.updates.environment", {
+fluid.defaults("gpii.tests.ul.api.updates.environment", {
     gradeNames:  ["fluid.test.testEnvironment"],
     expressPort: 9786,
     baseUrl:     "http://localhost:9786",
@@ -237,7 +237,7 @@ fluid.defaults("gpii.ul.api.tests.updates.environment", {
     },
     components: {
         harness: {
-            type:          "gpii.ul.api.tests.harness",
+            type:          "gpii.tests.ul.api.harness",
             createOnEvent: "constructServer",
             options: {
                 expressPort: "{testEnvironment}.options.expressPort",
@@ -250,9 +250,9 @@ fluid.defaults("gpii.ul.api.tests.updates.environment", {
             }
         },
         testCaseHolder: {
-            type: "gpii.ul.api.tests.updates.caseHolder"
+            type: "gpii.tests.ul.api.updates.caseHolder"
         }
     }
 });
 
-gpii.ul.api.tests.updates.environment();
+gpii.tests.ul.api.updates.environment();

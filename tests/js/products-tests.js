@@ -9,34 +9,23 @@ var jqUnit = require("node-jqunit");
 require("../../");
 gpii.ul.api.loadTestingSupport();
 
-fluid.registerNamespace("gpii.ul.api.tests.products");
+fluid.registerNamespace("gpii.tests.ul.api.products");
 
-gpii.ul.api.tests.products.checkResults = function (message, expected, actual, minRecords) {
-    jqUnit.assertLeftHand(message, expected, actual);
-    gpii.ul.api.tests.products.hasMinRecords(message, actual, minRecords);
-};
-
-gpii.ul.api.tests.products.hasMinRecords = function (message, actual, minRecords) {
-    if (minRecords) {
-        jqUnit.assertTrue(message + "(record count)", actual.products.length >= minRecords);
-    }
-};
-
-gpii.ul.api.tests.products.checkFirstPage = function (firstBody, firstRequest) {
+gpii.tests.ul.api.products.checkFirstPage = function (firstBody, firstRequest) {
     firstRequest.body = firstBody; // hold onto the body for the second comparison
-    gpii.ul.api.tests.products.hasMinRecords("The first page should have results...", firstBody, 1);
+    gpii.tests.ul.api.hasMinRecords("The first page should have results...", firstBody, 1);
 };
 
-gpii.ul.api.tests.products.checkSecondPage = function (secondBody, firstRequest) {
-    gpii.ul.api.tests.products.hasMinRecords("The second page should have results...", secondBody, 1);
+gpii.tests.ul.api.products.checkSecondPage = function (secondBody, firstRequest) {
+    gpii.tests.ul.api.hasMinRecords("The second page should have results...", secondBody, 1);
 
     var lastFirstPageRecord   = firstRequest.body.products.slice(-1)[0];
     var firstSecondPageRecord = secondBody.products[0];
     jqUnit.assertDeepEq("The last record from the first page should equal the first record from the second page...", lastFirstPageRecord, firstSecondPageRecord);
 };
 
-gpii.ul.api.tests.products.checkResultsByStatus = function (message, expected, actual, minRecords, statuses) {
-    gpii.ul.api.tests.products.checkResults(message, expected, actual, minRecords);
+gpii.tests.ul.api.checkResultsByStatus = function (message, expected, actual, minRecords, statuses) {
+    gpii.tests.ul.api.checkResults(message, expected, actual, minRecords);
 
     var recordsWithWrongStatus = 0;
     fluid.each(actual.products, function (record) {
@@ -46,7 +35,7 @@ gpii.ul.api.tests.products.checkResultsByStatus = function (message, expected, a
     jqUnit.assertEquals(message + " (no records with the wrong status)", 0, recordsWithWrongStatus);
 };
 
-fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
+fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
         defaults: {
@@ -133,7 +122,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{defaultRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            listener:  "gpii.tests.ul.api.checkResults",
                             args:      ["The defaults should return the expected results...", "{that}.options.expected.defaults", "@expand:JSON.parse({arguments}.0)", 1] //  message, expected, actual, minRecords
                         },
                         {
@@ -151,7 +140,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{firstPageRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkFirstPage",
+                            listener:  "gpii.tests.ul.api.products.checkFirstPage",
                             args:      ["@expand:JSON.parse({arguments}.0)", "{firstPageRequest}"] // firstBody, firstRequest
                         },
                         {
@@ -159,7 +148,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{secondPageRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkSecondPage",
+                            listener:  "gpii.tests.ul.api.products.checkSecondPage",
                             args:      ["@expand:JSON.parse({arguments}.0)", "{firstPageRequest}"] // secondBody, firstRequest
                         }
                     ]
@@ -173,7 +162,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{singleStatusRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResultsByStatus",
+                            listener:  "gpii.tests.ul.api.checkResultsByStatus",
                             args:      ["Requesting a single status should return the expected results...", "{that}.options.expected.singleStatus", "@expand:JSON.parse({arguments}.0)", 1, ["deleted"]] //  message, expected, actual, minRecords
                         },
                         {
@@ -191,7 +180,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{multiStatusRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResultsByStatus",
+                            listener:  "gpii.tests.ul.api.checkResultsByStatus",
                             args:      ["Requesting a single status should return the expected results...", "{that}.options.expected.multiStatus", "@expand:JSON.parse({arguments}.0)", 2, ["deleted", "new"]] //  message, expected, actual, minRecords
                         },
                         {
@@ -227,7 +216,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{updatedFutureRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            listener:  "gpii.tests.ul.api.checkResults",
                             args:      ["The defaults should return the expected results...", "{that}.options.expected.distantFuture", "@expand:JSON.parse({arguments}.0)", 0] //  message, expected, actual, minRecords
                         },
                         {
@@ -245,7 +234,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{updatedLongAgoRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            listener:  "gpii.tests.ul.api.checkResults",
                             args:      ["The defaults should return the expected results...", "{that}.options.expected.distantPast", "@expand:JSON.parse({arguments}.0)", 1] //  message, expected, actual, minRecords
                         },
                         {
@@ -286,7 +275,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                         },
                         {
                             event:     "{authorizedSourceRequest}.events.onComplete",
-                            listener:  "gpii.ul.api.tests.products.checkResults",
+                            listener:  "gpii.tests.ul.api.checkResults",
                             args:      ["We should be able to see records from our private source...", "{that}.options.expected.authorizedSource", "@expand:JSON.parse({arguments}.0)", 2] //  message, expected, actual, minRecords
                         },
                         {
@@ -373,7 +362,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
     }
 });
 
-fluid.defaults("gpii.ul.api.tests.products.environment", {
+fluid.defaults("gpii.tests.ul.api.products.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
         api:    9806,
@@ -381,9 +370,9 @@ fluid.defaults("gpii.ul.api.tests.products.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.ul.api.tests.products.caseHolder"
+            type: "gpii.tests.ul.api.products.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.ul.api.tests.products.environment");
+fluid.test.runTests("gpii.tests.ul.api.products.environment");

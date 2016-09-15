@@ -10,48 +10,38 @@ gpii.ul.api.loadTestingSupport();
 
 var jqUnit = require("node-jqunit");
 
-fluid.registerNamespace("gpii.tests.ul.api.product.search");
+fluid.registerNamespace("gpii.tests.ul.api.search");
 
-gpii.tests.ul.api.product.search.hasSearchResults = function (body, maxResults) {
+gpii.tests.ul.api.search.hasSearchResults = function (body, maxResults) {
     jqUnit.assertTrue("There should be at least one result...", body.products && body.products.length > 0);
 
     if (maxResults) {
         jqUnit.assertTrue("There should be no more than " + maxResults + " products returned...", body.products.length <= maxResults);
     }
 
-    fluid.each(body.products, gpii.tests.ul.api.product.search.checkForCouchisms);
+    gpii.tests.ul.api.checkForCouchisms(body.products);
 };
 
-gpii.tests.ul.api.product.search.hasNoSearchResults = function (body) {
+gpii.tests.ul.api.search.hasNoSearchResults = function (body) {
     jqUnit.assertTrue("There should be no search results...", body.products && body.products.length === 0);
 };
 
-
-gpii.tests.ul.api.product.search.checkForCouchisms = function (product) {
-    jqUnit.assertUndefined("There should be no CouchDB '_id' field data...", product._id);
-    jqUnit.assertUndefined("There should be no CouchDB '_rev' field data...", product._rev);
-};
-
 // Confirm whether the first record contains any source data.  Used to check permissions by source.
-gpii.tests.ul.api.product.search.checkSourceRecords = function (body, shouldHaveSourceData) {
+gpii.tests.ul.api.search.checkSourceRecords = function (body, shouldHaveSourceData) {
     if (shouldHaveSourceData) {
         jqUnit.assertTrue("There should be source data...", body.products[0].sources.length > 0);
-
-        fluid.each(body.products, function (product) {
-            fluid.each(product.sources, gpii.tests.ul.api.product.search.checkForCouchisms);
-        });
     }
     else {
         jqUnit.assertTrue("There should not be any source data...", body.products[0].sources.length === 0);
     }
 };
 
-gpii.tests.ul.api.product.search.checkSpecificRecord = function (body, recordNumber, expected) {
+gpii.tests.ul.api.search.checkSpecificRecord = function (body, recordNumber, expected) {
     var record = body.products[recordNumber];
     jqUnit.assertLeftHand("The record should match what we expect...", expected, record);
 };
 
-fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
+fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
         {
@@ -67,7 +57,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{basicSearch}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.hasSearchResults",
+                            listener: "gpii.tests.ul.api.search.hasSearchResults",
                             args:     ["@expand:JSON.parse({arguments}.0)"] // body, maxResults
                         }
                     ]
@@ -82,7 +72,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{anonymousSearch}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSourceRecords",
+                            listener: "gpii.tests.ul.api.search.checkSourceRecords",
                             args:     ["@expand:JSON.parse({arguments}.0)"] //  body, shouldHaveSourceData
                         },
                         {
@@ -96,7 +86,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{loggedInSearch}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSourceRecords",
+                            listener: "gpii.tests.ul.api.search.checkSourceRecords",
                             args:     ["@expand:JSON.parse({arguments}.0)", true] //  body, shouldHaveSourceData
                         }
                     ]
@@ -111,7 +101,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{limitedRequest}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSpecificRecord",
+                            listener: "gpii.tests.ul.api.search.checkSpecificRecord",
                             args:     ["@expand:JSON.parse({arguments}.0)", 42, { "name": "Whetstone 042" }] // body, recordNumber, expected
                         }
                     ]
@@ -126,7 +116,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{offsetRequest}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSpecificRecord",
+                            listener: "gpii.tests.ul.api.search.checkSpecificRecord",
                             args:     ["@expand:JSON.parse({arguments}.0)", 0, { "name": "Whetstone 499" }] // body, recordNumber, expected
                         }
                     ]
@@ -141,7 +131,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{limitedAndOffsetRequest}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSpecificRecord",
+                            listener: "gpii.tests.ul.api.search.checkSpecificRecord",
                             args:     ["@expand:JSON.parse({arguments}.0)", 1, { "name": "Whetstone 042" }] // body, recordNumber, expected
                         }
                     ]
@@ -156,7 +146,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{searchForDeleted}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.hasNoSearchResults",
+                            listener: "gpii.tests.ul.api.search.hasNoSearchResults",
                             args:     ["@expand:JSON.parse({arguments}.0)"] // body
                         }
                     ]
@@ -171,7 +161,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{searchForDeletedWithStatusString}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSpecificRecord",
+                            listener: "gpii.tests.ul.api.search.checkSpecificRecord",
                             args:     ["@expand:JSON.parse({arguments}.0)", 0, { "name": "Deleted record" }] // body, recordNumber, expected
                         }
                     ]
@@ -186,7 +176,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         },
                         {
                             event:    "{searchForDeletedWithStatusArray}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.checkSpecificRecord",
+                            listener: "gpii.tests.ul.api.search.checkSpecificRecord",
                             args:     ["@expand:JSON.parse({arguments}.0)", 0, { "name": "Deleted record" }] // body, recordNumber, expected
                         }
                     ]
@@ -217,7 +207,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
                         // There should be only a handful of results
                         {
                             event:    "{basicSuggestions}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.search.hasSearchResults",
+                            listener: "gpii.tests.ul.api.search.hasSearchResults",
                             args:     ["@expand:JSON.parse({arguments}.0)", 5] // body, maxResults
                         }
                     ]
@@ -306,7 +296,7 @@ fluid.defaults("gpii.tests.ul.api.product.search.caseHolder", {
 });
 
 
-fluid.defaults("gpii.tests.ul.api.product.search.environment", {
+fluid.defaults("gpii.tests.ul.api.search.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment.withLucene"],
     ports: {
         api:    9753,
@@ -315,9 +305,9 @@ fluid.defaults("gpii.tests.ul.api.product.search.environment", {
     },
     components: {
         testCaseHolder: {
-            type: "gpii.tests.ul.api.product.search.caseHolder"
+            type: "gpii.tests.ul.api.search.caseHolder"
         }
     }
 });
 
-fluid.test.runTests("gpii.tests.ul.api.product.search.environment");
+fluid.test.runTests("gpii.tests.ul.api.search.environment");

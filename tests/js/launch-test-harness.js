@@ -12,7 +12,7 @@ require("./lib/test-harness");
 // Uncomment this to display the router diagram on startup.
 // fluid.require("%gpii-express/tests/js/lib/diagramAllRoutes.js");
 
-gpii.ul.api.tests.harness.withLucene({
+gpii.tests.ul.api.harness.withLucene({
     ports: {
         "api":    6914,
         "couch":  6915,

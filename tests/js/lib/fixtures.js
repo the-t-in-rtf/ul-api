@@ -28,14 +28,14 @@ fluid.defaults("gpii.test.ul.api.caseHolder", {
 
 // An environment for tests that don't require lucene (it's faster).
 fluid.defaults("gpii.test.ul.api.testEnvironment", {
-    gradeNames: ["gpii.test.express.testEnvironment", "gpii.ul.api.tests.harness"],
+    gradeNames: ["gpii.test.express.testEnvironment", "gpii.tests.ul.api.harness"],
     port: "{that}.options.ports.api"
 });
 
 
 // An environment for tests that require lucene.
 fluid.defaults("gpii.test.ul.api.testEnvironment.withLucene", {
-    gradeNames: ["gpii.test.express.testEnvironment", "gpii.ul.api.tests.harness.withLucene"],
+    gradeNames: ["gpii.test.express.testEnvironment", "gpii.tests.ul.api.harness.withLucene"],
     hangWait:   7500,
     events: {
         onFixturesConstructed: {
@@ -59,11 +59,11 @@ fluid.defaults("gpii.test.ul.api.testEnvironment.withLucene", {
 // An environment for tests that also require a gpii-webdriver browser.
 fluid.registerNamespace("gpii.test.ul.api.testEnvironment.withBrowser");
 gpii.test.ul.api.testEnvironment.withBrowser.stopFixtures = function (that) {
-    gpii.ul.api.tests.harness.stopServer(that);
+    gpii.tests.ul.api.harness.stopServer(that);
     that.browser.end();
 };
 fluid.defaults("gpii.test.ul.api.testEnvironment.withBrowser", {
-    gradeNames: ["gpii.test.browser.environment", "gpii.ul.api.tests.harness"],
+    gradeNames: ["gpii.test.browser.environment", "gpii.tests.ul.api.harness"],
     events: {
         onFixturesConstructed: {
             events: {

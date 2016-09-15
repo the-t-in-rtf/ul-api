@@ -15,13 +15,13 @@ fluid.require("%gpii-pouchdb-lucene");
 fluid.require("%gpii-express-user");
 fluid.require("%gpii-handlebars");
 
-fluid.registerNamespace("gpii.ul.api.tests.harness");
-gpii.ul.api.tests.harness.stopServer = function (that) {
+fluid.registerNamespace("gpii.tests.ul.api.harness");
+gpii.tests.ul.api.harness.stopServer = function (that) {
     gpii.express.stopServer(that.express);
     gpii.express.stopServer(that.pouch);
 };
 
-fluid.defaults("gpii.ul.api.tests.harness", {
+fluid.defaults("gpii.tests.ul.api.harness", {
     gradeNames:   ["fluid.component"],
     templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
     schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
@@ -75,7 +75,7 @@ fluid.defaults("gpii.ul.api.tests.harness", {
     },
     listeners: {
         stopFixtures: {
-            funcName: "gpii.ul.api.tests.harness.stopServer",
+            funcName: "gpii.tests.ul.api.harness.stopServer",
             args:     ["{that}"]
         }
     },
@@ -210,14 +210,14 @@ fluid.defaults("gpii.ul.api.tests.harness", {
 });
 
 // A harness that includes search integration (loads more slowly).
-fluid.registerNamespace("gpii.ul.api.tests.harness.withLucene");
-gpii.ul.api.tests.harness.stopServer.withLucene = function (that) {
-    gpii.ul.api.tests.harness.stopServer(that);
+fluid.registerNamespace("gpii.tests.ul.api.harness.withLucene");
+gpii.tests.ul.api.harness.stopServer.withLucene = function (that) {
+    gpii.tests.ul.api.harness.stopServer(that);
     that.lucene.events.onReadyForShutdown.fire();
 };
 
-fluid.defaults("gpii.ul.api.tests.harness.withLucene", {
-    gradeNames:   ["gpii.ul.api.tests.harness"],
+fluid.defaults("gpii.tests.ul.api.harness.withLucene", {
+    gradeNames:   ["gpii.tests.ul.api.harness"],
     ports: {
         lucene: 7635
     },
@@ -249,7 +249,7 @@ fluid.defaults("gpii.ul.api.tests.harness.withLucene", {
     },
     listeners: {
         stopFixtures: {
-            funcName: "gpii.ul.api.tests.harness.stopServer.withLucene",
+            funcName: "gpii.tests.ul.api.harness.stopServer.withLucene",
             args:     ["{that}"]
         }
     },
