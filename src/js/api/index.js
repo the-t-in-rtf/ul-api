@@ -38,7 +38,7 @@ fluid.defaults("gpii.ul.api", {
         contextToExpose: {
             "layout": "layout", // This is required to support custom layouts
             "model": {
-                "user":   "req.session._gpii_user",
+                "user":   "req.session._ul_user",
                 "record": "product"
             },
             "req":  {
@@ -183,7 +183,7 @@ fluid.defaults("gpii.ul.api", {
         //        couch: "{gpii.express}.options.config.couch"
         //    }
         //},
-        // TODO: Test that this returns reasonable responses for common errors.
+        // TODO: Test that this returns reasonable responses for common errors (404s, permission failures).
         // HTML error-handling middleware (for browsers making non-AJAX requests)
         // htmlErrorHandler: {
         //     type:     "gpii.handlebars.errorRenderingMiddleware",
@@ -205,13 +205,12 @@ fluid.defaults("gpii.ul.api", {
         //         }
         //     }
         // },
-        // TODO:  Test this with the gpii.tests.ul.api.request.html grade
-        // // docs: {
-        // //     type: "gpii.ul.api.docs",
-        // //     options: {
-        // //         priority: "after:jsonErrorHandler"
-        // //     }
-        // // },
+        docs: {
+            type: "gpii.ul.api.docs",
+            options: {
+                priority: "after:jsonErrorHandler"
+            }
+        },
         // // TODO: Separate handler to pick up errors in the docs?  Try removing one of these.
         jsonErrors: {
             type: "gpii.express.middleware.error",

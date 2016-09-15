@@ -1,6 +1,9 @@
-// Display our API docs.  Requires an instance of `gpii.express` that has a copy of `gpii-handlebars` available to render
-// the boilerplate content.
-//
+/*
+
+    Display our API docs.  Requires an instance of `gpii.express` that has a copy of `gpii-handlebars` available to
+    render the boilerplate content.
+
+ */
 /* eslint-env node */
 "use strict";
 var fluid  = require("infusion");
@@ -11,7 +14,18 @@ var fs     = require("fs");
 
 fluid.registerNamespace("gpii.ul.api.docs");
 
-// TODO:  I have used this pattern before.  Confirm that this is not already available somewhere else.
+/**
+ *
+ * Read our documentation, render it, and send the rendered content to the user.
+ *
+ * Fulfills the standard contract for `gpii.express.middleware`:
+ * https://github.com/GPII/gpii-express/blob/master/docs/middleware.md
+ *
+ * @param that
+ * @param req
+ * @param res
+ *
+ */
 gpii.ul.api.docs.middleware = function (that, req, res) {
     var markdown = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
     res.render(that.options.template, { "title": that.options.title, "body": marked(markdown, that.options.markedOptions), "layout": that.options.layout});
