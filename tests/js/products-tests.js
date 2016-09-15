@@ -126,7 +126,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
             name: "Tests for GET /api/products...",
             tests: [
                 {
-                    name: "Testing the endpoint defaults...",
+                    name: "Perform a request with only the endpoint defaults...",
                     type: "test",
                     sequence: [
                         {
@@ -144,7 +144,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing paging...",
+                    name: "Limit the results by page...",
                     type: "test",
                     sequence: [
                         {
@@ -166,7 +166,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing requesting records using a single status string...",
+                    name: "Request a single status using a string...",
                     type: "test",
                     sequence: [
                         {
@@ -184,7 +184,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing requesting records using an array of status strings...",
+                    name: "Request an array of statuses...",
                     type: "test",
                     sequence: [
                         {
@@ -202,7 +202,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing requesting an invalid status...",
+                    name: "Request an invalid status...",
                     type: "test",
                     sequence: [
                         {
@@ -220,7 +220,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing limiting results by 'last updated' field (distant future)...",
+                    name: "Limit results by 'last updated' field (distant future)...",
                     type: "test",
                     sequence: [
                         {
@@ -238,7 +238,7 @@ fluid.defaults("gpii.ul.api.tests.products.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing limiting results by 'last updated' field (distant past)...",
+                    name: "Limit results by 'last updated' field (distant past)...",
                     type: "test",
                     sequence: [
                         {

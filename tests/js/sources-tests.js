@@ -28,7 +28,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
             name: "Testing GET /api/sources...",
             tests: [
                 {
-                    name: "Testing anonymous sources request...",
+                    name: "Request a list of sources (not logged in)...",
                     type: "test",
                     sequence: [
                         {
@@ -46,7 +46,7 @@ fluid.defaults("gpii.ul.api.tests.sources.caseHolder", {
                     ]
                 },
                 {
-                    name: "Testing logged in sources request...",
+                    name: "Request a list of sources (logged in)...",
                     type: "test",
                     sequence: [
                         {
