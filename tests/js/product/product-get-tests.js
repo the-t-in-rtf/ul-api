@@ -138,22 +138,49 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                     ]
                 },
                 {
-                    name: "Request a unified record with sources from /api/product...",
+                    name: "Request a unified record with sources from /api/product (not logged in)...",
                     type: "test",
                     sequence: [
                         {
-                            func: "{requestUnifiedRecordWithSources}.send",
+                            func: "{requestUnifiedRecordWithSourcesAnonymously}.send",
                             args: []
                         },
                         {
-                            event:    "{requestUnifiedRecordWithSources}.events.onComplete",
+                            event:    "{requestUnifiedRecordWithSourcesAnonymously}.events.onComplete",
                             listener: "gpii.tests.ul.api.product.get.verifyContent",
                             // message, response, body, expected, statusCode
                             args:     [
                                 "We should see the unified record...",
-                                "{requestUnifiedRecordWithSources}.nativeResponse",
+                                "{requestUnifiedRecordWithSourcesAnonymously}.nativeResponse",
                                 "@expand:JSON.parse({arguments}.0)",
-                                "{that}.options.expected.unifiedSources",
+                                "{that}.options.expected.unifiedSourcesAnonymous",
+                                200
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a unified record with sources from /api/product (logged in)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestUnifiedRecordLogin}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{requestUnifiedRecordLogin}.events.onComplete",
+                            listener: "{requestUnifiedRecordWithSourcesLoggedIn}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{requestUnifiedRecordWithSourcesLoggedIn}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should see the unified record...",
+                                "{requestUnifiedRecordWithSourcesLoggedIn}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.unifiedSourcesLoggedIn",
                                 200
                             ]
                         }
@@ -164,8 +191,13 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{requestSourceRecordWithSources}.send",
-                            args: []
+                            func: "{requestSourceRecordLogin}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{requestSourceRecordLogin}.events.onComplete",
+                            listener: "{requestSourceRecordWithSources}.send",
+                            args:     []
                         },
                         {
                             event:    "{requestSourceRecordWithSources}.events.onComplete",
@@ -218,10 +250,30 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                 endpoint: "api/product/unified/unifiedNewer"
             }
         },
-        requestUnifiedRecordWithSources: {
+        requestUnifiedRecordWithSourcesAnonymously: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "api/product/unified/unifiedNewer?sources=true"
+            }
+        },
+        requestUnifiedRecordLogin: {
+            type: "gpii.tests.ul.api.product.get.request",
+            options: {
+                endpoint: "api/user/login",
+                method:   "POST"
+            }
+        },
+        requestUnifiedRecordWithSourcesLoggedIn: {
+            type: "gpii.tests.ul.api.product.get.request",
+            options: {
+                endpoint: "api/product/unified/unifiedNewer?sources=true"
+            }
+        },
+        requestSourceRecordLogin: {
+            type: "gpii.tests.ul.api.product.get.request",
+            options: {
+                endpoint: "api/user/login",
+                method:   "POST"
             }
         },
         requestSourceRecordWithSources: {
@@ -296,7 +348,18 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "manufacturer": { "name": "sample manufacturer 1" },
             "updated":      "2015-01-01"
         },
-        unifiedSources: {
+        unifiedSourcesAnonymous: {
+            "uid":          "unifiedNewer",
+            "status":       "new",
+            "source":       "unified",
+            "sid":          "unifiedNewer",
+            "name":         "sample product 1",
+            "description":  "sample description 1",
+            "manufacturer": { "name": "sample manufacturer 1" },
+            "updated":      "2015-01-01",
+            "sources":      []
+        },
+        unifiedSourcesLoggedIn: {
             "uid":          "unifiedNewer",
             "status":       "new",
             "source":       "unified",
@@ -308,7 +371,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "sources": [{
                 "uid":          "unifiedNewer",
                 "status":       "new",
-                "source":       "existing",
+                "source":       "~existing",
                 "sid":          "contrib1",
                 "name":         "sample product 1",
                 "description":  "sample description 1",
@@ -318,7 +381,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         },
         source:  {
             "uid":          "unifiedNewer",
-            "source":       "existing",
+            "source":       "~existing",
             "status":       "new",
             "sid":          "contrib1",
             "name":         "sample product 1",

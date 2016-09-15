@@ -1,8 +1,12 @@
-// Respond to requests like GET /api/product/:source:/:sid based on the requested content type.
-//
-// If the request content-type is "application/json", respond with the JSON source of the record.
-//
-// Otherwise, serve up an HTML version of the content.
+/*
+
+    Respond to requests like GET /api/product/:source:/:sid based on the requested content type.
+
+    If the request content-type is "application/json", respond with the JSON source of the record.
+
+    Otherwise, serve up an HTML version of the content.
+
+ */
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
@@ -13,13 +17,37 @@ require("gpii-json-schema");
 
 require("../lib/validationGatedContentAware");
 
-// TODO:  Add tests and confirm that permission checking works for /api/product/SOURCE/.
-
-// TODO:  Put the JSON Schema headers back in
-
-// TODO:  Review and convert the way we handle "unified" products vs. the way the search and "product" do it.
+// TODO:  Put the JSON Schema headers back in once we can figure out how to safely add the headers only on success.
 
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
+
+/**
+ *
+ * Handle a single incoming request.  Performs an initial permission check and then requests data from CouchDB.
+ *
+ * @param that - The component itself.
+ *
+ */
+gpii.ul.api.product.get.handler.handleRequest = function (that) {
+    var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+    var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user)
+    if (visibleSources.indexOf(that.options.request.params.source) !== -1) {
+        var params = [that.options.request.params.source, that.options.request.params.sid];
+        that.productReader.get({ key: JSON.stringify(params)});
+    }
+    else {
+        that.options.next({ isError: true, statusCode: 401, message: that.options.errorMessages.notAuthorized});
+    }
+};
+
+/**
+ *
+ * Process the CouchDB response for the main record.
+ *
+ * @param that - The component itself.
+ * @param couchResponse {Object} - The raw response from CouchDB.
+ *
+ */
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {
     if (!couchResponse) {
         that.options.next({ isError: true, statusCode: 500, message: that.options.errorMessages.noCouchResponse});
@@ -55,6 +83,14 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
     }
 };
 
+/**
+ *
+ * For "unified" records, process the list of "children" returned from CouchDB.
+ *
+ * @param that - The component itself.
+ * @param couchResponse {Object} - The raw list of "child" records for the main record's UID, as returned from CouchDB.
+ *
+ */
 gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchResponse) {
     if (!couchResponse) {
         that.options.next({ isError: true, statusCode: 500, message: that.options.errorMessages.noCouchSourceResponse});
@@ -62,12 +98,17 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
     else {
         that.productRecord.sources = [];
 
+        var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+        var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user)
+
+
         // We do not use the new `transformEach` function on the list because we need to filter out keys on a
         // per-record basis.
         fluid.each(couchResponse.rows, function (couchRecord) {
             var transformedSourceRecord = fluid.model.transformWithRules(couchRecord, that.options.rules.sourceCouchResponseToJson);
 
-            if (transformedSourceRecord.source !== "unified") {
+            // Add non-unified records we have permission to see to "sources".
+            if (transformedSourceRecord.source !== "unified" && visibleSources.indexOf(transformedSourceRecord.source) !== -1) {
                 that.productRecord.sources.push(fluid.filterKeys(transformedSourceRecord, that.options.couchKeysToExclude, true));
             }
         });
@@ -83,6 +124,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     errorMessages: {
         noCouchResponse: "Could not retrieve the original record from the database.  Contact an administrator for help.",
         noCouchSourceResponse: "Could not retrieve the list of source products for the original record.  Contact an administrator for help.",
+        notAuthorized: "You are not authorized to view this record.",
         notFound: "Could not find a record matching the specified source and id.",
         duplicateFound: "There was more than one record with the specified source and id.  Contact an administrator for help."
     },
@@ -158,17 +200,9 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
         }
     },
     invokers: {
-        // Start by looking up the base record
         handleRequest: {
-            func: "{productReader}.get",
-            args: [{
-                key: {
-                    expander: {
-                        funcName: "JSON.stringify",
-                        args: [["{gpii.express.handler}.options.request.params.source", "{gpii.express.handler}.options.request.params.sid"]] // This must be encoded as an array
-                    }
-                }
-            }]
+            funcName: "gpii.ul.api.product.get.handler.handleRequest",
+            args:     ["{that}"]
         },
         handleError: {
             func: "{that}.options.next",
@@ -185,7 +219,6 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     }
 });
 
-// TODO:  Create a common grade for this pattern (in handlebars)
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/record.handlebars"
