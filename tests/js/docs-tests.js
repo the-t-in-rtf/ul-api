@@ -25,7 +25,7 @@ fluid.defaults("gpii.ul.api.tests.docs.caseHolder", {
             name: "Testing GET /api/ (documentation)...",
             tests: [
                 {
-                    name: "Testing anonymous sources request...",
+                    name: "Retrieving the API documentation...",
                     type: "test",
                     sequence: [
                         {
