@@ -11,13 +11,31 @@ fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
 fluid.registerNamespace("gpii.ul.api.products.handler");
 
-// Sources has definitions like key: { view: // allowed roles, edit: //allowed roles}
+/**
+ *
+ * Resolve user-specific keys like ~username to ~ so that we can can correctly check the permissions.
+ *
+ * @param sources {Array} An array of source names.
+ * @param username {Object} The user object stored in our request session.
+ * @returns {Array} The list of "resolved" source keys.
+ *
+ */
 gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
     return fluid.transform(sources, function (value) {
-        return value === username ? "~" : value;
+        return value === "~" + username ? "~" : value;
     });
 };
 
+/**
+ *
+ * Handle a single incoming request.  Performs a few initial checks and then requests data from CouchDB.
+ *
+ * Fulfills the contract outlined in `gpii.express.handler`:
+ * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
+ *
+ * @param that - The component itself
+ *
+ */
 gpii.ul.api.products.handler.handleRequest = function (that) {
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
@@ -52,6 +70,15 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
     }
 };
 
+/**
+ *
+ * Confirm that an individual record matches the filters (source, "last updated" date) specified in the query parameters.
+ *
+ * @param that - The component itself.
+ * @param record {Object} The record that is being evaluated.
+ * @returns {boolean} `true` if the record matches all filters, `false` if it does not.
+ *
+ */
 gpii.ul.api.products.handler.matchesFilters = function (that, record) {
     // Filter by status
     if (that.options.request.productsParams.status && fluid.makeArray(that.options.request.productsParams.status).indexOf(record.status) === -1) {
@@ -71,6 +98,14 @@ gpii.ul.api.products.handler.matchesFilters = function (that, record) {
     return true;
 };
 
+/**
+ *
+ * Process the raw response from CouchDB and produce results that match the API documentation.
+ *
+ * @param that - The component itself.
+ * @param couchResponse {Object} - The raw response from CouchDB.
+ *
+ */
 gpii.ul.api.products.handler.processCouchResponse = function (that, couchResponse) {
     if (!couchResponse) {
         that.options.next({isError: true, params: that.options.request.productParams, statusCode: 500, message: "No response from CouchDB, can't retrieve product records."});
