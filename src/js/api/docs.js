@@ -21,9 +21,9 @@ fluid.registerNamespace("gpii.ul.api.docs");
  * Fulfills the standard contract for `gpii.express.middleware`:
  * https://github.com/GPII/gpii-express/blob/master/docs/middleware.md
  *
- * @param that
- * @param req
- * @param res
+ * @param that - The component itself.
+ * @param req - The request object.  See: https://github.com/GPII/gpii-express/blob/master/docs/express.md#the-express-request-object
+ * @param res - The response object.  See: https://github.com/GPII/gpii-express/blob/master/docs/express.md#the-express-response-object
  *
  */
 gpii.ul.api.docs.middleware = function (that, req, res) {
