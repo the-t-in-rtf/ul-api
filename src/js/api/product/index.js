@@ -5,20 +5,23 @@ var fluid = require("infusion");
 
 require("gpii-express");
 
-//require("./put");
-//require("./post");
 require("./get");
-//require("./delete");
+require("./update")
+require("./delete");
 
 fluid.defaults("gpii.ul.api.product", {
     gradeNames: ["gpii.express.router"],
     path:       "/product",
     method:     "use",
     events: {
+        onDeleteSchemasDereferenced: null,
         onGetSchemasDereferenced: null,
+        onUpdateSchemasDereferenced: null,
         onSchemasDereferenced: {
             events: {
-                onGetSchemasDereferenced: "onGetSchemasDereferenced"
+                onDeleteSchemasDereferenced: "onDeleteSchemasDereferenced",
+                onGetSchemasDereferenced:    "onGetSchemasDereferenced",
+                onUpdateSchemasDereferenced: "onUpdateSchemasDereferenced"
             }
         }
     },
@@ -32,16 +35,29 @@ fluid.defaults("gpii.ul.api.product", {
                     }
                 }
             }
+        },
+        // POST and PUT are backed by the same endpoint
+        update: {
+            type: "gpii.ul.api.product.update",
+            options: {
+                priority: "after:get",
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.product}.events.onUpdateSchemasDereferenced.fire"
+                    }
+                }
+            }
+        },
+        "delete": {
+            type: "gpii.ul.api.product.delete",
+            options: {
+                priority: "after:update",
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.product}.events.onDeleteSchemasDereferenced.fire"
+                    }
+                }
+            }
         }
-        //,
-        //put: {
-        //    type: "gpii.ul.api.product.put"
-        //},
-        //post: {
-        //    type: "gpii.ul.api.product.post"
-        //},
-        //"delete": {
-        //    type: "gpii.ul.api.product.delete"
-        //}
     }
 });

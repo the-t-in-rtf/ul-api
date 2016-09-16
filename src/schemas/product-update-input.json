@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "id": "product-update-input.json",
+  "$ref": "product-base.json",
+  "required": ["description", "manufacturer", "name", "sid", "source", "status", "uid"],
+  "errors": {
+    "#/required/0": "A description is required.",
+    "#/required/1": "A manufacturer is required.",
+    "#/required/2": "A name is required.",
+    "#/required/3": "An sid is required.",
+    "#/required/4": "A source is required.",
+    "#/required/5": "A status is required.",
+    "#/required/6": "An uid is required."
+  }
+}

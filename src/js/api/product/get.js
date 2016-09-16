@@ -32,7 +32,9 @@ gpii.ul.api.product.get.handler.handleRequest = function (that) {
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
     var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user)
     if (visibleSources.indexOf(that.options.request.params.source) !== -1) {
-        var params = [that.options.request.params.source, that.options.request.params.sid];
+        var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
+
+        var params = [userOptions.source, userOptions.sid];
         that.productReader.get({ key: JSON.stringify(params)});
     }
     else {
@@ -248,9 +250,9 @@ fluid.defaults("gpii.ul.api.product.get", {
     },
     rules: {
         requestContentToValidate: {
-            "sid":     "params.sid",
-            "source":  "params.source",
-            "sources": "query.sources"
+            "sid":            "params.sid",
+            "source":         "params.source",
+            "includeSources": "query.includeSources"
         }
     },
     distributeOptions: [
