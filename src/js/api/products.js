@@ -57,7 +57,7 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
     // This error is also reported for non-existent sources, but we should not clarify this, as it would allow people
     // to trawl through and determine valid usernames by requesting ~{username} until they got a 401 instead of a 404.
     if (userOptions.sources && allowedSourceKeys.length < desiredSources.length) {
-        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 401, message: "You do not have permission to view one or more of the sources you requested."});
+        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 401, message: that.options.messages.noPermission});
     }
     else {
         // Whatever sources the user asks to see, their "receipt" will only ever reflect the ones they have permissiont to view.
@@ -108,7 +108,7 @@ gpii.ul.api.products.handler.matchesFilters = function (that, record) {
  */
 gpii.ul.api.products.handler.processCouchResponse = function (that, couchResponse) {
     if (!couchResponse) {
-        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 500, message: "No response from CouchDB, can't retrieve product records."});
+        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 500, message: that.options.messages.couchError});
     }
 
     var products = [];
@@ -165,6 +165,10 @@ fluid.defaults("gpii.ul.api.products.handler", {
     },
     timeout: 60000, // TODO:  We need to tune this in the extreme.  This is just so we can write the tests.
     fullRecordsPerRequest: 50,
+    messages: {
+        couchError: "No response from CouchDB, can't retrieve product records.",
+        noPermission: "You do not have permission to view one or more of the sources you requested."
+    },
     components: {
         couchReader: {
             type: "gpii.express.dataSource.urlEncodedJson",

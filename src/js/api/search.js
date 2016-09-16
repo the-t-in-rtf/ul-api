@@ -118,7 +118,7 @@ gpii.ul.api.search.handler.processSearchResponse = function (that, luceneRespons
  */
 gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResponses) {
     if (!couchResponses) {
-        that.options.next({isError: true, params: that.options.request.searchParams, statusCode: 500, message: "No response from CouchDB, can't prepare final search results."});
+        that.options.next({isError: true, params: that.options.request.searchParams, statusCode: 500, message: that.options.messages.couchError});
     }
 
     var products = [];
@@ -209,6 +209,9 @@ fluid.defaults("gpii.ul.api.search.handler", {
             q:      "query.q",
             limit:  { literalValue: 1000 }
         }
+    },
+    messages: {
+        couchError: "No response from CouchDB, can't prepare final search results."
     },
     fullRecordsPerRequest: 50,
     components: {
