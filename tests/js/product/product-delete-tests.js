@@ -7,161 +7,6 @@ var gpii  = fluid.registerNamespace("gpii");
 require("../../../");
 gpii.ul.api.loadTestingSupport();
 
-// TODO: Reimplement the "DELETE" interface and convert the tests below
-
-//jqUnit.asyncTest("Call the interface with no parameters (not logged in)...", function () {
-    //    request.del(deleteTests.productUrl, function (error, response, body) {
-    //        jqUnit.assertEquals("The status code should indicate that authorization is required...", 401, response.statusCode);
-    //        deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-    //        try{
-    //            var jsonData = JSON.parse(body);
-    //            jqUnit.assertUndefined("A record should not have been returned...", jsonData.record);
-    //        }
-    //        catch(e) {
-    //            jqUnit.assertUndefined("There should be no parsing errors:\n" + body, e);
-    //        }
-    //    });
-    //});
-    //
-    //jqUnit.asyncTest("Call the interface with no parameters (logged in)...", function () {
-    //    deleteTests.loginHelper.login(jqUnit, {}, function () {
-    //        request.del(deleteTests.productUrl, function (error, response, body) {
-    //            jqUnit.start();
-    //
-    //            jqUnit.assertEquals("The status code should indicate that authorization is required...", 403, response.statusCode);
-    //
-    //            deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-    //            try{
-    //                var jsonData = JSON.parse(body);
-    //                jqUnit.assertUndefined("A record should not have been returned...", jsonData.record);
-    //            }
-    //            catch(e) {
-    //                jqUnit.assertUndefined("There should be no parsing errors:\n" + body, e);
-    //            }
-    //            finally {
-    //                jqUnit.stop();
-    //                deleteTests.loginHelper.logout(jqUnit, {});
-    //            }
-    //        });
-    //    });
-    //});
-    //
-    //jqUnit.asyncTest("Call the interface with only one parameter (not logged in)...", function () {
-    //    request.del(deleteTests.productUrl  + "/foo", function (error, response, body) {
-    //        jqUnit.start();
-    //
-    //        jqUnit.assertEquals("The status code should indicate that authorization is required...", 401, response.statusCode);
-    //
-    //        deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-    //
-    //        try{
-    //            var jsonData = JSON.parse(body);
-    //            jqUnit.assertUndefined("A record should not have been returned...", jsonData.record);
-    //        }
-    //        catch(e) {
-    //            jqUnit.assertUndefined("There should be no parsing errors:\n" + body, e);
-    //        }
-    //    });
-    //});
-//
-
-//
-//     jqUnit.asyncTest("Delete a record that exists (logged in)...", function () {
-//         deleteTests.loginHelper.login(jqUnit, {}, function () {
-//             var options = {
-//                 "url": deleteTests.productUrl  + "/Handicat/12011",
-//                 "jar": deleteTests.loginHelper.jar
-//             };
-//             request.del(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-//
-//                 jqUnit.assertEquals("The status code should indicate that the call was successful...", 200, response.statusCode);
-//                 jqUnit.stop();
-//
-//                 var verifyOptions = {
-//                     url: deleteTests.config.couch.url + "_design/ul/_view/products",
-//                     qs: { "key": JSON.stringify([ "Handicat", "12011"]) }
-//                 };
-//                 request.get(verifyOptions, function (error, response, body) {
-//                     jqUnit.start();
-//                     jqUnit.assertNull("There should be no errors returned when verifying the update:", error);
-//                     try {
-//                         var data = JSON.parse(body);
-//                         jqUnit.assertNotUndefined("There should be record data available", data.rows);
-//                         jqUnit.assertEquals("There should be exactly one record", 1, data.rows.length);
-//                         if (data.rows && data.rows[0]) {
-//                             var record = data.rows[0].value;
-//                             jqUnit.assertEquals("The record should have its status set to 'deleted':", "deleted", record.status);
-//                         }
-//                     }
-//                     catch (e) {
-//                         jqUnit.assertUndefined("There should be no parsing errors when verifying the update:", e);
-//                     }
-//
-//                     jqUnit.stop();
-//                     deleteTests.loginHelper.logout(jqUnit, {});
-//                 });
-//             });
-//         });
-//     });
-//
-//     jqUnit.asyncTest("Try to delete a record that doesn't exist (logged in)...", function () {
-//         deleteTests.loginHelper.login(jqUnit, {}, function () {
-//             var options = {
-//                 "url": deleteTests.productUrl  + "/foo/bar",
-//                 "jar": deleteTests.loginHelper.jar
-//             };
-//             request.del(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-//
-//                 jqUnit.assertEquals("The status code should indicate that the record was not found...", 404, response.statusCode);
-//
-//                 jqUnit.stop();
-//                 deleteTests.loginHelper.logout(jqUnit, {});
-//             });
-//         });
-//     });
-//
-//     jqUnit.asyncTest("Try to delete the same record twice (logged in)...", function () {
-//         deleteTests.loginHelper.login(jqUnit, {}, function () {
-//             var options = {
-//                 "url": deleteTests.productUrl  + "/Hulpmiddelenwijzer/132514",
-//                 "jar": deleteTests.loginHelper.jar
-//             };
-//             request.del(options, function (error, response, body) {
-//                 jqUnit.start();
-//
-//                 deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-//
-//                 jqUnit.assertEquals("The status code should indicate that the call was successful...", 200, response.statusCode);
-//                 jqUnit.stop();
-//
-//                 request.del(options, function (error, response, body) {
-//                     jqUnit.start();
-//                     deleteTests.testUtils.isSaneResponse(jqUnit, error, response, body);
-//
-//                     jqUnit.assertEquals("The status code should indicate that the command could not be completed...", 403, response.statusCode);
-//                     try {
-//                         var data = JSON.parse(body);
-//                         jqUnit.assertFalse("The response should not have been 'ok':", data.ok);
-//                     }
-//                     catch (e) {
-//                         jqUnit.assertUndefined("There should be no parsing errors: " + body, e);
-//                     }
-//
-//                     jqUnit.stop();
-//                     deleteTests.loginHelper.logout(jqUnit, {});
-//                 });
-//             });
-//         });
-//     });
-// };
-
-
 fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
@@ -169,7 +14,26 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
             name: "testing DELETE /api/product/:source/:sid",
             tests: [
                 {
-                    name: "Try to delete a record without logging in...",
+                    name: "Hit the endpoint with no data (anonymously)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{anonymousInvalidRequest}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{anonymousInvalidRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should have received a validation error message...", { isError: true, statusCode: 400, message: "The information you provided is incomplete or incorrect.  Please check the following:"}, "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The response status code should be correct...", 400, "{anonymousInvalidRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Delete an existing record (anonymously)...",
                     type: "test",
                     sequence: [
                         {
@@ -179,11 +43,115 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
                         {
                             event:    "{anonymousDeleteRequest}.events.onComplete",
                             listener: "jqUnit.assertLeftHand",
-                            args:     ["We should have received an authentication error message...", { ok: false, statusCode: 401}, "{arguments}.0"]
+                            args:     ["We should have received an authentication error message...", { isError: true, statusCode: 401}, "@expand:JSON.parse({arguments}.0)"]
                         },
                         {
                             func: "jqUnit.assertEquals",
                             args: ["The response status code should be correct...", 401, "{anonymousDeleteRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Hit the endpoint with no data (logged in)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{loginBeforeInvalidRequest}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{loginBeforeInvalidRequest}.events.onComplete",
+                            listener: "{invalidRequest}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{invalidRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should have received a validation error message...", { isError: true, statusCode: 400, message: "The information you provided is incomplete or incorrect.  Please check the following:"}, "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The response status code should be correct...", 400, "{invalidRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Delete a record that exists but for which we don't have the right permissions...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{loginBeforeDeleteWithoutPermission}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{loginBeforeDeleteWithoutPermission}.events.onComplete",
+                            listener: "{deleteWithoutPermission}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{deleteWithoutPermission}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should have received a permission error message...", { isError: true, statusCode: 401}, "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The response status code should be correct...", 401, "{deleteWithoutPermission}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Delete a record that exists and for which we have the right permissions...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{loginBeforeDeleteWithPermission}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{loginBeforeDeleteWithPermission}.events.onComplete",
+                            listener: "{deleteWithPermission}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{deleteWithPermission}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should have received a success message...", { statusCode: 200, message: "Record deleted."}, "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The response status code should be correct...", 200, "{deleteWithPermission}.nativeResponse.statusCode"]
+                        },
+                        {
+                            func: "{verifyDeleted}.send"
+                        },
+                        {
+                            event:    "{verifyDeleted}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["The record should be flagged as deleted...", { status: "deleted" }, "@expand:JSON.parse({arguments}.0)"]
+                        }
+                    ]
+                },
+                {
+                    name: "Hit the endpoint with no data (logged in)...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{loginBeforeDeleteMissing}.send",
+                            args: [{username: "existing", password: "password"}]
+                        },
+                        {
+                            event:    "{loginBeforeDeleteMissing}.events.onComplete",
+                            listener: "{deleteMissing}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{deleteMissing}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should have received a 404 error message...", { isError: true, statusCode: 404}, "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The response status code should be correct...", 404, "{deleteMissing}.nativeResponse.statusCode"]
                         }
                     ]
                 }
@@ -199,6 +167,60 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
             options: {
                 method:   "DELETE",
                 endpoint: "api/product/Dlf%20data/0109982"
+            }
+        },
+        anonymousInvalidRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method:   "DELETE",
+                endpoint: "api/product/"
+            }
+        },
+        loginBeforeInvalidRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        invalidRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method:   "DELETE",
+                endpoint: "api/product/"
+            }
+        },
+        loginBeforeDeleteWithoutPermission: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        deleteWithoutPermission: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method: "DELETE",
+                endpoint: "api/product/Dlf%20data/0109982"
+            }
+        },
+        loginBeforeDeleteWithPermission: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        deleteWithPermission: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method: "DELETE",
+                endpoint: "api/product/~existing/contrib1"
+            }
+        },
+        verifyDeleted: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method:   "GET",
+                endpoint: "api/product/~existing/contrib1"
+            }
+        },
+        loginBeforeDeleteMissing: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        deleteMissing: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                method: "DELETE",
+                endpoint: "api/product/~existing/contrib999"
             }
         }
     }
