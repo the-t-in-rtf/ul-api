@@ -347,11 +347,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             }
         },
         loginRequest: {
-            type: "gpii.test.ul.api.request",
-            options: {
-                endpoint: "api/user/login",
-                method:   "POST"
-            }
+            type: "gpii.test.ul.api.request.login"
         },
         authorizedSourceRequest: {
             type: "gpii.test.ul.api.request",
