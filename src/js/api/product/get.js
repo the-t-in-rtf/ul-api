@@ -75,7 +75,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         var input = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
         // Look up the sources if the "sources" flag is set in {that}.request.query.
-        if (input.source === "unified" && input.sources) {
+        if (input.source === "unified" && input.includeSources) {
             that.sourceReader.get({ uid: that.options.request.params.sid });
         }
         // No need to look up sources, just send what we have now.
@@ -101,8 +101,7 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
         that.productRecord.sources = [];
 
         var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
-        var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user)
-
+        var visibleSources = gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user);
 
         // We do not use the new `transformEach` function on the list because we need to filter out keys on a
         // per-record basis.
