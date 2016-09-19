@@ -20,7 +20,6 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
     gradeNames: ["fluid.test.testCaseHolder"],
     expected: {
         unifiedNewer: {
-            "ok": "true",
             "total_rows": 1,
             "params": {
                 "sources": [
@@ -55,7 +54,6 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
             ]
         },
         sourceNewer: {
-            "ok": "true",
             "total_rows": 1,
             "params": {
                 "sources": [

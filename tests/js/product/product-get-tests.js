@@ -253,7 +253,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         requestUnifiedRecordWithSourcesAnonymously: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/unified/unifiedNewer?sources=true"
+                endpoint: "api/product/unified/unifiedNewer?includeSources=true"
             }
         },
         requestUnifiedRecordLogin: {
@@ -266,7 +266,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         requestUnifiedRecordWithSourcesLoggedIn: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/unified/unifiedNewer?sources=true"
+                endpoint: "api/product/unified/unifiedNewer?includeSources=true"
             }
         },
         requestSourceRecordLogin: {
@@ -279,7 +279,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
         requestSourceRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
-                endpoint: "api/product/~existing/contrib1?sources=true"
+                endpoint: "api/product/~existing/contrib1?includeSources=true"
             }
         }
     },

@@ -9,7 +9,7 @@ require("./lib/htmlMessageHandler");
 
 fluid.defaults("gpii.ul.api.404.handler", {
     gradeNames:  ["gpii.express.handler"],
-    messageBody: { ok: false, message: "The API endpoint you requested could not be found.  Please check the documentation and try again." }
+    messageBody: { isError: true, statusCode: 404, message: "The API endpoint you requested could not be found.  Please check the documentation and try again." }
 });
 
 fluid.defaults("gpii.ul.api.404.handler.json", {

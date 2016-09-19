@@ -51,7 +51,7 @@ gpii.ul.api.updates.handler.makeRecordLookupPromise = function (that, uids) {
 
 gpii.ul.api.updates.handler.makeErrorPromise = function (that) {
     return function (error) {
-        that.sendResponse(500, { ok: false, message: error});
+        that.sendResponse(500, { isError: true, statusCode: 500, message: error});
     };
 };
 
@@ -136,7 +136,7 @@ gpii.ul.api.updates.handler.makeDeliverResultsPromise = function (that) {
 
 gpii.ul.api.updates.handler.handleRequest = function (that) {
     if (!that.options.request.query.source) {
-        that.sendResponse(400, { "ok": false, "message": "Cannot continue with at least one &quot;source&quot; parameter.  Check the API documentation for full details."});
+        that.sendResponse(400, { "isError": true, statusCode: 400, "message": "Cannot continue with at least one &quot;source&quot; parameter.  Check the API documentation for full details."});
         return;
     }
 
@@ -147,7 +147,7 @@ gpii.ul.api.updates.handler.handleRequest = function (that) {
 
     // "unified" is not a meaningful choice, return an error if it's included in the list
     if (that.options.request.matchingSources.indexOf("unified") !== -1) {
-        that.sendResponse(400, { "ok": false, "message": "Cannot compare the &quot;unified&quot; source with itself."});
+        that.sendResponse(400, { "isError": true, statusCode: 400, "message": "Cannot compare the &quot;unified&quot; source with itself."});
         return;
     }
 
@@ -158,7 +158,7 @@ gpii.ul.api.updates.handler.handleRequest = function (that) {
     };
     request(options, function (error, response, body) {
         if (error || (body && body.error)) {
-            that.sendResponse(500, { "ok": false, "message": body && body.error ? body.error : error});
+            that.sendResponse(500, { "isError": true, statusCode: 500, "message": body && body.error ? body.error : error});
             return;
         }
 
