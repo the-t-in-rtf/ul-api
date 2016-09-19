@@ -257,11 +257,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             }
         },
         requestUnifiedRecordLogin: {
-            type: "gpii.tests.ul.api.product.get.request",
-            options: {
-                endpoint: "api/user/login",
-                method:   "POST"
-            }
+            type: "gpii.test.ul.api.request.login"
         },
         requestUnifiedRecordWithSourcesLoggedIn: {
             type: "gpii.tests.ul.api.product.get.request",
@@ -270,11 +266,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             }
         },
         requestSourceRecordLogin: {
-            type: "gpii.tests.ul.api.product.get.request",
-            options: {
-                endpoint: "api/user/login",
-                method:   "POST"
-            }
+            type: "gpii.test.ul.api.request.login"
         },
         requestSourceRecordWithSources: {
             type: "gpii.tests.ul.api.product.get.request",

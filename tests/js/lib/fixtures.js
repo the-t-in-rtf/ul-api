@@ -113,3 +113,11 @@ fluid.defaults("gpii.test.ul.api.request.html", {
     }
 });
 
+
+// Many of our tests require a login, so we have one with the right endpoint and method as a convenience.
+fluid.defaults("gpii.test.ul.api.request.login", {
+    gradeNames: ["gpii.test.ul.api.request"],
+    method:     "POST",
+    endpoint:   "api/user/login"
+});
+
