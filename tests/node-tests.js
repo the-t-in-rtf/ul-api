@@ -6,5 +6,5 @@
 // pairs I've tried seems to pass regardless of order.  Need a pairing session to help track this down.
 require("./js/docs-tests");
 require("./js/product");
-require("./js/search-tests");
+// require("./js/search-tests");
 require("./js/sources-tests");
