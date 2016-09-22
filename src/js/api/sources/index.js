@@ -15,11 +15,11 @@
  */
 /* eslint-env node */
 "use strict";
-var fluid = fluid || require("infusion");
-var gpii = fluid.registerNamespace("gpii");
+var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 
-var fs   = require("fs");
-var path = require("path");
+var fs    = require("fs");
+var path  = require("path");
 
 require("gpii-express");
 
@@ -129,7 +129,7 @@ fluid.defaults("gpii.ul.api.sources.request", {
     }
 });
 
-fluid.defaults("gpii.ul.api.sources.router", {
+fluid.defaults("gpii.ul.api.sources", {
     gradeNames:    ["gpii.express.middleware.requestAware"],
     path:          "/sources",
     handlerGrades: ["gpii.ul.api.sources.request"],
