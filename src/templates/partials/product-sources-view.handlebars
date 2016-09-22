@@ -2,7 +2,7 @@
   <ul>
     {{#each sources}}
       <li>
-          <a href="/record?source={{source}}&sid={{sid}}" target="_blank">
+          <a href="/api/product/{{source}}/{{sid}}" target="_blank">
               {{#equals source @root.user.username}}
                   View your suggested updates to this record.
               {{else}}
