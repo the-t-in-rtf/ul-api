@@ -21,7 +21,7 @@ gpii.tests.ul.api.checkResults = function (message, expected, actual, minRecords
 
 gpii.tests.ul.api.hasMinRecords = function (message, actual, minRecords) {
     if (minRecords) {
-        jqUnit.assertTrue(message + "(record count)", actual.products.length >= minRecords);
+        jqUnit.assertTrue(message + "(record count)", actual && actual.products && actual.products.length && actual.products.length >= minRecords);
     }
 };
 
