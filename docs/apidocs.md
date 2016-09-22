@@ -559,8 +559,7 @@ Performs a full text search of all data, returns matching products, grouped by t
                   "q": "jaws",
                   "offset": 0,
                   "limit": 100,
-                  "sort": "uid ASC",
-                  "updatedSince": "2014-05-25T11:23:32.441Z",
+                  "sortBy": "uid ASC",
                   "status": [ "active" ]
              },
              "products": [
@@ -620,7 +619,6 @@ when building a "unified" record.
              "total_rows": 1,
              "params": {
                   "q": "jaws",
-                  "updatedSince": "2014-05-25T11:23:32.441Z",
                   "status": [ "active" ]
              },
              "products": [
@@ -658,18 +656,17 @@ when building a "unified" record.
          }
          ```
 
- ## `GET /api/updates/{?sources,updated,status,offset,limit}`
+ ## `GET /api/updates/{?sources,updatedSince,sourcesNewer}`
 
-Return a list of unified products that contain newer information than the record provided by the given sources.
+Compare "unified" records to one or more "sources" and highlight "updates", which by default are cases in which the
+"unified" record has been updated more recently than the "source" record.
 
  + Parameters
-     + `sources` (required, string) ... Only display products from the specified sources.
-     + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product records updated at or after this time are included in the comparison.
-     + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
-     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
-     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  Set to `-1` to return all products.  Defaults to `-1`
+     + `sources` (required, String|Array) ... Only display products from the specified sources.
+     + `updatedSince` (optional, String) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product records updated at or after this time are included in the comparison.
+     + `sourcesNewer` (optional, Boolean) ... If `true`, the comparison is inverted, and cases in which the "source" record is newer will be displayed.  Defaults to `false`.
 
- + Response 200 (application/search+json)
+ + Response 200 (application/updates+json)
      + Headers
          + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/updates.json#
          + Link: <https://registry.gpii.net/schema/updates.json#>; rel="describedBy"
@@ -680,8 +677,7 @@ Return a list of unified products that contain newer information than the record
              "total_rows": 1,
              "params": {
                   "sources": ["Vlibank"]
-                  "updatedSince": "2014-05-25T11:23:32.441Z",
-                  "status": [ "active" ]
+                  "updatedSince": "2014-05-25T11:23:32.441Z"
              },
              "products": [
                 {
