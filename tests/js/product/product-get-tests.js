@@ -360,16 +360,30 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "description":  "sample description 1",
             "manufacturer": { "name": "sample manufacturer 1" },
             "updated":      "2015-01-01",
-            "sources": [{
-                "uid":          "unifiedNewer",
-                "status":       "new",
-                "source":       "~existing",
-                "sid":          "contrib1",
-                "name":         "sample product 1",
-                "description":  "sample description 1",
-                "manufacturer": { "name": "sample manufacturer 1" },
-                "updated":      "2014-01-01"
-            }]
+            "sources": [
+                {
+                    "uid":          "unifiedNewer",
+                    "status":       "new",
+                    "source":       "~existing",
+                    "sid":          "contrib1",
+                    "name":         "sample product 1",
+                    "description":  "sample description 1",
+                    "manufacturer": { "name": "sample manufacturer 1" },
+                    "updated":      "2014-01-01"
+                },
+                {
+                    "uid": "unifiedNewer",
+                    "status": "new",
+                    "source": "~existing",
+                    "sid": "contrib5",
+                    "name": "sample product 5",
+                    "description": "sample description 5",
+                    "manufacturer": {
+                        "name": "sample manufacturer 5"
+                    },
+                    "updated": "2014-05-01"
+                }
+            ]
         },
         source:  {
             "uid":          "unifiedNewer",

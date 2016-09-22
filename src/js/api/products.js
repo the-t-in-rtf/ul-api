@@ -39,12 +39,15 @@ gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
 gpii.ul.api.products.handler.handleRequest = function (that) {
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
+    that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
 
     // The list of desired sources is an array of source names, i.e. ["unified", "Handicat"]
-    var desiredSources = userOptions.sources ? fluid.makeArray(userOptions.sources) : Object.keys(gpii.ul.api.sources.sources);
-    if (userOptions.unified && userOptions.sources.indexOf("unified") === -1) {
+    var desiredSources = fluid.makeArray(that.options.request.productsParams.sources);
+    if (that.options.request.productsParams.unified && desiredSources.indexOf("unified") === -1) {
         desiredSources.push("unified");
     }
+
+    that.options.request.productsParams.sources = desiredSources;
 
     // Resolve a datasource that matches our username to ~ for the permission check.
     var resolvedSourceKeys = user ? gpii.ul.api.products.handler.resolveSourceKeys(desiredSources, user.username) : desiredSources;
@@ -56,17 +59,11 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
     // specified a source variable, as the default is to filter "all sources" down to "all visible sources for this user".
     // This error is also reported for non-existent sources, but we should not clarify this, as it would allow people
     // to trawl through and determine valid usernames by requesting ~{username} until they got a 401 instead of a 404.
-    if (userOptions.sources && allowedSourceKeys.length < desiredSources.length) {
+    if (allowedSourceKeys.length < desiredSources.length) {
         that.options.next({isError: true, params: that.options.request.productParams, statusCode: 401, message: that.options.messages.noPermission});
     }
     else {
-        // Whatever sources the user asks to see, their "receipt" will only ever reflect the ones they have permissiont to view.
-        userOptions.sources = allowedSourceKeys;
-
-        // Save the user params for the "receipt" we will deliver later.
-        that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
-
-        that.couchReader.get({keys: allowedSourceKeys });
+        that.couchReader.get({keys: desiredSources });
     }
 };
 
@@ -233,7 +230,8 @@ fluid.defaults("gpii.ul.api.products", {
     defaultParams: {
         offset:  0,
         limit:   250,
-        unified: true
+        unified: true,
+        sources: ["unified"]
     },
     distributeOptions: {
         source: "{that}.options.defaultParams",

@@ -38,8 +38,8 @@ fluid.defaults("gpii.ul.api", {
         contextToExpose: {
             "layout": "layout", // This is required to support custom layouts
             "model": {
-                "user":   "req.session._ul_user",
-                "record": "product"
+                "user":    "req.session._ul_user",
+                "product": "product"
             },
             "req":  {
                 "query":  "req.query",
@@ -98,7 +98,8 @@ fluid.defaults("gpii.ul.api", {
                     initBlock: {
                         options: {
                             contextToOptionsRules: {
-                                req: "req"
+                                req:     "req",
+                                product: "product"
                             }
                         }
                     }
@@ -169,20 +170,17 @@ fluid.defaults("gpii.ul.api", {
             }
         },
         sources: {
-            type: "gpii.ul.api.sources.router",
+            type: "gpii.ul.api.sources",
             options: {
-                priority: "after:suggest",
-                path: "/sources"
+                priority: "after:suggest"
             }
         },
-        //updates: {
-        //    type: "gpii.ul.api.updates.router",
-        //    options: {
-        //        path: "/updates",
-        //     priority: "after:docs",
-        //        couch: "{gpii.express}.options.config.couch"
-        //    }
-        //},
+        updates: {
+            type: "gpii.ul.api.updates",
+            options: {
+                priority: "after:sources"
+            }
+        },
         // TODO: Test that this returns reasonable responses for common errors (404s, permission failures).
         // HTML error-handling middleware (for browsers making non-AJAX requests)
         // htmlErrorHandler: {

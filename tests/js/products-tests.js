@@ -35,6 +35,18 @@ gpii.tests.ul.api.checkResultsByStatus = function (message, expected, actual, mi
     jqUnit.assertEquals(message + " (no records with the wrong status)", 0, recordsWithWrongStatus);
 };
 
+gpii.tests.ul.api.checkUnifiedRecords = function (body) {
+    jqUnit.assertTrue("There should be records...", body.products.length > 100);
+    var hasSourceRecords = false;
+    fluid.each(body.products, function (product) {
+        if (product.sources) {
+            hasSourceRecords = true;
+        }
+    });
+
+    jqUnit.assertTrue("At least one unified record should have source records...", hasSourceRecords);
+};
+
 fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
@@ -47,10 +59,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             }
         },
         loggedIn: {
-            "sources": [
-                "unified",
-                "existing"
-            ]
+            "sources": [ "unified", "existing" ]
         },
         singleStatus: {
             "params": {
@@ -77,9 +86,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             "total_rows": 0,
             "params": {
                 "updated":  "3000-01-01T16:54:12.023Z",
-                "sources": [
-                    "unified"
-                ],
+                "sources": [ "unified" ],
                 "offset": 0,
                 "limit": 250,
                 "unified": true
@@ -88,9 +95,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         distantPast: {
             "params": {
                 "updated":  "1970-01-01T16:54:12.023Z",
-                "sources": [
-                    "unified"
-                ],
+                "sources": [ "unified" ],
                 "offset": 0,
                 "limit": 250,
                 "unified": true
@@ -102,11 +107,69 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         },
         authorizedSource: {
             "params": {
-                "sources": ["~existing"],
+                "sources": [ "~existing" ],
                 "offset": 0,
                 "limit": 250,
                 "unified": false
             }
+        },
+        newestUnified: {
+            "params": {
+                "offset":  0,
+                "limit":   1,
+                "unified": false,
+                "sortBy": "\\updated",
+                "sources": [ "unified"]
+            },
+            products: [{
+                "uid": "futureKind",
+                "status": "new",
+                "source": "unified",
+                "sid": "futureKind",
+                "name": "A record ahead of its time.",
+                "description": "The skies are made of diamonds.",
+                "manufacturer": {
+                    "name": "Professor Yana"
+                },
+                "updated": "3000-01-01"
+            }]
+        },
+        oldestUnified: {
+            "params": {
+                "offset":  0,
+                "limit":   1,
+                "unified": false,
+                "sortBy": "updated",
+                "sources": [ "unified"]
+            },
+            products: [{
+                "source": "unified",
+                "sid": "1421059432813-849447471",
+                "uid": "1421059432813-849447471",
+                "status": "new",
+                "name": "TEXTHELP - READ&WRITE",
+                "description": "Read&Write GOLD integrates with familiar applications (i.e. Microsoft Word, Internet Explorer, and Adobe Reader) giving access to features for reading, writing, and research support from within programs used every day.<br /><br />Technical details:<br />REPORTED WITHIN THE RESEARCH PROJECT<br />Cloud4All",
+                "manufacturer": {
+                    "name": "TEXTHELP SYSTEM INC",
+                    "address": "",
+                    "postalCode": "",
+                    "cityTown": "Woburn",
+                    "country": "UNITED STATES",
+                    "phone": "",
+                    "email": "u.s.info@texthelp.com",
+                    "url": "http://www.texthelp.com"
+                },
+                "ontologies": {
+                    "iso9999": {
+                        "IsoCodePrimary": {
+                            "Code": "22.30.03",
+                            "Name": "Reading materials with audible output"
+                        },
+                        "IsoCodesOptional": []
+                    }
+                },
+                "updated": "2008-11-23T23:00:00.000Z"
+            }]
         }
     },
     rawModules: [
@@ -266,11 +329,11 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{loginRequest}.send",
+                            func: "{authorizedSourceLoginRequest}.send",
                             args: [{ username: "existing", password: "password"}]
                         },
                         {
-                            event:     "{loginRequest}.events.onComplete",
+                            event:     "{authorizedSourceLoginRequest}.events.onComplete",
                             listener:  "{authorizedSourceRequest}.send"
                         },
                         {
@@ -281,6 +344,65 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                         {
                             func: "jqUnit.assertEquals",
                             args:  ["The correct status code should have been returned...", 200, "{authorizedSourceRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Request a set of unified records...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{unifiedLoginRequest}.send",
+                            args: [{ username: "existing", password: "password"}]
+                        },
+                        {
+                            event:     "{unifiedLoginRequest}.events.onComplete",
+                            listener:  "{unifiedRequest}.send"
+                        },
+                        {
+                            event:     "{unifiedRequest}.events.onComplete",
+                            listener:  "gpii.tests.ul.api.checkUnifiedRecords",
+                            args:      ["@expand:JSON.parse({arguments}.0)"] // body
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{unifiedRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Use sort parameters to get the newest unified record...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{newestUnifiedRequest}.send"
+                        },
+                        {
+                            event:     "{newestUnifiedRequest}.events.onComplete",
+                            listener:  "jqUnit.assertLeftHand",
+                            args:      ["The newest record should have been returned...", "{that}.options.expected.newestUnified", "@expand:JSON.parse({arguments}.0)"] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{newestUnifiedRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Use sort parameters to get the oldest unified record...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{oldestUnifiedRequest}.send"
+                        },
+                        {
+                            event:     "{oldestUnifiedRequest}.events.onComplete",
+                            listener:  "jqUnit.assertLeftHand",
+                            args:      ["The oldest record should have been returned...", "{that}.options.expected.oldestUnified", "@expand:JSON.parse({arguments}.0)"] //  message, expected, actual, minRecords
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{oldestUnifiedRequest}.nativeResponse.statusCode"]
                         }
                     ]
                 }
@@ -346,13 +468,34 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 endpoint: "api/products?sources=%22~existing%22"
             }
         },
-        loginRequest: {
+        authorizedSourceLoginRequest: {
             type: "gpii.test.ul.api.request.login"
         },
         authorizedSourceRequest: {
             type: "gpii.test.ul.api.request",
             options: {
                 endpoint: "api/products?sources=%22~existing%22&unified=false"
+            }
+        },
+        unifiedLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        unifiedRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sources=%22~existing%22"
+            }
+        },
+        newestUnifiedRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sortBy=%22%5C%5Cupdated%22&limit=1&unified=false"
+            }
+        },
+        oldestUnifiedRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sortBy=%22updated%22&limit=1&unified=false"
             }
         }
     }
