@@ -6,48 +6,10 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-sort");
 require("./sources");
+require("./lib/initialHtmlForm");
+require("./lib/validationMiddleware");
 
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
-
-// Marker grade to allow us to distribute options to our two pieces of middleware.
-fluid.defaults("gpii.ul.api.search.middleware", {
-    gradeNames: ["gpii.express.middleware"]
-});
-
-fluid.registerNamespace("gpii.ul.api.search.middleware.html");
-
-/**
- *
- * A simple "gating" function to ensure that the form is only rendered if the client accepts the right content type.
- * This must be a separate piece of middleware and must be loaded before the schema validation because we serve the
- * initial form whether or not we have query data.
- *
- * @param that {Object} The middleware component itself.
- * @param request {Object} The Express request object.
- * @param response {Object} The Express response object.
- * @param next {Function} The next piece of middleware in the chain.
- */
-gpii.ul.api.search.middleware.html.renderFormOrDefer = function (that, request, response, next) {
-    if (request.accepts(that.options.contentTypes)) {
-        gpii.express.singleTemplateMiddleware.renderForm(that, request, response);
-    }
-    else {
-        next();
-    }
-};
-
-// A component to serve up the search form.
-fluid.defaults("gpii.ul.api.search.middleware.html", {
-    gradeNames: ["gpii.ul.api.search.middleware", "gpii.express.singleTemplateMiddleware"],
-    templateKey: "pages/search.handlebars",
-    contentTypes: ["text/html"],
-    invokers: {
-        middleware: {
-            funcName: "gpii.ul.api.search.middleware.html.renderFormOrDefer",
-            args:     ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"] //request, response, next
-        }
-    }
-});
 
 fluid.registerNamespace("gpii.ul.api.search.handler");
 
@@ -271,11 +233,6 @@ fluid.defaults("gpii.ul.api.search.handler", {
     }
 });
 
-fluid.defaults("gpii.ul.api.search.middleware.json", {
-    gradeNames: ["gpii.ul.api.search.middleware", "gpii.express.middleware.requestAware"],
-    handlerGrades: ["gpii.ul.api.search.handler"]
-});
-
 fluid.defaults("gpii.ul.api.search", {
     gradeNames: ["gpii.express.router"],
     path: "/search",
@@ -291,43 +248,37 @@ fluid.defaults("gpii.ul.api.search", {
             "": "query"
         }
     },
-    distributeOptions: [{
-        source: "{that}.options.searchDefaults",
-        target: "{that gpii.express.handler}.options.searchDefaults"
-    }],
+    distributeOptions: [
+        {
+            source: "{that}.options.searchDefaults",
+            target: "{that gpii.express.handler}.options.searchDefaults"
+        },
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        }
+    ],
     schemas: {
+        input:  "search-input.json",
         output: "search-results.json"
     },
     components: {
-        // Middleware to serve the HTML form.
         htmlForm: {
-            type: "gpii.ul.api.search.middleware.html",
+            type: "gpii.ul.api.middleware.initialHtmlForm",
             options: {
-                priority: "first"
+                priority: "first",
+                templateKey: "pages/search.handlebars"
             }
         },
         // The JSON middleware requires valid input to access....
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "gpii.ul.api.middleware.validationMiddleware",
             options: {
-                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
                 priority:   "after:htmlForm",
                 rules: {
-                    requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate",
-                    validationErrorsToResponse: {
-                        isError:    { literalValue: true },
-                        statusCode: { literalValue: 400 },
-                        message: {
-                            literalValue: "{that}.options.messages.error"
-                        },
-                        fieldErrors: ""
-                    }
+                    requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate"
                 },
-                schemaDirs: "{gpii.ul.api}.options.schemaDirs",
-                schemaKey:  "search-input.json",
-                messages: {
-                    error: "The information you provided is incomplete or incorrect.  Please check the following:"
-                },
+                schemaKey:  "{gpii.ul.api.search}.options.schemas.input",
                 listeners: {
                     "onSchemasDereferenced.notifyParent": {
                         func: "{gpii.ul.api.search}.events.onSchemasDereferenced.fire"
@@ -337,9 +288,10 @@ fluid.defaults("gpii.ul.api.search", {
         },
         // Middleware to serve a JSON payload.
         jsonMiddleware: {
-            type: "gpii.ul.api.search.middleware.json",
+            type: "gpii.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
+                handlerGrades: ["gpii.ul.api.search.handler"],
                 rules: "{gpii.ul.api.search}.options.rules"
             }
         }
