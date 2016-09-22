@@ -9,224 +9,226 @@
 //
 /* eslint-env node */
 "use strict";
-var fluid   = fluid || require("infusion");
-var gpii    = fluid.registerNamespace("gpii");
+var fluid = require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 
-var request = require("request");
-var when    = require("when");
+require("./lib/initialHtmlForm");
+require("./lib/validationMiddleware");
 
-// TODO: add support for filtering by statuses
-// TODO: default to filtering out new and deleted products once we have more data
+require("gpii-sort");
 
-fluid.registerNamespace("gpii.ul.api.updates.handler");
-gpii.ul.api.updates.handler.minDate = function (dates) {
-    return new Date(Math.min.apply(null, dates));
+fluid.registerNamespace("gpii.ul.api.updates.handler.json");
+
+gpii.ul.api.updates.handler.json.handleRequest = function (that) {
+    var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
+    var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
+
+    // The list of desired sources is an array of source names, i.e. ["unified", "Handicat"]
+    var desiredSources = userOptions.sources ? fluid.makeArray(userOptions.sources) : Object.keys(gpii.ul.api.sources.sources);
+    if (desiredSources.indexOf("unified") === -1) {
+        desiredSources.push("unified");
+    }
+
+    // Resolve a datasource that matches our username to ~ for the permission check.
+    var resolvedSourceKeys = user ? gpii.ul.api.products.handler.resolveSourceKeys(desiredSources, user.username) : desiredSources;
+    var filteredSourceDefinitions = fluid.filterKeys(gpii.ul.api.sources.sources, resolvedSourceKeys);
+
+    var allowedSourceKeys = gpii.ul.api.sources.request.listReadableSources(filteredSourceDefinitions, user);
+
+    if (allowedSourceKeys.length < desiredSources.length) {
+        that.options.next({isError: true, params: that.options.request.productParams, statusCode: 401, message: that.options.messages.noPermission});
+    }
+    else {
+        that.productReader.get({keys: JSON.stringify(allowedSourceKeys)});
+    }
 };
 
-gpii.ul.api.updates.handler.maxDate = function (dates) {
-    return new Date(Math.max.apply(null, dates));
+gpii.ul.api.updates.handler.json.maxDate = function (dates) {
+    return new Date(Math.max.apply(null, fluid.transform(dates, gpii.ul.api.updates.handler.json.stringToDate)));
 };
 
-
-gpii.ul.api.updates.handler.stringToDate = function (dateAsString) {
+gpii.ul.api.updates.handler.json.stringToDate = function (dateAsString) {
     return new Date(dateAsString);
 };
 
-gpii.ul.api.updates.handler.makeRecordLookupPromise = function (that, uids) {
-    return when.promise(function (resolve, reject) {
-        var urlWithKeys = fluid.stringTemplate(that.options.unifiedView, { keys: JSON.stringify(uids)});
-        var options = {
-            url: urlWithKeys
-        };
-        request(options, function (error2, response2, body2) {
-            if (error2 || (body2 && body2.error)) {
-                reject(body2 && body2.error ? body2.error : error2);
-            }
-
-            var data = JSON.parse(body2);
-            resolve(data.rows);
-        });
-    });
-};
-
-gpii.ul.api.updates.handler.makeErrorPromise = function (that) {
-    return function (error) {
-        that.sendResponse(500, { isError: true, statusCode: 500, message: error});
-    };
-};
-
-gpii.ul.api.updates.handler.combineArrays = function (arrayOfArrays) {
-    var combined = [];
-    for (var a = 0; a < arrayOfArrays.length; a++) {
-        var arrayToCombine = arrayOfArrays[a];
-        combined = combined.concat(arrayToCombine);
+gpii.ul.api.updates.handler.json.processCouchResponse = function (that, couchResponse) {
+    if (!couchResponse) {
+        that.options.next(that.options.messages.couchError);
     }
-    return combined;
-};
+    else {
+        var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
-gpii.ul.api.updates.handler.makeDeliverResultsPromise = function (that) {
-    return function (results) {
-        var records = gpii.ul.api.updates.handler.combineArrays(results);
-
-        // TODO:  Reconcile this with the unification approach used in /api/products and /api/search
-        var unifiedRecords = {};
+        // Sort into unified and source records
+        var unifiedRecords = [];
         var sourceRecords = {};
-        fluid.each(records, function (rawRecord) {
-            var record = fluid.model.transformWithRules(rawRecord, that.options.rules.couchToRecord);
-            if (!sourceRecords[record.uid]) {
-                sourceRecords[record.uid] = [];
+        fluid.each(couchResponse.rows, function (row) {
+            var productRecord = fluid.censorKeys(fluid.copy(row.value), that.options.couchKeysToExclude);
+            if (productRecord.source === "unified") {
+                unifiedRecords.push(productRecord);
             }
-
-            if (record.source === "unified") {
-                record.sources = sourceRecords[record.uid];
-                unifiedRecords[record.uid] = record;
-            }
+            // Filter by source
             else {
-                sourceRecords[record.uid].push(record);
+                if (sourceRecords[productRecord.uid] === undefined) {
+                    sourceRecords[productRecord.uid] = [];
+                }
+                sourceRecords[productRecord.uid].push(productRecord);
             }
         });
 
-        // Filter by date
-        var recordsFilteredByDate = [];
+        // Group into a set of unfiltered clusters by UID.
+        fluid.each(unifiedRecords, function (unifiedRecord) {
+            if (sourceRecords[unifiedRecord.uid]) {
+                gpii.sort(sourceRecords[unifiedRecord.uid], ["source", "sid"])
+                unifiedRecord.sources = sourceRecords[unifiedRecord.uid];
+            }
+        });
+
+        // Evaluate each cluster to confirm if there are relevant differences, filtering by date, status, etc.
+        var matchingClusters = [];
+
         fluid.each(unifiedRecords, function (cluster) {
             var includeCluster = false;
-            cluster.sources.forEach(function (sourceRecord) {
-                // Only compare selected sources and not all available sources
-                if (that.options.request.matchingSources.indexOf(sourceRecord.source) !== -1) {
-                    // If neither record is new enough to meet our filter criteria, we don't need to make a further comparison.
-                    var maxDate = gpii.ul.api.updates.handler.maxDate([cluster.updated, sourceRecord.updated]);
-                    if (!that.options.request.updatedSince || maxDate >= that.options.request.updatedSince) {
-                        // filter for clusters where the source data is newer (used to track suggested changes, for example)
-                        if (that.options.request.sourceNewer) {
-                            if (sourceRecord.updated > cluster.updated) {
-                                includeCluster = true;
-                            }
-                        }
-                        // filter for clusters where the unified record is newer
-                        else {
-                            if (cluster.updated > sourceRecord.updated) {
-                                includeCluster = true;
-                            }
-                        }
+
+            fluid.each(cluster.sources, function (sourceRecord) {
+                // Filter out cases in which neither record in the comparison is new enough.
+                if (userOptions.updatedSince) {
+                    var mostRecentlyUpdated = gpii.ul.api.updates.handler.json.maxDate([sourceRecord.updated, cluster.updated]);
+                    if (mostRecentlyUpdated < new Date(userOptions.updatedSince)) {
+                        return;
                     }
+                }
+
+                var sourceIsNewer = sourceRecord.updated > cluster.updated;
+                if ((!sourceIsNewer && !userOptions.sourceNewer) || (sourceIsNewer && userOptions.sourceNewer)) {
+                    includeCluster = true;
                 }
             });
 
             if (includeCluster) {
-                recordsFilteredByDate.push(cluster);
+                matchingClusters.push(cluster);
             }
         });
 
-        // TODO:  Display the selected statuses in the params list
-        var params = {
-            "sources": that.options.request.matchingSources
-        };
-        if (that.options.request.updatedSince) {
-            params.updated = that.options.request.updatedSince;
-        }
-
-        that.sendResponse(200, {
-            "ok": "true",
-            "total_rows": recordsFilteredByDate.length,
-            "params":     params,
-            "records":    recordsFilteredByDate
-        });
-    };
-};
-
-gpii.ul.api.updates.handler.handleRequest = function (that) {
-    if (!that.options.request.query.source) {
-        that.sendResponse(400, { "isError": true, statusCode: 400, "message": "Cannot continue with at least one &quot;source&quot; parameter.  Check the API documentation for full details."});
-        return;
+        that.sendResponse(200, { params: userOptions, total_rows: matchingClusters.length, products: matchingClusters });
     }
 
-    // We should be able to work with either a single or multiple "source" parameters
-    that.options.request.matchingSources = Array.isArray(that.options.request.query.source) ? that.options.request.query.source : [that.options.request.query.source];
-    that.options.request.updatedSince    = that.options.request.query.updated ? new Date(that.options.request.query.updated) : null;
-    that.options.request.sourceNewer     = that.options.request.query.sourceNewer && that.options.request.query.sourceNewer === "true" ? true : false;
-
-    // "unified" is not a meaningful choice, return an error if it's included in the list
-    if (that.options.request.matchingSources.indexOf("unified") !== -1) {
-        that.sendResponse(400, { "isError": true, statusCode: 400, "message": "Cannot compare the &quot;unified&quot; source with itself."});
-        return;
-    }
-
-    // Retrieve all products for the specified source that have their "uid" field set.
-    var urlWithKeys = fluid.stringTemplate(that.options.sourceView, { keys: JSON.stringify(that.options.request.matchingSources)});
-    var options = {
-        url: urlWithKeys
-    };
-    request(options, function (error, response, body) {
-        if (error || (body && body.error)) {
-            that.sendResponse(500, { "isError": true, statusCode: 500, "message": body && body.error ? body.error : error});
-            return;
-        }
-
-        var data = JSON.parse(body);
-        var distinctUidMap = {};
-        fluid.each(data.rows, function (record) {
-            distinctUidMap[record.value.uid] = true;
-        });
-        var distinctUids = Object.keys(distinctUidMap);
-
-        // Get the list of unified products based on the list of UIDs.  This must be done in batches to work around the
-        // 7000 character limit in query strings, which we would hit with more than ~300 keys.
-        var promises = [];
-        for (var a = 0; a < distinctUids.length; a += 250) {
-            var batchUids = distinctUids.slice(a, a + 250);
-            var promise   = gpii.ul.api.updates.handler.makeRecordLookupPromise(that, batchUids);
-            promises.push(promise);
-        }
-
-        when.all(promises)
-            .then(gpii.ul.api.updates.handler.makeDeliverResultsPromise(that))["catch"](gpii.ul.api.updates.handler.makeErrorPromise(that));
-    });
+    return couchResponse;
 };
 
-fluid.defaults("gpii.ul.api.updates.request", {
-    rules: {
-        couchToRecord: {
-            "" : "value",
-            "updated": {
-                transform: {
-                    type:      "gpii.ul.api.updates.handler.stringToDate",
-                    inputPath: "value.updated"
-                }
-            }
-        }
+fluid.defaults("gpii.ul.api.updates.handler.json", {
+    gradeNames: ["gpii.express.handler"],
+    couchKeysToExclude: ["_id", "_rev"],
+    messages: {
+        couchError:   "No response from CouchDB, can't retrieve product records.",
+        noPermission: "You do not have permission to view one or more of the sources you requested."
     },
     invokers: {
         handleRequest: {
-            funcName: "gpii.ul.api.updates.handler.handleRequest",
+            funcName: "gpii.ul.api.updates.handler.json.handleRequest",
             args:     ["{that}"]
+        },
+        processCouchResponse: {
+            funcName:  "gpii.ul.api.updates.handler.json.processCouchResponse",
+            args:     ["{that}", "{arguments}.0"]
+        }
+    },
+    components: {
+        productReader: {
+            type: "kettle.dataSource.URL",
+            options: {
+                url: {
+                    //  args:     ["http://localhost:%port/%dbName/_design/ul/_view/records_by_source?keys=%keys", "{that}.options.couch"]
+
+                    expander: {
+                        funcName: "fluid.stringTemplate",
+                        args:     ["%baseUrl/_design/ul/_view/records_by_source?keys=%keys", { baseUrl: "{gpii.ul.api}.options.urls.ulDb" }]
+                    }
+                },
+                termMap: {
+                    "keys": "%keys"
+                },
+                listeners: {
+                    // Finish processing after the "sources" are read
+                    "onRead.processCouchResponse": {
+                        func: "{gpii.ul.api.updates.handler.json}.processCouchResponse",
+                        args: ["{arguments}.0"]
+                    },
+                    // Report back to the user on failure.
+                    "onError.sendResponse": {
+                        func: "{gpii.express.handler}.sendResponse",
+                        args: [ 500, { message: "{arguments}.0" }] // statusCode, body
+                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
+                    }
+                }
+            }
         }
     }
 });
 
-fluid.defaults("gpii.ul.api.updates.router", {
-    gradeNames:    ["gpii.express.requestAware.router"],
-    path:          "/updates",
-    handlerGrades: "gpii.ul.api.updates.request",
-    sourceView: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/%dbName/_design/ul/_view/records_by_source?keys=%keys", "{that}.options.couch"]
+fluid.defaults("gpii.ul.api.updates.handler.html", {
+    gradeNames: ["gpii.ul.api.htmlMessageHandler"],
+    templateKey: "pages/updates.handlebars",
+    invokers: {
+        handleRequest: {
+            func: "{that}.sendResponse",
+            // We don't actually pass any data, we just render the form and let it do its work.
+            args: [200, {}] // statusCode, body
+        }
+    }
+});
+
+fluid.defaults("gpii.ul.api.updates", {
+    gradeNames: ["gpii.express.router"],
+    path:       "/updates",
+    events: {
+        onSchemasDereferenced: null
+    },
+    schemas: {
+        input: "updates-input.json"
+    },
+    components: {
+        htmlForm: {
+            type: "gpii.ul.api.middleware.initialHtmlForm",
+            options: {
+                priority: "first",
+                templateKey: "pages/updates.handlebars"
+            }
+        },
+        // The JSON middleware requires valid input to access....
+        validationMiddleware: {
+            type: "gpii.ul.api.middleware.validationMiddleware",
+            options: {
+                priority:   "after:htmlForm",
+                rules: {
+                    requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate"
+                },
+                schemaKey:  "{gpii.ul.api.updates}.options.schemas.input",
+                listeners: {
+                    "onSchemasDereferenced.notifyParent": {
+                        func: "{gpii.ul.api.updates}.events.onSchemasDereferenced.fire"
+                    }
+                }
+            }
+        },
+        // Middleware to serve a JSON payload.
+        jsonMiddleware: {
+            type: "gpii.express.middleware.requestAware",
+            options: {
+                priority: "after:validationMiddleware",
+                handlerGrades: ["gpii.ul.api.updates.handler.json"],
+                rules: "{gpii.ul.api.search}.options.rules"
+            }
         }
     },
-    unifiedView: {
-        expander: {
-            funcName: "fluid.stringTemplate",
-            args:     ["http://localhost:%port/%dbName/_design/ul/_view/unified?keys=%keys", "{that}.options.couch"]
+    rules: {
+        requestContentToValidate: {
+            "": "query"
         }
     },
     distributeOptions: [
         {
-            "source": "{that}.options.sourceView",
-            "target": "{that gpii.express.handler}.options.sourceView"
-        },
-        {
-            "source": "{that}.options.unifiedView",
-            "target": "{that gpii.express.handler}.options.unifiedView"
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
         }
     ]
 });

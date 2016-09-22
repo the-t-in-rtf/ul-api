@@ -2,34 +2,30 @@
 /* Tests for the "updates" API module */
 "use strict";
 
-// We use just the request-handling bits of the kettle stack in our tests, but we include the whole thing to pick up the base grades
-require("../../../../node_modules/kettle");
-require("../../../../node_modules/kettle/lib/test/KettleTestUtils");
-
 var fluid        = fluid || require("infusion");
 var gpii         = fluid.registerNamespace("gpii");
 
-require("./test-harness");
-
-require("../lib/sequence");
-require("../lib/assembleurl");
-require("../lib/saneresponse");
+require("../../");
+gpii.ul.api.loadTestingSupport();
 
 // Each test has a request instance of `kettle.test.request.http` or `kettle.test.request.httpCookie`, and a test module that wires the request to the listener that handles its results.
 fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
-    gradeNames: ["fluid.test.testCaseHolder"],
+    gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
+        anonymous: {
+            isError: true,
+            statusCode: 401
+        },
         unifiedNewer: {
             "total_rows": 1,
             "params": {
-                "sources": [
-                    "admin"
-                ]
+                "sources": "~existing"
             },
-            "records": [
+            "products": [
                 {
                     "uid": "unifiedNewer",
                     "source": "unified",
+                    "status": "new",
                     "sid": "unifiedNewer",
                     "name": "sample product 1",
                     "description": "sample description 1",
@@ -40,14 +36,73 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                     "sources": [
                         {
                             "uid": "unifiedNewer",
-                            "source": "admin",
-                            "sid": "admin1",
+                            "status": "new",
+                            "source": "~existing",
+                            "sid": "contrib1",
                             "name": "sample product 1",
                             "description": "sample description 1",
                             "updated": "2014-01-01",
                             "manufacturer": {
                                 "name": "sample manufacturer 1"
                             }
+                        },
+                        {
+                            "uid": "unifiedNewer",
+                            "status": "new",
+                            "source": "~existing",
+                            "sid": "contrib5",
+                            "name": "sample product 5",
+                            "description": "sample description 5",
+                            "manufacturer": {
+                                "name": "sample manufacturer 5"
+                            },
+                            "updated": "2014-05-01"
+                        }
+                    ]
+                }
+            ]
+        },
+        unifiedSpecified: {
+            "total_rows": 1,
+            "params": {
+                "sources": ["~existing", "unified"]
+            },
+            "products": [
+                {
+                    "uid": "unifiedNewer",
+                    "source": "unified",
+                    "status": "new",
+                    "sid": "unifiedNewer",
+                    "name": "sample product 1",
+                    "description": "sample description 1",
+                    "updated": "2015-01-01",
+                    "manufacturer": {
+                        "name": "sample manufacturer 1"
+                    },
+                    "sources": [
+                        {
+                            "uid": "unifiedNewer",
+                            "status": "new",
+                            "source": "~existing",
+                            "sid": "contrib1",
+                            "name": "sample product 1",
+                            "description": "sample description 1",
+                            "updated": "2014-01-01",
+                            "manufacturer": {
+                                "name": "sample manufacturer 1"
+                            }
+                        },
+                        {
+                            "uid": "unifiedNewer",
+                            "status": "new",
+                            "source": "~existing",
+                            "sid": "contrib5",
+                            "name": "sample product 5",
+                            "description": "sample description 5",
+                            "manufacturer": {
+                                "name": "sample manufacturer 5"
+                            },
+                            "updated": "2014-05-01"
                         }
                     ]
                 }
@@ -56,15 +111,15 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
         sourceNewer: {
             "total_rows": 1,
             "params": {
-                "sources": [
-                    "admin"
-                ]
+                "sources": "~existing",
+                "sourceNewer": true
             },
-            "records": [
+            "products": [
                 {
                     "uid": "unifiedOlder",
                     "source": "unified",
                     "sid": "unifiedOlder",
+                    "status": "new",
                     "name": "sample product 2",
                     "description": "sample description 2",
                     "updated": "2013-01-01",
@@ -74,8 +129,9 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                     "sources": [
                         {
                             "uid": "unifiedOlder",
-                            "source": "admin",
-                            "sid": "admin2",
+                            "source": "~existing",
+                            "status": "new",
+                            "sid": "contrib2",
                             "name": "sample product 2",
                             "description": "sample description 2",
                             "updated": "2014-01-01",
@@ -86,62 +142,71 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                     ]
                 }
             ]
-        }
-    },
-    mergePolicy: {
-        rawModules:    "noexpand",
-        sequenceStart: "noexpand"
-    },
-    moduleSource: {
-        funcName: "gpii.tests.ul.api.addRequiredSequences",
-        args:     ["{that}.options.sequenceStart", "{that}.options.rawModules"]
-    },
-    sequenceStart: [
-        { // This sequence point is required because of a QUnit bug - it defers the start of sequence by 13ms "to avoid any current callbacks" in its words
-            func: "{testEnvironment}.events.constructServer.fire"
         },
-        {
-            listener: "fluid.identity",
-            event:    "{testEnvironment}.events.onReady"
+        updatedSince: {
+            "total_rows": 0,
+            "params": {
+                "sources": "~existing",
+                "updatedSince": "3000-01-01"
+            },
+            "products": []
         }
-    ],
-    // Our raw test cases, that will have `sequenceStart` prepended before they are run.
+    },
     rawModules: [
         {
+            name: "Testing the /api/updates endpoint...",
             tests: [
+                {
+                    name: "Request a report anonymously...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{anonymousRequest}.send"
+                        },
+                        {
+                            event:    "{anonymousRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should receive a permission error...", "{that}.options.expected.anonymous", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be as expected...", 401, "{anonymousRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
                 {
                     name: "Looking for products where the source is newer than the unified record...",
                     type: "test",
                     sequence: [
                         {
                             func: "{sourceNewerLoginRequest}.send",
-                            args: [{name: "admin", password: "admin"}]
+                            args: [{ username: "existing", password: "password"}]
                         },
                         {
                             listener: "fluid.identity",
-                            event: "{sourceNewerLoginRequest}.events.onComplete"
+                            event:    "{sourceNewerLoginRequest}.events.onComplete"
                         },
                         {
                             func: "{sourceNewerRequest}.send"
                         },
                         {
-                            listener: "gpii.tests.ul.api.isSaneResponse",
-                            event: "{sourceNewerRequest}.events.onComplete",
-                            args: ["{sourceNewerRequest}.nativeResponse", "{arguments}.0", 200, "{that}.options.expected.sourceNewer"]
+                            event:    "{sourceNewerRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should see clusters in which the source record is newer...", "{that}.options.expected.sourceNewer", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be as expected...", 200, "{sourceNewerRequest}.nativeResponse.statusCode"]
                         }
                     ]
-                }
-            ]
-        },
-        {
-            tests: [
+                },
                 {
                     name: "Looking for products where the unified record is newer than the source record...",
                     type: "test",
                     sequence: [
                         {
                             func: "{unifiedNewerLoginRequest}.send",
-                            args: [{ name: "admin", password: "admin" }]
+                            args: [{ username: "existing", password: "password" }]
                         },
                         {
                             listener: "fluid.identity",
@@ -151,9 +216,65 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                             func: "{unifiedNewerRequest}.send"
                         },
                         {
-                            listener: "gpii.tests.ul.api.isSaneResponse",
                             event:    "{unifiedNewerRequest}.events.onComplete",
-                            args:     ["{unifiedNewerRequest}.nativeResponse", "{arguments}.0", 200, "{that}.options.expected.unifiedNewer"]
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["We should see clusters in which the unified record is newer...", "{that}.options.expected.unifiedNewer", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be as expected...", 200, "{unifiedNewerRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Limiting the results using the 'updatedSince' parameter...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{updatedSinceLoginRequest}.send",
+                            args: [{ username: "existing", password: "password" }]
+                        },
+                        {
+                            listener: "fluid.identity",
+                            event:    "{updatedSinceLoginRequest}.events.onComplete"
+                        },
+                        {
+                            func: "{updatedSinceRequest}.send"
+                        },
+                        {
+                            event:    "{updatedSinceRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["There should no longer be results in the distant future...", "{that}.options.expected.updatedSince", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be as expected...", 200, "{updatedSinceRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Specify 'unified' as one of the sources...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{unifiedSpecifiedLoginRequest}.send",
+                            args: [{ username: "existing", password: "password"}]
+                        },
+                        {
+                            listener: "fluid.identity",
+                            event:    "{unifiedSpecifiedLoginRequest}.events.onComplete"
+                        },
+                        {
+                            func: "{unifiedSpecifiedRequest}.send"
+                        },
+                        {
+                            event:    "{unifiedSpecifiedRequest}.events.onComplete",
+                            listener: "jqUnit.assertLeftHand",
+                            args:     ["The results should not change if we add 'unified' to the list of sources...", "{that}.options.expected.unifiedSpecified", "@expand:JSON.parse({arguments}.0)"]
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be as expected...", 200, "{unifiedSpecifiedRequest}.nativeResponse.statusCode"]
                         }
                     ]
                 }
@@ -165,92 +286,62 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
         cookieJar: {
             type: "kettle.test.cookieJar"
         },
-        sourceNewerLoginRequest: {
-            type: "kettle.test.request.httpCookie",
+        anonymousRequest: {
+            type: "gpii.test.ul.api.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "gpii.tests.ul.api.assembleUrl",
-                        args:     ["{testEnvironment}.options.baseUrl", "api/user/signin"]
-                    }
-
-                },
-                port: "{testEnvironment}.options.expressPort",
-                method: "POST"
+                endpoint: "api/updates?sources=%22~existing%22"
             }
         },
+        sourceNewerLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
         sourceNewerRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.ul.api.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "gpii.tests.ul.api.assembleUrl",
-                        args:     ["{testEnvironment}.options.baseUrl", "api/updates?source=admin&sourceNewer=true"]
-                    }
-                },
-                port: "{testEnvironment}.options.expressPort",
-                method: "GET"
+                endpoint: "api/updates?sources=%22~existing%22&sourceNewer=true"
             }
         },
         unifiedNewerLoginRequest: {
-            type: "kettle.test.request.httpCookie",
-            options: {
-                path: {
-                    expander: {
-                        funcName: "gpii.tests.ul.api.assembleUrl",
-                        args:     ["{testEnvironment}.options.baseUrl", "api/user/signin"]
-                    }
-
-                },
-                port: "{testEnvironment}.options.expressPort",
-                method: "POST"
-            }
+            type: "gpii.test.ul.api.request.login"
         },
         unifiedNewerRequest: {
-            type: "kettle.test.request.httpCookie",
+            type: "gpii.test.ul.api.request",
             options: {
-                path: {
-                    expander: {
-                        funcName: "gpii.tests.ul.api.assembleUrl",
-                        args:     ["{testEnvironment}.options.baseUrl", "api/updates?source=admin"]
-                    }
-                },
-                port: "{testEnvironment}.options.expressPort",
-                method: "GET"
+                endpoint: "api/updates?sources=%22~existing%22"
+            }
+        },
+        unifiedSpecifiedLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        unifiedSpecifiedRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/updates?sources=%5B%22~existing%22%2C%22unified%22%5D"
+            }
+        },
+        updatedSinceLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        updatedSinceRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/updates?sources=%22~existing%22&updatedSince=%223000-01-01%22"
             }
         }
     }
 });
 
 fluid.defaults("gpii.tests.ul.api.updates.environment", {
-    gradeNames:  ["fluid.test.testEnvironment"],
-    expressPort: 9786,
-    baseUrl:     "http://localhost:9786",
-    pouchPort:   6879,
-    pouchUrl:    "http://localhost:6879",
-    usersUrl:    "http://localhost:6879/_users",
-    events: {
-        constructServer: null,
-        onReady:         null
+    gradeNames: ["gpii.test.ul.api.testEnvironment"],
+    ports: {
+        api:    9786,
+        couch:  6879
     },
     components: {
-        harness: {
-            type:          "gpii.tests.ul.api.harness",
-            createOnEvent: "constructServer",
-            options: {
-                expressPort: "{testEnvironment}.options.expressPort",
-                pouchPort:   "{testEnvironment}.options.pouchPort",
-                listeners: {
-                    onReady: {
-                        func: "{testEnvironment}.events.onReady.fire"
-                    }
-                }
-            }
-        },
         testCaseHolder: {
             type: "gpii.tests.ul.api.updates.caseHolder"
         }
     }
 });
 
-gpii.tests.ul.api.updates.environment();
+fluid.test.runTests("gpii.tests.ul.api.updates.environment");

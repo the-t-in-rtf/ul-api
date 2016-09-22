@@ -17,8 +17,10 @@
         ajaxOptions: {
             method:   "GET",
             url:      "/api/sources",
-            json:     true,
-            dataType: "json"
+            dataType: "json",
+            headers: {
+                accept: "application/json"
+            }
         },
         rules: {
             successResponseToModel: {
@@ -85,7 +87,7 @@
     // We use the foundation "accordion" control, which needs to be rebound when the markup is reloaded...
     gpii.ul.updates.rebindFoundation = function () {
         $(document).foundation();
-        $(document).foundation("accordion", "reflow");
+        // $(document).foundation("accordion", "reflow");
     };
 
     fluid.defaults("gpii.ul.updates", {
@@ -106,7 +108,7 @@
             // Rules to control how a successful response is applied to the model.
             successResponseToModel: {
                 "":           "notfound",
-                records:      "responseJSON.records",
+                products:     "responseJSON.products",
                 errorMessage: { literalValue: null }
             },
 
@@ -115,7 +117,7 @@
                 "":             "notfound",
                 errorMessage:   "responseJSON.message",
                 successMessage: { literalValue: null },
-                records:        { literalValue: false }
+                products:       { literalValue: false }
             },
 
             // Rules to control how our model is parsed before making a request
@@ -158,14 +160,14 @@
                 options: {
                     template: "updates-products",
                     model: {
-                        message: "{updates}.model.records"
+                        message: "{updates}.model.products"
                     }
                 }
             }
         },
         model: {
             sources:      [],
-            records:      false,
+            products:      false,
             errorMessage: null,
             sourceNewer:  true
         },

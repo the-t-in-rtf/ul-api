@@ -1,33 +1,23 @@
 {
   "type": "object",
-  "id": "updates.json",
-  "description": "The JSON Schema used in reporting differences between the unified listing and one or more sources.",
+  "id": "updates-input.json",
+  "description": "The JSON Schema used to validate user input to /api/updates.",
   "properties": {
-    "total_rows": {
-      "$ref": "paging.json#/definitions/total_rows"
+    "updatedSince": {
+      "$ref": "filters.json#/definitions/updatedSince"
     },
-    "offset": {
-      "$ref": "paging.json#/definitions/offset"
+    "sources": {
+      "$ref": "filters.json#/definitions/sources"
     },
-    "limit": {
-      "$ref": "paging.json#/definitions/limit"
-    },
-    "filters": {
-      "$ref": "filters.json#/definitions/filters"
-    },
-    "products": {
-      "$ref": "products-base.json#/definitions/products"
-    },
-    "retrievedAt": {
-      "$ref": "retrieved-at.json#/definitions/retrievedAt"
+    "sourcesNewer": {
+      "type": "boolean",
+      "error": {
+        "type": "The `sourcesNewer` field must be either `true` or `false`."
+      }
     }
   },
-  "required": [
-    "total_rows",
-    "offset",
-    "limit",
-    "filters",
-    "products",
-    "retrievedAt"
-  ]
+  "required": ["sources"],
+  "errors": {
+    "#required/0": "You must indicate one or more sources to compare to the `unified` records."
+  }
 }
