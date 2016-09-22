@@ -13,6 +13,18 @@
       "updated": "2015-01-01"
     },
     {
+      "uid": "futureKind",
+      "status": "new",
+      "source": "unified",
+      "sid": "futureKind",
+      "name": "A record ahead of its time.",
+      "description": "The skies are made of diamonds.",
+      "manufacturer": {
+        "name": "Professor Yana"
+      },
+      "updated": "3000-01-01"
+    },
+    {
       "uid": "unifiedNewer",
       "status": "new",
       "source": "~existing",
@@ -23,6 +35,18 @@
         "name": "sample manufacturer 1"
       },
       "updated": "2014-01-01"
+    },
+    {
+      "uid": "unifiedNewer",
+      "status": "new",
+      "source": "~existing",
+      "sid": "contrib5",
+      "name": "sample product 5",
+      "description": "sample description 5",
+      "manufacturer": {
+        "name": "sample manufacturer 5"
+      },
+      "updated": "2014-05-01"
     },
     {
       "uid": "unifiedOlder",
