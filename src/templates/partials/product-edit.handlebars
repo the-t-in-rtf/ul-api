@@ -1,0 +1,31 @@
+<div class="product-edit-success"></div>
+<div class="product-edit-error"></div>
+<form action="#" class="product-edit-form">
+    <input type="hidden" class="product-edit-source" value="{{source}}"/>
+    <input type="hidden" class="product-edit-sid"    value="{{sid}}"/>
+    <input type="hidden" class="product-edit-uid"    value="{{uid}}"/>
+
+  <h3>Product Details</h3>
+    <!-- TODO: evolve this into a proper dropdown -->
+    <select class="product-edit-status">
+        <option value="{{status}}">{{status}}</option>
+    </select>
+
+    <label for="product-edit-name">Name</label>
+    <input type="text" class="product-edit-name" placeholder="Please enter the name of this product." id="product-edit-name" value="{{{name}}}/">
+
+
+    <label for="product-edit-description">Description</label>
+    <textarea class="product-edit-description" rows="10" placeholder="Please enter a description of this product." id="product-edit-description">{{{description}}}</textarea>
+
+  <hr/>
+
+  <h3>Manufacturer Details</h3>
+
+  {{>product-manufacturer-edit manufacturer}}
+
+  <a class="button product-toggle">Cancel</a>
+
+  <input type="submit" value="Save" class="button product-edit-submit"/>
+</form>
+

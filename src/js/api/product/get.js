@@ -80,7 +80,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         }
         // No need to look up sources, just send what we have now.
         else {
-            that.sendResponse(200, that.productRecord);
+            that.sendResponse(200, { req: that.options.request, product: that.productRecord});
         }
     }
 };
@@ -114,7 +114,7 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
             }
         });
 
-        that.sendResponse(200, that.productRecord);
+        that.sendResponse(200, { req: that.options.request, product: that.productRecord});
     }
 };
 
@@ -222,7 +222,13 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
 
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
-    templateKey: "pages/record.handlebars"
+    templateKey: "pages/product.handlebars"
+    // rules: {
+    //     contextToExpose: {
+    //         "req":     "req",
+    //         "product": "product"
+    //     }
+    // }
 });
 
 fluid.defaults("gpii.ul.api.product.get", {

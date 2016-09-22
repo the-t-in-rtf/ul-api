@@ -1,5 +1,5 @@
 // TODO: Migrate this to a "content aware" part of the API when this feature is complete:  https://github.com/GPII/gpii-express/pull/6
-// TODO:  Figure out what happens when a user contributes changes to the same record a second time.
+// TODO:  Figure out what happens when a user contributes changes to the same product a second time.
 // Component to allow end users to contribute changes, which can be reviewed and incorporated into the unified record.
 /* global fluid */
 (function () {
@@ -19,12 +19,12 @@
         },
         rules: {
             modelToRequestPayload: {
-                "":       "record",
+                "":       "product",
                 "source": "user.username"
             },
             successResponseToModel: {
                 "":             "notfound",
-                record:         "responseJSON.record",
+                product:         "responseJSON.product",
                 successMessage: { literalValue: "Your submission has been saved.  You may continue revising this or close the window."},
                 errorMessage:   { literalValue: null }
             },
@@ -54,21 +54,21 @@
         },
         bindings: {
             source:           "user.username",
-            name:             "record.name",
-            description:      "record.description",
-            manufacturerName: "record.manufacturer.name",
-            address:          "record.manufacturer.address",
-            cityTown:         "record.manufacturer.cityTown",
-            provinceRegion:   "record.manufacturer.provinceRegion",
-            postalCode:       "record.manufacturer.postalCode",
-            country:          "record.manufacturer.country",
-            email:            "record.manufacturer.email",
-            phone:            "record.manufacturer.phone",
-            url:              "record.manufacturer.url",
-            settingsDesc:     "record.sourceData.settings.description",
-            pricing:          "record.sourceData.pricing",
-            settingsStorage:  "record.sourceData.settings.storage",
-            settingsRestart:  "record.sourceData.settings.restart"
+            name:             "product.name",
+            description:      "product.description",
+            manufacturerName: "product.manufacturer.name",
+            address:          "product.manufacturer.address",
+            cityTown:         "product.manufacturer.cityTown",
+            provinceRegion:   "product.manufacturer.provinceRegion",
+            postalCode:       "product.manufacturer.postalCode",
+            country:          "product.manufacturer.country",
+            email:            "product.manufacturer.email",
+            phone:            "product.manufacturer.phone",
+            url:              "product.manufacturer.url",
+            settingsDesc:     "product.sourceData.settings.description",
+            pricing:          "product.sourceData.pricing",
+            settingsStorage:  "product.sourceData.settings.storage",
+            settingsRestart:  "product.sourceData.settings.restart"
         },
         templates: {
             initial: "contribute-form"
@@ -86,7 +86,7 @@
     // The main container that handles the initial load and is a gatekeeper for rendering and displaying the data entry form.
     fluid.registerNamespace("gpii.ul.contribute");
 
-    // We can only retrieve existing record data if we have a uid.
+    // We can only retrieve existing product data if we have a uid.
     gpii.ul.contribute.makeRequestIfNeeded = function (that) {
         if (that.options.req.query.uid) {
             that.makeRequest();
@@ -107,7 +107,7 @@
         }
     };
 
-    // The component that loads the record content and controls the initial rendering.  Subcomponents
+    // The component that loads the product content and controls the initial rendering.  Subcomponents
     // listen for this component to give the go ahead, and then take over parts of the interface.
     fluid.defaults("gpii.ul.contribute", {
         gradeNames: ["gpii.handlebars.ajaxCapable", "gpii.handlebars.templateAware"],
@@ -129,7 +129,7 @@
         model: {
             successMessage: false,
             errorMessage:   false,
-            record: {
+            product: {
                 uid:    "{that}.options.req.query.uid",
                 status: "new"
             }
@@ -141,10 +141,10 @@
             successResponseToModel: {
                 "":     "notfound",
                 // Only update the model with select data, rather than inappropriately clobbering the source, sid, etc.
-                record: {
-                    name:         "responseJSON.record.name",
-                    description:  "responseJSON.record.description",
-                    manufacturer: "responseJSON.record.manufacturer"
+                product: {
+                    name:         "responseJSON.product.name",
+                    description:  "responseJSON.product.description",
+                    manufacturer: "responseJSON.product.manufacturer"
                 },
                 errorMessage:   { literalValue: null }
             },
@@ -205,7 +205,7 @@
                 },
                 {
                     func: "{that}.applier.change",
-                    args: ["record.source", "{change}.value.name"]
+                    args: ["product.source", "{change}.value.name"]
                 }
             ]
         },
