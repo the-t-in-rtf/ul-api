@@ -17,8 +17,8 @@
     "status": {
       "$ref": "filters.json#/definitions/status"
     },
-    "updated": {
-      "$ref": "filters.json#/definitions/updated"
+    "updatedSince": {
+      "$ref": "filters.json#/definitions/updatedSince"
     }
   },
   "required": [

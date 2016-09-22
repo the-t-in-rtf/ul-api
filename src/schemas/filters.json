@@ -2,10 +2,16 @@
   "id": "filters.json",
   "description": "Common 'filter' parameter definitions used throughout the UL API.",
   "definitions": {
-    "updated": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Return only records created at or after this time (in ISO 8601 format)."
+    "updatedSince": {
+      "type":        "string",
+      "anyOf": [
+        { "format": "date-time" },
+        { "format": "date" }
+      ],
+      "errors": {
+        "type":   "You must supply a valid date in ISO 8601 string format.",
+        "anyOf":  "You must supply a valid date in ISO 8601 string format."
+      }
     },
     "status": {
       "anyOf": [
@@ -35,8 +41,8 @@
     "filters": {
       "type": "object",
       "properties": {
-        "updated": {
-          "$ref": "filters.json#/definitions/updated"
+        "updatedSince": {
+          "$ref": "filters.json#/definitions/updatedSince"
         },
         "status": {
           "$ref": "filters.json#/definitions/status"

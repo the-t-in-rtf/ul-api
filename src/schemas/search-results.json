@@ -8,14 +8,8 @@
     "total_rows": {
       "$ref": "paging.json#/definitions/total_rows"
     },
-    "offset": {
-      "$ref": "paging.json#/definitions/offset"
-    },
-    "limit": {
-      "$ref": "paging.json#/definitions/limit"
-    },
-    "filters": {
-      "$ref": "filters.json#/definitions/filters"
+    "params": {
+      "$ref": "search-input.json"
     },
     "products": {
       "$ref": "products-base.json#/definitions/products"
