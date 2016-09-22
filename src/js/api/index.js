@@ -17,7 +17,7 @@ require("./product");
 require("./products");
 require("./search");
 require("./sources");
-//require("./updates");
+require("./updates");
 require("./404");
 
 fluid.defaults("gpii.ul.api", {
