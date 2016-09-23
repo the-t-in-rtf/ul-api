@@ -190,19 +190,6 @@ fluid.defaults("gpii.ul.api", {
         //         templateKey: "pages/error"
         //     }
         // },
-        // TODO: Remove this once everything is confirmed working
-        // JSON  error-handling middleware (JSON)
-        // jsonErrorHandler: {
-        //     type:     "gpii.express.middleware.error",
-        //     options: {
-        //         priority: "after:htmlErrorHandler",
-        //         errorOutputRules: {
-        //             "isError":     "error.isError",
-        //             "message":     "error.message",
-        //             "fieldErrors": "error.fieldErrors"
-        //         }
-        //     }
-        // },
         docs: {
             type: "gpii.ul.api.docs",
             options: {

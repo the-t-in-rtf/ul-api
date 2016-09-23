@@ -1,20 +1,26 @@
-{{#if message}}
-    <p>The following unified records match your search criteria.</p>
+{{#if user}}
+    {{#if message}}
+        <p>The following unified records match your search criteria.</p>
 
-    {{#each message}}
-        <div class="row">
-            <div class="column small-3">
-                <a href="/api/product/{{source}}/{{sid}}">{{name}}</a>
+        {{#each message}}
+            <div class="row">
+                <div class="column small-3">
+                    <a href="/api/product/{{source}}/{{sid}}">{{name}}</a>
+                </div>
+                <div class="column small-9 ul-updates-product-description">
+                    {{#if description}}{{{md description}}}{{/if}}
+                </div>
             </div>
-            <div class="column small-9 ul-updates-product-description">
-                {{#if description}}{{{md description}}}{{/if}}
-            </div>
+            <ul>
+            </ul>
+        {{/each}}
+    {{else}}
+        <div class="panel">
+            No records were found.  Check your search criteria and the filters you have chosen.
         </div>
-        <ul>
-        </ul>
-    {{/each}}
+    {{/if}}
 {{else}}
     <div class="panel">
-        No records were found.  Check your search criteria and the filters you have chosen.
+        You must log in to use this interface.
     </div>
 {{/if}}

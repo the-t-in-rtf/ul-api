@@ -1,6 +1,6 @@
 // The "updates" report for database vendors
 /* global fluid, document, jQuery */
-(function ($) {
+(function () {
     "use strict";
     var gpii = fluid.registerNamespace("gpii");
 
@@ -18,9 +18,7 @@
             method:   "GET",
             url:      "/api/sources",
             dataType: "json",
-            headers: {
-                accept: "application/json"
-            }
+            headers:  { accept: "application/json" }
         },
         rules: {
             successResponseToModel: {
@@ -42,7 +40,7 @@
         invokers: {
             renderInitialMarkup: {
                 func: "{that}.renderMarkup",
-                args: ["{that}.container", "{that}.options.template", "{that}.model"]
+                args: ["container", "{that}.options.template", "{that}.model"] // selector, template, data, manipulator
             }
         },
         listeners: {
@@ -55,40 +53,62 @@
         },
         modelListeners: {
             user: {
-                func: "{that}.makeRequest"
+                func: "{that}.makeRequest",
+                excludeSource: ["init"] // We already check on startup regardless
             }
         },
         selectors: {
-            "updated":      ".ul-updates-updated-control",
+            "container":    "",
+            "updatedSince": ".ul-updates-updatedSince-control",
             "sources":      ".ul-updates-sources-control",
             "sourceNewer":  "input[name='ul-updates-sourceNewer-control']"
         },
         bindings: [
+            // TODO: Clearing this out results in an error.
             {
-                selector:    "updated",
-                path:        "updated",
-                elementType: "date"
+                selector:    "updatedSince",
+                path:        "updatedSince"
             },
             {
                 selector:    "sources",
-                path:        "sources",
-                elementType: "select"
+                path:        "sources"
             },
             {
                 selector:    "sourceNewer",
                 path:        "sourceNewer",
-                elementType: "radio"
+                rules: {
+                    domToModel: {
+                        "": {
+                            transform: {
+                                type:  "gpii.binder.transforms.stringToBoolean",
+                                inputPath: ""
+                            }
+                        }
+                    },
+                    modelToDom: {
+                        "": {
+                            transform: {
+                                type:  "gpii.binder.transforms.booleanToString",
+                                inputPath: ""
+                            }
+                        }
+                    }
+                }
             }
         ]
     });
 
     fluid.registerNamespace("gpii.ul.updates");
 
-    // We use the foundation "accordion" control, which needs to be rebound when the markup is reloaded...
-    gpii.ul.updates.rebindFoundation = function () {
-        $(document).foundation();
-        // $(document).foundation("accordion", "reflow");
+    gpii.ul.updates.filterAndEncode = function (payload) {
+        var filtered = fluid.filterKeys(payload, ["sources", "updatedSince", "sourceNewer"]);
+        return gpii.express.querystring.encodeObject(filtered);
     };
+
+    fluid.defaults("gpii.ul.updates.filterAndEncode", {
+        gradeNames: ["fluid.standardTransformFunction"]
+    });
+
 
     fluid.defaults("gpii.ul.updates", {
         gradeNames: ["gpii.handlebars.templateFormControl"],
@@ -97,8 +117,10 @@
         ajaxOptions: {
             method:      "GET",
             url:         "/api/updates",
-            json:     true,
-            dataType: "json",
+            dataType:    "json",
+            headers: {
+                "accept": "application/json"
+            },
             traditional: true // We are passing array data, whose variable name jQuery will mangle without this option.
         },
         templates: {
@@ -122,10 +144,12 @@
 
             // Rules to control how our model is parsed before making a request
             modelToRequestPayload: {
-                "":          "notfound",
-                source:      "sources",
-                updated:     "updated",
-                sourceNewer: "sourceNewer"
+                "": {
+                    transform: {
+                        type:      "gpii.ul.updates.filterAndEncode",
+                        inputPath: ""
+                    }
+                }
             }
         },
         selectors: {
@@ -146,7 +170,7 @@
                 options: {
                     model: {
                         sources:      "{updates}.model.sources",
-                        updated:      "{updates}.model.updated",
+                        updatedSince: "{updates}.model.updatedSince",
                         sourceNewer:  "{updates}.model.sourceNewer",
                         user:         "{updates}.model.user",
                         errorMessage: "{updates}.model.errorMessage"  // Allow this component to display error messages if there are problems.
@@ -160,6 +184,7 @@
                 options: {
                     template: "updates-products",
                     model: {
+                        user:    "{updates}.model.user",
                         message: "{updates}.model.products"
                     }
                 }
@@ -167,22 +192,18 @@
         },
         model: {
             sources:      [],
-            products:      false,
+            products:     false,
             errorMessage: null,
+            // TODO: Ensure that this value is stripped out by the transform, so that it can be set to `null` by default.
+            updatedSince: new Date(0),
             sourceNewer:  true
-        },
-        listeners: {
-            "onMarkupRendered.rebindFoundation": {
-                "funcName": "gpii.ul.updates.rebindFoundation",
-                "args":     "{that}"
-            }
         },
         modelListeners: {
             sources: {
                 func:          "{that}.makeRequest",
                 excludeSource: "init"
             },
-            updated: {
+            updatedSince: {
                 func:          "{that}.makeRequest",
                 excludeSource: "init"
             },
