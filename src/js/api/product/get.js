@@ -114,8 +114,15 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
             }
         });
 
+        // Sort the child records by source, and sid, so that the order is consistent
+        gpii.sort(that.productRecord.sources, ["source", "sid"])
+
         that.sendResponse(200, { req: that.options.request, product: that.productRecord});
     }
+};
+
+gpii.ul.api.product.get.handler.sendResponse = function (that, statusCode, body) {
+    gpii.express.handler.sendResponse(that, that.options.response, statusCode, body.product || body);
 };
 
 // Our main handler.  Looks up the underlying record using a kettle.dataSource and expects to call the
@@ -216,6 +223,10 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
         processSourcesResponse: {
             funcName: "gpii.ul.api.product.get.handler.processSourcesResponse",
             args:     ["{that}", "{arguments}.0"] // response
+        },
+        sendResponse: {
+            funcName: "gpii.ul.api.product.get.handler.sendResponse",
+            args: ["{that}", "{arguments}.0", "{arguments}.1"] // statusCode, body
         }
     }
 });

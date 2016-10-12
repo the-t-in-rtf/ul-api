@@ -418,7 +418,7 @@ Returns a single product identified by its `source` and `sid`.  Only the latest 
 default.  For ["unified" records](#unified-records), full source products are not included by default.
 
 + Parameters
-    + `includeSources` (optional, boolean) ... If this is a "unified" record, you have the option to retrieve and display the source data rather than simply displaying a list of source IDs.  Defaults to "false".
+    + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source data rather than simply displaying a list of source IDs.  Defaults to "false".
 
 + Response 200 (application/record+json)
     + Headers
@@ -428,44 +428,38 @@ default.  For ["unified" records](#unified-records), full source products are no
 
         ```
         {
-            "record:
-            {
-                {
-                    "source": "ul",
-                    "uid": "com.maker.win7.sample",
-                    "sid": "com.maker.win7.sample",
-                    "name": "A Sample Unified Listing Record",
-                    "description": "A record that combines 2-3 additional products' worth of information."
-                    "manufacturer": {
-                        "name": "Maker Software",
-                        "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
-                        "postalCode": "27707",
-                        "cityTown": "Durham",
-                        "provinceRegion": "North Carolina",
-                        "country": "United States",
-                        "phone": "(704) 555-1212",
-                        "email": "maker@maker.com",
-                        "url": "http://www.maker.com/"
-                    },
-                    "status": "active",
-                    "language: "en_us",
-                    "sources": [ "siva:2345" ],
-                    "editions": {
-                        "default": {
-                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                            "settingsHandlers": [],
-                            "lifeCycleManager": {}
-                        }
-                    },
-                    "ontologies": {
-                        "iso9999": {
-                            "primaryCode": "22.39.12",
-                            "secondaryCodes": [ "22.39.07" ]
-                        }
-                    },
-                    "updated": "2014-11-30T22:04:15Z"
+            "source": "unified",
+            "uid": "com.maker.win7.sample",
+            "sid": "com.maker.win7.sample",
+            "name": "A Sample Unified Listing Record",
+            "description": "A record that combines 2-3 additional products' worth of information."
+            "manufacturer": {
+                "name": "Maker Software",
+                "address": "4806 Hope Valley Road\nDurham, NC, 27707\nUnited States",
+                "postalCode": "27707",
+                "cityTown": "Durham",
+                "provinceRegion": "North Carolina",
+                "country": "United States",
+                "phone": "(704) 555-1212",
+                "email": "maker@maker.com",
+                "url": "http://www.maker.com/"
+            },
+            "status": "active",
+            "language: "en_us",
+            "editions": {
+                "default": {
+                    "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
+                    "settingsHandlers": [],
+                    "lifeCycleManager": {}
                 }
-            }
+            },
+            "ontologies": {
+                "iso9999": {
+                    "primaryCode": "22.39.12",
+                    "secondaryCodes": [ "22.39.07" ]
+                }
+            },
+            "updated": "2014-11-30T22:04:15Z"
         }
         ```
 
