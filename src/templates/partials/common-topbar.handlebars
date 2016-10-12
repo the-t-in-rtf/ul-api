@@ -7,15 +7,21 @@
     </div>
 </div>
 
-<div class="top-bar" id="main-menu">
-    <div class="top-bar-right">
-        <ul class="menu center vertical medium-horizontal expanded">
-            <li><h3><a href="/">Unified Listing</a></h3></li>
-            <li {{#equals . "search"}} class="active"{{/equals}}><a href="/api/search">Search</a></li>
-            <li {{#equals . "contribute"}} class="active"{{/equals}}><a href="/contributors">Contribute</a></li>
-            <li {{#equals . "manufacturers"}} class="active"{{/equals}}><a href="/manufacturers">For Manufacturers</a></li>
-            <li{{#equals . "databases"}} class="active"{{/equals}}><a href="/databases">For Database Administrators</a></li>
-            <li><div class="controls-viewport"></div></li>
-        </ul>
+<div class="row">
+    <div class="column medium-9 small-12">
+        <div class="top-bar" id="main-menu">
+            <div class="top-bar-right">
+                <ul class="menu center vertical medium-horizontal expanded">
+                    <li><a href="/">Unified Listing</a></li>
+                    <li {{#equals . "search"}} class="active"{{/equals}}><a href="/api/search">Search</a></li>
+                    <li {{#equals . "contribute"}} class="active"{{/equals}}><a href="/contributors">Contribute</a></li>
+                    <li {{#equals . "manufacturers"}} class="active"{{/equals}}><a href="/manufacturers">Manufacturers</a></li>
+                    <li{{#equals . "databases"}} class="active"{{/equals}}><a href="/databases">Database Admins</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="column medium-3 small-12">
+        <div class="controls-viewport"><div class="controls-message"></div></div>
     </div>
 </div>

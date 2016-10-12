@@ -2,6 +2,10 @@
     opacity:        .25;
 }
 
+.scroll-container {
+    margin-top: 1em;
+}
+
 .column.small-12 {
     padding-left: 0;
     padding-right: 0;
@@ -10,6 +14,10 @@
 label.required:after {
     content: "*";
     color:   red;
+}
+
+.controls-viewport .button {
+    line-height: 2.5;
 }
 
 .user-controls-toggle::after {
