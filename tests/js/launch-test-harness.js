@@ -14,9 +14,9 @@ require("./lib/test-harness");
 
 gpii.tests.ul.api.harness.withLucene({
     ports: {
-        "api":    6914,
-        "couch":  6915,
-        "lucene": 6916
+        "api":    6714,
+        "couch":  6715,
+        "lucene": 6716
     },
     listeners: {
         // Uncomment this to display the router diagram on startup.
