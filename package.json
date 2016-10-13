@@ -39,6 +39,7 @@
     "grunt": "1.0.1",
     "grunt-jsonlint": "1.1.0",
     "istanbul": "0.4.5",
+    "jquery": "2.1.4",
     "jsonlint": "1.6.2",
     "kettle": "1.1.0",
     "moment": "2.15.0",
