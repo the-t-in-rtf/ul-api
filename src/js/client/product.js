@@ -20,21 +20,26 @@
         }
     });
 
-    // TODO:  Give this "teeth" to submit changes.  It should be the only thing communicating.
     // The component that handles the binding, etc. for the "Edit" form.
     fluid.defaults("gpii.ul.product.edit", {
         gradeNames: ["gpii.handlebars.templateFormControl"],
         ajaxOptions: {
             url:         "/api/product",
             method:      "PUT",
-            dataType:    "json",
+            processData: false,
+            contentType: "application/json",
             headers: {
                 accept: "application/json"
             }
         },
         rules: {
             modelToRequestPayload: {
-                "": "product"
+                "": {
+                    transform: {
+                        type:      "fluid.transforms.objectToJSONString",
+                        inputPath: "product"
+                    }
+                }
             },
             successResponseToModel: {
                 "":      "notfound",
@@ -42,7 +47,8 @@
             }
         },
         templates: {
-            initial: "product-edit"
+            initial: "product-edit",
+            error:   "validation-error-summary"
         },
         selectors: {
             status:           ".product-edit-status",
@@ -213,6 +219,7 @@
         },
         template: "product-viewport",
         events: {
+            onEditRendered: null,
             onReadyForEdit: null,
             onRenderedAndReadyForEdit: {
                 events: {
@@ -220,7 +227,7 @@
                     onMarkupRendered: "onMarkupRendered"
                 }
             },
-            onEditRendered: null
+            onViewRendered: null
         },
         modelListeners: {
             product: {
@@ -239,6 +246,9 @@
                     template: "product-view",
                     model:    "{product}.model",
                     listeners: {
+                        "onMarkupRendered.notifyParent": {
+                            func: "{product}.events.onViewRendered.fire"
+                        },
                         // Check to see if our "edit" button should be visible on render
                         "onMarkupRendered.checkReadyToEdit": {
                             func: "{product}.checkReadyToEdit"
@@ -268,7 +278,7 @@
                         // Our view may be redrawn over and over again, and we have to make sure our bindings work each time.
                         onRefresh: {
                             events: {
-                                parentReady: "{view}.events.onMarkupRendered"
+                                parentReady: "{product}.events.onViewRendered"
                             }
                         }
                     },
@@ -308,30 +318,6 @@
                         }
                     }
                 }
-            },
-            // We don't need the rest of the baggage from `templateFormControl`, but we do need a similar pattern to
-            // display common "success" and "error" messages.
-            success: {
-                type:          "gpii.handlebars.templateMessage",
-                createOnEvent: "{product}.events.onMarkupRendered",
-                container:     ".product-success",
-                options: {
-                    template: "common-success",
-                    model: {
-                        message: "{product}.model.successMessage"
-                    }
-                }
-            },
-            error: {
-                type:          "gpii.handlebars.templateMessage",
-                createOnEvent: "{product}.events.onMarkupRendered",
-                container:     ".product-error",
-                options: {
-                    template: "common-error",
-                    model: {
-                        message: "{product}.model.errorMessage"
-                    }
-                }
             }
         },
         invokers: {
@@ -343,11 +329,6 @@
                 func: "{that}.renderMarkup",
                 args: ["viewport", "{that}.options.template", "{that}.model"]
             }
-        },
-        // listeners: {
-        //     "onCreate.makeRequest": {
-        //         func: "{that}.makeRequest"
-        //     }
-        // }
+        }
     });
 })();
