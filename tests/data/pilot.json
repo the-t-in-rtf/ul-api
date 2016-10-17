@@ -8,14 +8,7 @@
       "source": "Dlf data",
       "sid": "0109982",
       "manufacturer": {
-        "name": "Freedom Scientific",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientific"
       },
       "ontologies": {
         "iso9999": {
@@ -120,14 +113,7 @@
       "source": "Hulpmiddelenwijzer",
       "sid": "124665",
       "manufacturer": {
-        "name": "Freedom Scientific Benelux, Optelec Nederland B.V.",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientific Benelux, Optelec Nederland B.V."
       },
       "ontologies": {
         "iso9999": {
@@ -176,14 +162,7 @@
       "source": "Vlibank",
       "sid": "B812",
       "manufacturer": {
-        "name": "Freedom Scientific USA",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientific USA"
       },
       "ontologies": {
         "iso9999": {
@@ -232,14 +211,7 @@
       "source": "Rehadat",
       "sid": "C/00505",
       "manufacturer": {
-        "name": "Freedom Scientific Blind/Low Vision Group and Corporate Offices",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientific Blind/Low Vision Group and Corporate Offices"
       },
       "ontologies": {
         "iso9999": {
@@ -432,14 +404,7 @@
       "source": "Handicat",
       "sid": "12011",
       "manufacturer": {
-        "name": "Freedom Scientifics corporate",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientifics corporate"
       },
       "ontologies": {
         "iso9999": {
@@ -488,14 +453,7 @@
       "name": "Jaws For Windows",
       "description": "Screen reader software.  Comprises: supports standard Windows office applications, Internet Explorer, Firefox, MSN Messenger, and Adobe Acrobat Reader, Lotus Symphony/Notes and others; outputs to refreshable Braille displays; multilingual synthesizer; supports Internet Explorer including links lists, frames lists, forms mode, reading HTML tables and graphic labels; supports dual monitors; interactive talking installation and basic training tutorial. Options include: standard edition for 32-bit or 64-bit versions of Windows 7 Home Premium, Windows Vista Home Premium, Windows Vista Home Basic and 32-bit Windows XP Home operating systems; professional edition for all 32-bit or 64-bit versions of Windows 7, Windows Vista, and Windows Server 2008 and 32-bit versions of Windows XP and Windows Server 2003. \u000a  Note: voice synthesizer requires a sound card compatible with the users version of Windows.<br /><br />Price from (&pound;): 659<br /><br /><br /><br />Software<br />Adjust voice pitch: Standard <br />Adjust voice speed: Standard <br />Braille output: Standard <br />CD-Rom; USB Pen; Download: CD-Rom <br />Pronunciation correction: Standard <br />Read text with mouse over: Feature not available <br />Screen Zoom: Feature not available <br />Talking installation: Standard <br />Windows operating system: XP, Vista and 7",
       "manufacturer": {
-        "name": "Freedom Scientific",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Freedom Scientific"
       },
       "ontologies": {
         "iso9999": {
@@ -517,13 +475,8 @@
       "sid": "38",
       "manufacturer": {
         "name": "NVAccess",
-        "address": "",
-        "postalCode": "",
-        "cityTown": "",
         "country": "UNKNOWN",
-        "phone": "",
-        "email": "mick@kulgan.net",
-        "url": ""
+        "email": "mick@kulgan.net"
       },
       "ontologies": {
         "iso9999": {
@@ -573,13 +526,8 @@
       "description": "NonVisual Desktop Access (NVDA) is a free and open-source screen reader for the Windows Operating System, enabling blind and vision impaired people to use their computers for no more cost than the computer and Operating System itself.",
       "manufacturer": {
         "name": "NVAccess",
-        "address": "",
-        "postalCode": "",
-        "cityTown": "",
         "country": "UNKNOWN",
-        "phone": "",
-        "email": "mick@kulgan.net",
-        "url": ""
+        "email": "mick@kulgan.net"
       },
       "ontologies": {
         "iso9999": {
@@ -601,11 +549,8 @@
       "sid": "19284",
       "manufacturer": {
         "name": "FULLMEASURE",
-        "address": "",
-        "postalCode": "",
         "cityTown": "EXETER",
         "country": "UNITED KINGDOM",
-        "phone": "",
         "email": "steve@fullmeasure.co.uk",
         "url": "http://fullmeasure.co.uk/"
       },
@@ -763,11 +708,8 @@
       "description": "Maavis provide screens of buttons containing text or images perform simple operations when activated.  Activation can be with, pointer, keyboard, touch screen or with the built in scanning support for switch users. Screens are arranged in a hierarchy that provides 'activity selection', 'item group selection' and 'item players'. Players are provided for photos, music, information (web pages), video calls and basic AAC.<br /><br />Technical details:<br />REPORTED WITHIN THE RESEARCH PROJECT<br />Cloud4All<br />INPUT DEVICES<br />Double switch",
       "manufacturer": {
         "name": "FULLMEASURE",
-        "address": "",
-        "postalCode": "",
         "cityTown": "EXETER",
         "country": "UNITED KINGDOM",
-        "phone": "",
         "email": "steve@fullmeasure.co.uk",
         "url": "http://fullmeasure.co.uk/"
       },
@@ -790,14 +732,7 @@
       "source": "Vlibank",
       "sid": "E25653",
       "manufacturer": {
-        "name": "Texthelp Systems Ltd",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Texthelp Systems Ltd"
       },
       "ontologies": {
         "iso9999": {
@@ -857,11 +792,8 @@
       "sid": "19288",
       "manufacturer": {
         "name": "TEXTHELP SYSTEM INC",
-        "address": "",
-        "postalCode": "",
         "cityTown": "Woburn",
         "country": "UNITED STATES",
-        "phone": "",
         "email": "u.s.info@texthelp.com",
         "url": "http://www.texthelp.com"
       },
@@ -956,11 +888,8 @@
       "description": "Read&Write GOLD integrates with familiar applications (i.e. Microsoft Word, Internet Explorer, and Adobe Reader) giving access to features for reading, writing, and research support from within programs used every day.<br /><br />Technical details:<br />REPORTED WITHIN THE RESEARCH PROJECT<br />Cloud4All",
       "manufacturer": {
         "name": "TEXTHELP SYSTEM INC",
-        "address": "",
-        "postalCode": "",
         "cityTown": "Woburn",
         "country": "UNITED STATES",
-        "phone": "",
         "email": "u.s.info@texthelp.com",
         "url": "http://www.texthelp.com"
       },
@@ -983,14 +912,7 @@
       "source": "Vlibank",
       "sid": "E17570",
       "manufacturer": {
-        "name": "Dolphin Computer Access",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access"
       },
       "ontologies": {
         "iso9999": {
@@ -1187,14 +1109,7 @@
       "source": "Dlf data",
       "sid": "0113246",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd"
       },
       "ontologies": {
         "iso9999": {
@@ -1243,14 +1158,7 @@
       "source": "Vlibank",
       "sid": "B811",
       "manufacturer": {
-        "name": "Dolphin Computer Access",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access"
       },
       "ontologies": {
         "iso9999": {
@@ -1299,14 +1207,7 @@
       "source": "Vlibank",
       "sid": "B856",
       "manufacturer": {
-        "name": "Dolphin Computer Access",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access"
       },
       "ontologies": {
         "iso9999": {
@@ -1355,14 +1256,7 @@
       "source": "Vlibank",
       "sid": "E23404",
       "manufacturer": {
-        "name": "Dolphin Computer Access",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access"
       },
       "ontologies": {
         "iso9999": {
@@ -1411,14 +1305,7 @@
       "source": "Vlibank",
       "sid": "B953",
       "manufacturer": {
-        "name": "Dolphin Computer Access",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access"
       },
       "ontologies": {
         "iso9999": {
@@ -1467,14 +1354,7 @@
       "source": "Dlf data",
       "sid": "0110076",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd"
       },
       "ontologies": {
         "iso9999": {
@@ -1523,14 +1403,7 @@
       "source": "Dlf data",
       "sid": "0110009",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd"
       },
       "ontologies": {
         "iso9999": {
@@ -1706,14 +1579,7 @@
       "source": "Rehadat",
       "sid": "IW/FTB/223912.001",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd.",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd."
       },
       "ontologies": {
         "iso9999": {
@@ -1996,14 +1862,7 @@
       "source": "Rehadat",
       "sid": "C/00173",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd.",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd."
       },
       "ontologies": {
         "iso9999": {
@@ -2063,11 +1922,8 @@
       "sid": "19328",
       "manufacturer": {
         "name": "ACCESS FIREFOX PROJECT",
-        "address": "",
-        "postalCode": "",
         "cityTown": "-",
         "country": "UNKNOWN",
-        "phone": "",
         "email": "KenSaunders@AccessFirefox.org",
         "url": "http://www.accessfirefox.org/"
       },
@@ -2168,14 +2024,7 @@
       "source": "Rehadat",
       "sid": "DIAS/005111",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd.",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd."
       },
       "ontologies": {
         "iso9999": {
@@ -2234,14 +2083,7 @@
       "name": "Supernova Reader Magnifier",
       "description": "Screen magnification software with speech. Comprises: output to speech to read documents, web pages, menus or button prompts and talk as the user types; user can choice to list links, headings or frames on websites; choice of magnification style such as split screen, whole screen, lens and window; magnified objects and text are smoothed to remove pixelation; magnification from initial login; multiple focus highlighting options - cursor, mouse pointer, line, focus; automatic tracking of mouse and keyboard presses; high contrast and custom colour schemes; multi language support, switch magnifier interface to choice of over 20 languages at any time; automatic software updates via the Internet; compatible with a range of digital CCTVs.<br /><br />Price from (&pound;): 320<br /><br /><br /><br />Software<br />CD-Rom; USB Pen; Download: CD-Rom <br />Read text with mouse over: Standard <br />Screen magnification range: 2-60 x<br />Text/font smoothing: Standard <br />Windows: Standard <br />Windows operating system: XP, Vista and 7",
       "manufacturer": {
-        "name": "Dolphin Computer Access Ltd",
-        "address": null,
-        "postalCode": null,
-        "cityTown": null,
-        "country": null,
-        "phone": null,
-        "email": null,
-        "url": null
+        "name": "Dolphin Computer Access Ltd"
       },
       "ontologies": {
         "iso9999": {

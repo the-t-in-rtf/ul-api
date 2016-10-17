@@ -41,14 +41,16 @@
                     }
                 }
             },
+            errorResponseToModel: {
+                "": "responseJSON"
+            },
             successResponseToModel: {
                 "":      "notfound",
                 message: "Your changes have been saved."
             }
         },
         templates: {
-            initial: "product-edit",
-            error:   "validation-error-summary"
+            initial: "product-edit"
         },
         selectors: {
             status:           ".product-edit-status",
@@ -72,7 +74,6 @@
         },
         hideOnSuccess: false,
         hideOnError:   false,
-        // TODO:  on success, somehow let our parent know to toggle itself again.
         bindings: {
             name:             "product.name",
             description:      "product.description",
@@ -81,17 +82,97 @@
             source:           "product.source",
             sid:              "product.sid",
             uid:              "product.uid",
-            manufacturerName: "product.manufacturer.name",
-            address:          "product.manufacturer.address",
-            cityTown:         "product.manufacturer.cityTown",
-            provinceRegion:   "product.manufacturer.provinceRegion",
-            postalCode:       "product.manufacturer.postalCode",
-            country:          "product.manufacturer.country",
-            email:            "product.manufacturer.email",
-            phone:            "product.manufacturer.phone",
-            url:              "product.manufacturer.url"
+            manufacturerName: {
+                selector: "manufacturerName",
+                path:     "product.manufacturer.name",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            address: {
+                selector: "address",
+                path:     "product.manufacturer.address",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            cityTown: {
+                selector: "cityTown",
+                path:     "product.manufacturer.cityTown",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            provinceRegion: {
+                selector: "provinceRegion",
+                path:     "product.manufacturer.provinceRegion",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            postalCode: {
+                selector: "postalCode",
+                path:     "product.manufacturer.postalCode",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            country: {
+                selector: "country",
+                path:     "product.manufacturer.country",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            email: {
+                selector: "email",
+                path:     "product.manufacturer.email",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            phone: {
+                selector: "phone",
+                path:     "product.manufacturer.phone",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            },
+            url: {
+                selector: "url",
+                path:     "product.manufacturer.url",
+                rules: {
+                    domToModel: {
+                        "": { transform: { type:  "gpii.schemas.transforms.stripEmptyString", inputPath: "" } }
+                    }
+                }
+            }
         },
         components: {
+            error: {
+                options: {
+                    model: {
+                        fieldErrors: "{templateFormControl}.model.fieldErrors"
+                    },
+                    template:    "validation-error-summary"
+                }
+            },
             // This component is not responsible for displaying success or error messages on its own, so we replace
             // the built-in success and error components from the base grade with dummy `fluid.identity` components.
             //success: { type: "fluid.identity" },
@@ -156,7 +237,7 @@
         invokers: {
             hideOnSuccess: {
                 funcName: "gpii.ul.product.toggle.onSave.hideOnSuccess",
-                args:     ["{that}", "{arguments}"]
+                args:     ["{that}", "{arguments}.0"]
             }
         }
     });
@@ -261,7 +342,9 @@
                 createOnEvent: "{product}.events.onRenderedAndReadyForEdit",
                 container:     ".product-edit",
                 options: {
-                    model: "{product}.model"
+                    model: {
+                        product: "{product}.model.product"
+                    }
                 }
             },
             // Toggles must exist at this level so that they can be aware of both the view and edit form, thus we have
@@ -314,7 +397,8 @@
                 options: {
                     listeners: {
                         "{edit}.events.requestReceived": {
-                            func: "{that}.hideOnSuccess"
+                            func: "{that}.hideOnSuccess",
+                            args: ["{arguments}.1"] // component, success
                         }
                     }
                 }
