@@ -1,10 +1,6 @@
 // TODO: Migrate this to a "content aware" part of the API when this feature is complete:  https://github.com/GPII/gpii-express/pull/6
 // Component to display the view/edit interface for a single product.
 
-// TODO:  The renderer should be the only thing to initialize the form.
-
-// TODO:  The view component should still be capable of rerendering on model changes?  Refresh?  Different page?
-
 /* global fluid */
 (function () {
     "use strict";
@@ -15,6 +11,14 @@
     fluid.defaults("gpii.ul.product.edit.status", {
         gradeNames: ["gpii.ul.select"],
         template: "product-edit-status",
+        select: {
+            options: [
+                { value: "new", label: "New"},
+                { value: "active", label: "Active"},
+                { value: "discontinued", label: "Discontinued"},
+                { value: "deleted", label: "Deleted"},
+            ]
+        },
         selectors:  {
             select:  ""
         }
@@ -22,17 +26,20 @@
 
     // The component that handles the binding, etc. for the "Edit" form.
     fluid.defaults("gpii.ul.product.edit", {
-        gradeNames: ["gpii.handlebars.templateFormControl"],
+        // gradeNames: ["gpii.handlebars.templateFormControl"],
+        gradeNames: ["gpii.schemas.client.errorAwareForm"],
+        schemaKey:  "product-update-input.json",
         ajaxOptions: {
             url:         "/api/product",
             method:      "PUT",
-            processData: false,
+            // processData: false,
             contentType: "application/json",
             headers: {
                 accept: "application/json"
             }
         },
         rules: {
+            // TODO: Decouple the validation payload from the request payload, so that we can enable "live" validation.  Currently doesn't work because the "payload" is a string and no longer a JSON object.
             modelToRequestPayload: {
                 "": {
                     transform: {
@@ -164,20 +171,23 @@
                 }
             }
         },
+        errorBindings: {
+            name:             "name",
+            description:      "description",
+            source:           "source",
+            sid:              "sid",
+            uid:              "uid",
+            manufacturerName: "manufacturer.name",
+            address:          "manufacturer.address",
+            cityTown:         "manufacturer.cityTown",
+            provinceRegion:   "manufacturer.provinceRegion",
+            postalCode:       "manufacturer.postalCode",
+            country:          "manufacturer.country",
+            email:            "manufacturer.email",
+            phone:            "manufacturer.phone",
+            url:              "manufacturer.url"
+        },
         components: {
-            error: {
-                options: {
-                    model: {
-                        fieldErrors: "{templateFormControl}.model.fieldErrors"
-                    },
-                    template:    "validation-error-summary"
-                }
-            },
-            // This component is not responsible for displaying success or error messages on its own, so we replace
-            // the built-in success and error components from the base grade with dummy `fluid.identity` components.
-            //success: { type: "fluid.identity" },
-            //error:   { type: "fluid.identity" },
-            // The "status" controls.
             status: {
                 type:          "gpii.ul.product.edit.status",
                 createOnEvent: "{edit}.events.onMarkupRendered",
