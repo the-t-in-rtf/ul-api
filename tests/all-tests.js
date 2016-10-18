@@ -3,7 +3,6 @@
 //
 "use strict";
 
-// TODO:  Review this with Antranig.  From the coverage reports, it looks like the tests are running, but no test output is displayed.
 require("./js/docs-tests");
 require("./js/product");
 require("./js/products-tests");
