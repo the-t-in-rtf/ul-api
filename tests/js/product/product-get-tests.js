@@ -214,7 +214,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                     ]
                 },
                 {
-                    name: "Request a source recored we do not have permission to see...",
+                    name: "Request a source record we do not have permission to see...",
                     type: "test",
                     sequence: [
                         {
