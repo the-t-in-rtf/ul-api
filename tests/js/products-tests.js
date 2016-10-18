@@ -59,7 +59,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             }
         },
         loggedIn: {
-            "sources": [ "unified", "existing" ]
+            "sources": [ "unified", "~existing" ]
         },
         singleStatus: {
             "params": {
@@ -151,11 +151,8 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "description": "Read&Write GOLD integrates with familiar applications (i.e. Microsoft Word, Internet Explorer, and Adobe Reader) giving access to features for reading, writing, and research support from within programs used every day.<br /><br />Technical details:<br />REPORTED WITHIN THE RESEARCH PROJECT<br />Cloud4All",
                 "manufacturer": {
                     "name": "TEXTHELP SYSTEM INC",
-                    "address": "",
-                    "postalCode": "",
                     "cityTown": "Woburn",
                     "country": "UNITED STATES",
-                    "phone": "",
                     "email": "u.s.info@texthelp.com",
                     "url": "http://www.texthelp.com"
                 },
