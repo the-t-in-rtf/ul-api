@@ -212,6 +212,28 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                             ]
                         }
                     ]
+                },
+                {
+                    name: "Request a source recored we do not have permission to see...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestPrivateRecord}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestPrivateRecord}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should receive an authorization error...",
+                                "{requestPrivateRecord}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.private",
+                                401
+                            ]
+                        }
+                    ]
                 }
             ]
         }
@@ -272,6 +294,12 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "api/product/~existing/contrib1?includeSources=true"
+            }
+        },
+        requestPrivateRecord: {
+            type: "gpii.tests.ul.api.product.get.request",
+            options: {
+                endpoint: "api/product/~existing/contrib1"
             }
         }
     },
@@ -394,6 +422,11 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "description":  "sample description 1",
             "manufacturer": { "name": "sample manufacturer 1" },
             "updated":      "2014-01-01"
+        },
+        private: {
+            isError: true,
+            "statusCode": 401,
+            message: "You are not authorized to view this record."
         }
     }
 });
