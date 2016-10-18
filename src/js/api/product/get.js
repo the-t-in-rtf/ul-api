@@ -115,7 +115,7 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
         });
 
         // Sort the child records by source, and sid, so that the order is consistent
-        gpii.sort(that.productRecord.sources, ["source", "sid"])
+        gpii.sort(that.productRecord.sources, ["source", "sid"]);
 
         that.sendResponse(200, { req: that.options.request, product: that.productRecord});
     }
@@ -234,12 +234,6 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/product.handlebars"
-    // rules: {
-    //     contextToExpose: {
-    //         "req":     "req",
-    //         "product": "product"
-    //     }
-    // }
 });
 
 fluid.defaults("gpii.ul.api.product.get", {
