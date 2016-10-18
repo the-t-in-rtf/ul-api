@@ -1,30 +1,39 @@
 {
     "Handicat": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Vlibank": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["import"]
     },
     "Siva": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "EASTIN Admin": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Hjælpemiddelbasen": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Rehadat": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Hulpmiddelenwijzer": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Oaeg": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "Dlf data": {
-        "view": ["reviewers", "eastin"]
+        "view": ["*"],
+        "edit": ["importer"]
     },
     "unified": {
         "view": ["*"],

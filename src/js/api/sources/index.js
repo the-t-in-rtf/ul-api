@@ -43,6 +43,7 @@ gpii.ul.api.sources.request.handleRequest = function (that) {
 
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
     var visibleSources = gpii.ul.api.sources.request.listReadableSources(that.options.sources, user);
+    visibleSources.sort();
 
     that.sendResponse(200, { sources: visibleSources });
 };

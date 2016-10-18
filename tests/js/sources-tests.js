@@ -12,11 +12,29 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
     expected: {
         anonymous: {
             "sources": [
+                "Dlf data",
+                "EASTIN Admin",
+                "Handicat",
+                "Hjælpemiddelbasen",
+                "Hulpmiddelenwijzer",
+                "Oaeg",
+                "Rehadat",
+                "Siva",
+                "Vlibank",
                 "unified"
             ]
         },
         loggedIn: {
             "sources": [
+                "Dlf data",
+                "EASTIN Admin",
+                "Handicat",
+                "Hjælpemiddelbasen",
+                "Hulpmiddelenwijzer",
+                "Oaeg",
+                "Rehadat",
+                "Siva",
+                "Vlibank",
                 "unified",
                 "~existing"
             ]
