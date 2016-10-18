@@ -23,8 +23,8 @@ require("./404");
 fluid.defaults("gpii.ul.api", {
     gradeNames:   ["gpii.express.router"],
     path:         "/api",
-    templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     sessionKey:   "_ul_user",
     events: {
         productEndpointReady: null,

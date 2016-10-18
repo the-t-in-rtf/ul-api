@@ -5,7 +5,7 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("./src/js/api/index");
 
-fluid.module.register("gpii-ul-api", __dirname, require);
+fluid.module.register("ul-api", __dirname, require);
 
 // Provide a function to optionally load test support.
 fluid.registerNamespace("gpii.ul.api");

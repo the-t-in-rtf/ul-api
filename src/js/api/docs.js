@@ -38,7 +38,7 @@ fluid.defaults("gpii.ul.api.docs", {
     template:   "pages/docs",
     layout:     "main",
     title:      "PTD API Documentation",
-    mdFile:     "%gpii-ul-api/docs/apidocs.md",
+    mdFile:     "%ul-api/docs/apidocs.md",
     markedOptions: {
     },
     invokers: {

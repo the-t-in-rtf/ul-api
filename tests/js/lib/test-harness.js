@@ -23,8 +23,8 @@ gpii.tests.ul.api.harness.stopServer = function (that) {
 
 fluid.defaults("gpii.tests.ul.api.harness", {
     gradeNames:   ["fluid.component"],
-    templateDirs: ["%gpii-ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%gpii-ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     ports: {
         api:    7633,
         couch:  7634
@@ -133,7 +133,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                         options: {
                             priority: "after:session",
                             path: "/nm",
-                            content: "%gpii-ul-api/node_modules"
+                            content: "%ul-api/node_modules"
                         }
 
                     },
@@ -143,7 +143,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                         options: {
                             priority: "after:session",
                             path:    "/src",
-                            content: "%gpii-ul-api/src"
+                            content: "%ul-api/src"
                         }
                     },
                     // JSON Schemas, available individually
@@ -198,8 +198,8 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                         options: {
                             path: "/",
                             databases: {
-                                users: { data: "%gpii-ul-api/tests/data/users.json" },
-                                ul:    { data: ["%gpii-ul-api/tests/data/pilot.json", "%gpii-ul-api/tests/data/deleted.json", "%gpii-ul-api/tests/data/updates.json", "%gpii-ul-api/tests/data/views.json", "%gpii-ul-api/tests/data/whetstone.json"] }
+                                users: { data: "%ul-api/tests/data/users.json" },
+                                ul:    { data: ["%ul-api/tests/data/pilot.json", "%ul-api/tests/data/deleted.json", "%ul-api/tests/data/updates.json", "%ul-api/tests/data/views.json", "%ul-api/tests/data/whetstone.json"] }
                             }
                         }
                     }
