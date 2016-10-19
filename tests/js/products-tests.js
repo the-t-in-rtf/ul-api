@@ -349,12 +349,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{unifiedLoginRequest}.send",
-                            args: [{ username: "existing", password: "password"}]
-                        },
-                        {
-                            event:     "{unifiedLoginRequest}.events.onComplete",
-                            listener:  "{unifiedRequest}.send"
+                            func: "{unifiedRequest}.send"
                         },
                         {
                             event:     "{unifiedRequest}.events.onComplete",
@@ -474,13 +469,10 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 endpoint: "api/products?sources=%22~existing%22&unified=false"
             }
         },
-        unifiedLoginRequest: {
-            type: "gpii.test.ul.api.request.login"
-        },
         unifiedRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?sources=%22~existing%22"
+                endpoint: "api/products?sources=%22Vlibank%22"
             }
         },
         newestUnifiedRequest: {

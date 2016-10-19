@@ -105,65 +105,6 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                     }
                 },
                 components: {
-                    corsHeaders: {
-                        type: "gpii.express.middleware.headerSetter",
-                        options: {
-                            priority: "after:allSchemas",
-                            headers: {
-                                cors: {
-                                    fieldName: "Access-Control-Allow-Origin",
-                                    template:  "*",
-                                    dataRules: {}
-                                }
-                            }
-                        }
-                    },
-                    // Client-side Handlebars template bundles
-                    inline: {
-                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
-                        options: {
-                            priority: "after:corsHeaders",
-                            path: "/hbs",
-                            templateDirs: "{harness}.options.templateDirs"
-                        }
-                    },
-                    // NPM dependencies
-                    nm: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            priority: "after:session",
-                            path: "/nm",
-                            content: "%ul-api/node_modules"
-                        }
-
-                    },
-                    // Our own source
-                    src: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            priority: "after:session",
-                            path:    "/src",
-                            content: "%ul-api/src"
-                        }
-                    },
-                    // JSON Schemas, available individually
-                    schemas: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            priority: "after:session",
-                            path:    "/schemas",
-                            content: "{harness}.options.schemaDirs"
-                        }
-                    },
-                    // Bundled JSON Schemas for client-side validation
-                    allSchemas: {
-                        type: "gpii.schema.inlineMiddleware",
-                        options: {
-                            priority: "after:session",
-                            path:       "/allSchemas",
-                            schemaDirs: "{harness}.options.schemaDirs"
-                        }
-                    },
                     api: {
                         type: "gpii.ul.api",
                         options: {
