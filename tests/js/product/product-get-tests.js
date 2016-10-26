@@ -356,7 +356,8 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "name":         "sample product 1",
             "description":  "sample description 1",
             "manufacturer": { "name": "sample manufacturer 1" },
-            "updated":      "2015-01-01"
+            "updated":      "2015-01-01",
+            "sources":      []
         },
         unified: {
             "uid":          "unifiedNewer",
@@ -366,7 +367,8 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             "name":         "sample product 1",
             "description":  "sample description 1",
             "manufacturer": { "name": "sample manufacturer 1" },
-            "updated":      "2015-01-01"
+            "updated":      "2015-01-01",
+            "sources":      []
         },
         unifiedSourcesAnonymous: {
             "uid":          "unifiedNewer",

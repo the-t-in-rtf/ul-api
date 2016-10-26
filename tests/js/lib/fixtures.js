@@ -10,9 +10,6 @@ kettle.loadTestingSupport();
 require("gpii-express");
 gpii.express.loadTestingSupport();
 
-require("gpii-webdriver");
-gpii.webdriver.loadTestingSupport();
-
 require("./test-harness");
 
 // A caseholder for tests that do not require a browser (browser tests can use gpii.test.webdriver.caseHolder).
@@ -51,41 +48,6 @@ fluid.defaults("gpii.test.ul.api.testEnvironment.withLucene", {
                 luceneStopped: "luceneStopped",
                 pouchStopped:  "pouchStopped"
             }
-        }
-    }
-});
-
-
-// An environment for tests that also require a gpii-webdriver browser.
-fluid.registerNamespace("gpii.test.ul.api.testEnvironment.withBrowser");
-gpii.test.ul.api.testEnvironment.withBrowser.stopFixtures = function (that) {
-    gpii.tests.ul.api.harness.stopServer(that);
-    that.browser.end();
-};
-fluid.defaults("gpii.test.ul.api.testEnvironment.withBrowser", {
-    gradeNames: ["gpii.test.browser.environment", "gpii.tests.ul.api.harness"],
-    events: {
-        onFixturesConstructed: {
-            events: {
-                apiReady:      "apiReady",
-                luceneStarted: "luceneStarted",
-                pouchStarted:  "pouchStarted",
-                onDriverReady: "onDriverReady"
-            }
-        },
-        onFixturesStopped: {
-            events: {
-                apiStopped:    "apiStopped",
-                luceneStopped: "luceneStopped",
-                pouchStopped:  "pouchStopped",
-                onDriverStopped: "onDriverStopped"
-            }
-        }
-    },
-    invokers: {
-        stopFixtures: {
-            funcName: "gpii.test.ul.api.testEnvironment.withBrowser.stopFixtures",
-            args:     ["{that}"]
         }
     }
 });

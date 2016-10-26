@@ -262,7 +262,15 @@ fluid.defaults("gpii.ul.api.product.get", {
         requestContentToValidate: {
             "sid":            "params.sid",
             "source":         "params.source",
-            "includeSources": "query.includeSources"
+            "includeSources": {
+                "transform": {
+                    "type": "fluid.transforms.firstValue",
+                    "values": [
+                        "query.includeSources",
+                        {literalValue: true}
+                    ]
+                }
+            }
         }
     },
     distributeOptions: [
