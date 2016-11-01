@@ -208,13 +208,27 @@ fluid.defaults("gpii.ul.api.products.handler", {
     }
 });
 
-fluid.defaults("gpii.ul.api.products.middleware", {
-    gradeNames: ["gpii.express.middleware.requestAware"],
-    handlerGrades: ["gpii.ul.api.products.handler"]
+fluid.defaults("gpii.ul.api.products.handler.html", {
+    gradeNames: ["gpii.ul.api.products.handler", "gpii.ul.api.htmlMessageHandler"],
+    templateKey: "pages/products.handlebars",
+    rules: {
+        contextToExpose: {
+            "layout": "layout", // This is required to support custom layouts
+            "model": {
+                "user":     "req.session._ul_user",
+                "products": "products"
+            },
+            "req":  {
+                "query":  "req.query",
+                "params": "req.params"
+            }
+        }
+    }
 });
 
 fluid.defaults("gpii.ul.api.products", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames:   ["gpii.ul.api.validationGatedContentAware"],
+    timeout: 60000,
     path: "/products",
     events: {
         onSchemasDereferenced: null
@@ -225,6 +239,7 @@ fluid.defaults("gpii.ul.api.products", {
         }
     },
     schemas: {
+        input:  "products-input.json",
         output: "products-results.json"
     },
     defaultParams: {
@@ -237,42 +252,15 @@ fluid.defaults("gpii.ul.api.products", {
         source: "{that}.options.defaultParams",
         target: "{that gpii.express.handler}.options.defaultParams"
     },
-    components: {
-        // The JSON middleware requires valid input to access....
-        validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
-            options: {
-                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
-                rules: {
-                    requestContentToValidate: "{gpii.ul.api.products}.options.rules.requestContentToValidate",
-                    validationErrorsToResponse: {
-                        isError:    { literalValue: true },
-                        statusCode: { literalValue: 400 },
-                        message: {
-                            literalValue: "{that}.options.messages.error"
-                        },
-                        fieldErrors: ""
-                    }
-                },
-                schemaDirs: "{gpii.ul.api}.options.schemaDirs",
-                schemaKey:  "products-input.json",
-                messages: {
-                    error: "The information you provided is incomplete or incorrect.  Please check the following:"
-                },
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.products}.events.onSchemasDereferenced.fire"
-                    }
-                }
-            }
+    handlers: {
+        html: {
+            contentType:   "text/html",
+            handlerGrades: ["gpii.ul.api.products.handler.html"]
         },
-        // Middleware to serve a JSON payload with the list of products.
-        jsonMiddleware: {
-            type: "gpii.ul.api.products.middleware",
-            options: {
-                priority: "after:validationMiddleware",
-                rules: "{gpii.ul.api.products}.options.rules"
-            }
+        json: {
+            priority:      "after:html",
+            contentType:   "application/json",
+            handlerGrades: ["gpii.ul.api.products.handler"]
         }
     }
 });

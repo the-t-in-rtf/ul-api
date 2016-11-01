@@ -34,28 +34,7 @@ fluid.defaults("gpii.ul.api", {
             }
         }
     },
-    rules: {
-        contextToExpose: {
-            "layout": "layout", // This is required to support custom layouts
-            "model": {
-                "user":    "req.session._ul_user",
-                "product": "product"
-            },
-            "req":  {
-                "query":  "req.query",
-                "params": "req.params"
-            }
-        }
-    },
     distributeOptions: [
-        {
-            source: "{that}.options.rules.contextToExpose",
-            target: "{that gpii.express.singleTemplateMiddleware}.options.rules.contextToExpose"
-        },
-        {
-            source: "{that}.options.rules.contextToExpose",
-            target: "{that gpii.ul.api.htmlMessageHandler}.options.rules.contextToExpose"
-        },
         {
             source: "{that}.options.sessionKey",
             target: "{that gpii.express.handler}.options.sessionKey"

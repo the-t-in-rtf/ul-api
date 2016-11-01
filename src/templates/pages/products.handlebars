@@ -1,0 +1,13 @@
+<h1>Products (HTML)</h1>
+
+<p>You requested an HTML list of products, which is presented below.  For a more complete front end, check
+out the <a href="https://github.com/GPII/ul-website">ul-website package</a>.</p>
+
+
+{{#if model.products}}
+    <ul>
+        {{#each model.products}}<li><a href="/api/product/{{source}}/{{sid}}">{{name}}</a></li>{{/each}}
+    </ul>
+{{else}}
+    No products found.
+{{/if}}

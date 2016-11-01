@@ -233,7 +233,20 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
 
 fluid.defaults("gpii.ul.api.product.get.handler.html", {
     gradeNames: ["gpii.ul.api.product.get.handler.base", "gpii.ul.api.htmlMessageHandler"],
-    templateKey: "pages/product.handlebars"
+    templateKey: "pages/product.handlebars",
+    rules: {
+        contextToExpose: {
+            "layout": "layout", // This is required to support custom layouts
+            "model": {
+                "user":     "req.session._ul_user",
+                "product":  "product"
+            },
+            "req":  {
+                "query":  "req.query",
+                "params": "req.params"
+            }
+        }
+    }
 });
 
 fluid.defaults("gpii.ul.api.product.get", {
