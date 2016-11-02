@@ -6,6 +6,7 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("gpii-sort");
 require("./sources");
+require("./lib/htmlMessageHandler");
 
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
@@ -248,10 +249,20 @@ fluid.defaults("gpii.ul.api.products", {
         unified: true,
         sources: ["unified"]
     },
-    distributeOptions: {
-        source: "{that}.options.defaultParams",
-        target: "{that gpii.express.handler}.options.defaultParams"
-    },
+    distributeOptions: [
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        },
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
+        },
+        {
+            source: "{that}.options.defaultParams",
+            target: "{that gpii.express.handler}.options.defaultParams"
+        }
+    ],
     handlers: {
         html: {
             contentType:   "text/html",

@@ -148,6 +148,7 @@
       }
     },
     "status": {
+      "type": "string",
       "enum": [
         "new",
         "active",
@@ -156,6 +157,7 @@
       ],
       "description": "The status of this record. Current supported values are: 'new', 'active', 'discontinued', 'deleted'.",
       "errors": {
+        "type": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'.",
         "enum": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'."
       }
     },

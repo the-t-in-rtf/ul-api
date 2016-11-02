@@ -108,6 +108,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                     api: {
                         type: "gpii.ul.api",
                         options: {
+                            templateDirs: "{harness}.options.templateDirs",
                             priority: "after:jsonQueryParser",
                             urls:     "{harness}.options.urls",
                             listeners: {
@@ -115,6 +116,22 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                                     func: "{harness}.events.apiReady.fire"
                                 }
                             }
+                        }
+                    },
+                    inline: {
+                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
+                        options: {
+                            priority: "after:api",
+                            path: "/hbs",
+                            templateDirs: "{harness}.options.templateDirs"
+                        }
+                    },
+                    modules: {
+                        type: "gpii.express.router.static",
+                        options: {
+                            priority: "after:api",
+                            path: "/modules",
+                            content: "%ul-api/node_modules"
                         }
                     }
                 }

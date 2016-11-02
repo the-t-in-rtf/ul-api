@@ -21,9 +21,9 @@
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#baa1558d22ee7abcb6d6b6410af7cc95693f1b80",
     "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#c0becab841193c6378911643370c79b2c487b436",
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#9bc7d7254d941cdea1bf168d3f9477907a72b9e8",
-    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#3b15986a750a4bca6511db165acfbd5197900596",
+    "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#a3017d562125415a98b9d11675fdf5ddc7ebadf7",
     "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#db00b6e2168517d1e7d80d64224f024fa3ff248d",
-    "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene.git#d3c45d089c4b3c99cf0d1ea205247b01eacfdbc3",
+    "gpii-pouchdb-lucene": "0.1.0-dev.20161027T075313Z.8ef66e1",
     "gpii-sort": "git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20",
     "handlebars": "4.0.5",
     "infusion": "git://github.com/the-t-in-rtf/infusion.git#056bd1a246fd63f0123fcd375db8f6b157e245b8",
@@ -31,6 +31,7 @@
     "pagedown": "1.1.0"
   },
   "devDependencies": {
+    "ajv": "4.6.0",
     "eslint": "3.5.0",
     "fluid-grunt-eslint": "18.1.2",
     "foundation-sites": "6.2.4-rc1",
@@ -40,6 +41,8 @@
     "istanbul": "0.4.5",
     "jquery": "2.1.4",
     "jsonlint": "1.6.2",
+    "jsonpointer.js": "0.4.0",
+    "json-schema-ref-parser": "3.1.2",
     "kettle": "1.1.0",
     "moment": "2.15.0",
     "node-jqunit": "1.1.4"

@@ -18,7 +18,6 @@ require("./products");
 require("./search");
 require("./sources");
 require("./updates");
-require("./404");
 
 fluid.defaults("gpii.ul.api", {
     gradeNames:   ["gpii.express.router"],
@@ -160,41 +159,29 @@ fluid.defaults("gpii.ul.api", {
                 priority: "after:sources"
             }
         },
-        // TODO: Test that this returns reasonable responses for common errors (404s, permission failures).
-        // HTML error-handling middleware (for browsers making non-AJAX requests)
-        // htmlErrorHandler: {
-        //     type:     "gpii.handlebars.errorRenderingMiddleware",
-        //     options: {
-        //         priority: "after:sources",
-        //         templateKey: "pages/error"
-        //     }
-        // },
         docs: {
             type: "gpii.ul.api.docs",
             options: {
-                priority: "after:jsonErrorHandler"
+                priority: "after:updates"
             }
         },
-        // // TODO: Separate handler to pick up errors in the docs?  Try removing one of these.
+        htmlErrorHandler: {
+            type:     "gpii.handlebars.errorRenderingMiddleware",
+            options: {
+                priority: "after:docs",
+                templateKey: "pages/error"
+            }
+        },
         jsonErrors: {
             type: "gpii.express.middleware.error",
-            priority: "after:docs",
+            priority: "after:htmlErrorHandler",
             options: {
                 rules: {
                     errorOutputRules: {
-                        "isError":     "error.isError",
-                        "message":     "error.message",
-                        "fieldErrors": "error.fieldErrors"
+                        "":     ""
                     }
                 }
             }
-        },
-        // TODO: Get this working again or remove with cause.
-        // Handling for bad URLs.  TODO:  Test this to confirm that it displays a meaningful message in both HTML and JSON
-        // TODO:  Test with a bogus path versus /
-        // 404: {
-        //     type:     "gpii.ul.api.404",
-        //     priority: "after:jsonErrors"
-        // }
+        }
     }
 });
