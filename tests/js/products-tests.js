@@ -24,6 +24,17 @@ gpii.tests.ul.api.products.checkSecondPage = function (secondBody, firstRequest)
     jqUnit.assertDeepEq("The last record from the first page should equal the first record from the second page...", lastFirstPageRecord, firstSecondPageRecord);
 };
 
+gpii.tests.ul.api.checkResultsBySource = function (message, expected, actual, minRecords, sources) {
+    gpii.tests.ul.api.checkResults(message, expected, actual, minRecords);
+
+    var recordsWithWrongSource = 0;
+    fluid.each(actual.products, function (record) {
+        recordsWithWrongSource += sources.indexOf(record.source) !== -1 ? 0 : 1;
+    });
+
+    jqUnit.assertEquals(message + " (no records with the wrong status)", 0, recordsWithWrongSource);
+};
+
 gpii.tests.ul.api.checkResultsByStatus = function (message, expected, actual, minRecords, statuses) {
     gpii.tests.ul.api.checkResults(message, expected, actual, minRecords);
 
@@ -335,8 +346,8 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                         },
                         {
                             event:     "{authorizedSourceRequest}.events.onComplete",
-                            listener:  "gpii.tests.ul.api.checkResults",
-                            args:      ["We should be able to see records from our private source...", "{that}.options.expected.authorizedSource", "@expand:JSON.parse({arguments}.0)", 2] //  message, expected, actual, minRecords
+                            listener:  "gpii.tests.ul.api.checkResultsBySource",
+                            args:      ["We should be able to see records from our private source...", "{that}.options.expected.authorizedSource", "@expand:JSON.parse({arguments}.0)", 2, ["~existing"]] // message, expected, actual, minRecords, sources
                         },
                         {
                             func: "jqUnit.assertEquals",
