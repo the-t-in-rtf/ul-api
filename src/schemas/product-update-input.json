@@ -2,7 +2,7 @@
   "type": "object",
   "id": "product-update-input.json",
   "$ref": "product-base.json",
-  "required": ["description", "manufacturer", "name", "sid", "source", "status", "uid"],
+  "required": ["description", "manufacturer", "name", "sid", "source", "status"],
   "properties": {
     "source": {
       "$ref": "product-base.json#/definitions/source"
