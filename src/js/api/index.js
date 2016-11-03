@@ -37,6 +37,10 @@ fluid.defaults("gpii.ul.api", {
         {
             source: "{that}.options.sessionKey",
             target: "{that gpii.express.handler}.options.sessionKey"
+        },
+        {
+            source: "{that}.options.rules.contextToExpose",
+            target: "{that gpii.ul.api.htmlMessageHandler}.options.rules.contextToExpose"
         }
     ],
     components: {
@@ -76,8 +80,12 @@ fluid.defaults("gpii.ul.api", {
                     initBlock: {
                         options: {
                             contextToOptionsRules: {
-                                req:     "req",
-                                product: "product"
+                                req:      "req",
+                                product:  "product",
+                                products: "products",
+                                model: {
+                                    user: "user"
+                                }
                             }
                         }
                     }

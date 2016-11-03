@@ -4,9 +4,21 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 fluid.registerNamespace("gpii.ul.api.htmlMessageHandler");
-gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, context) {
-    var filteredContext = fluid.model.transformWithRules(context, that.options.rules.contextToExpose);
-    that.options.response.status(statusCode).render(that.options.templateKey, filteredContext);
+
+/**
+ *
+ * Construct a handlebars context from our options and the supplied body, and render an HTML response.
+ *
+ * @param that - The component itself.
+ * @param statusCode - The HTTP status code to send.
+ * @param body - The JSON payload we are rendering as HTML.
+ */
+gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, body) {
+    var componentContext = fluid.model.transformWithRules(that, that.options.rules.componentMaterialToExpose);
+    var responseContext = fluid.model.transformWithRules(body, that.options.rules.bodyToExpose);
+    var combinedContext = fluid.merge(null, componentContext, responseContext);
+
+    that.options.response.status(statusCode).render(that.options.templateKey, combinedContext);
     that.events.afterResponseSent.fire(that);
 };
 
@@ -16,6 +28,21 @@ gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, conte
 //
 fluid.defaults("gpii.ul.api.htmlMessageHandler", {
     templateKey: "pages/message.handlebars",
+    rules: {
+        componentMaterialToExpose: {
+            req:  {
+                query:  "options.request.query",
+                params: "options.request.params"
+            },
+            user: "options.request.session._ul_user",
+            model: {
+                user: "options.request.session._ul_user"
+            }
+        },
+        bodyToExpose: {
+            "": ""
+        }
+    },
     invokers: {
         sendResponse: {
             funcName: "gpii.ul.api.htmlMessageHandler.renderAndSend",

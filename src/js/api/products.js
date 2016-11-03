@@ -213,15 +213,9 @@ fluid.defaults("gpii.ul.api.products.handler.html", {
     gradeNames: ["gpii.ul.api.products.handler", "gpii.ul.api.htmlMessageHandler"],
     templateKey: "pages/products.handlebars",
     rules: {
-        contextToExpose: {
-            "layout": "layout", // This is required to support custom layouts
-            "model": {
-                "user":     "req.session._ul_user",
+        bodyToExpose: {
+            model: {
                 "products": "products"
-            },
-            "req":  {
-                "query":  "req.query",
-                "params": "req.params"
             }
         }
     }
