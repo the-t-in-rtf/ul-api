@@ -84,7 +84,9 @@ fluid.defaults("gpii.ul.api", {
                                 product:  "product",
                                 products: "products",
                                 model: {
-                                    user: "user"
+                                    user:     "req.session._ul_user",
+                                    product:  "product",
+                                    products: "products"
                                 }
                             }
                         }

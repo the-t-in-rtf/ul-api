@@ -214,6 +214,7 @@ fluid.defaults("gpii.ul.api.products.handler.html", {
     templateKey: "pages/products.handlebars",
     rules: {
         bodyToExpose: {
+            "": "notfound",
             model: {
                 "products": "products"
             }
