@@ -22,7 +22,8 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
                 "Siva",
                 "Vlibank",
                 "unified"
-            ]
+            ],
+            "writableSources": []
         },
         loggedIn: {
             "sources": [
@@ -37,7 +38,8 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
                 "Vlibank",
                 "unified",
                 "~existing"
-            ]
+            ],
+            "writableSources": ["~existing"]
         }
     },
     rawModules: [

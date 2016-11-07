@@ -42,10 +42,14 @@ fluid.registerNamespace("gpii.ul.api.sources.request");
 gpii.ul.api.sources.request.handleRequest = function (that) {
 
     var user = that.options.request.session && that.options.request.session[that.options.sessionKey];
-    var visibleSources = gpii.ul.api.sources.request.listReadableSources(that.options.sources, user);
-    visibleSources.sort();
 
-    that.sendResponse(200, { sources: visibleSources });
+    var readSources = gpii.ul.api.sources.request.listReadableSources(that.options.sources, user);
+    readSources.sort();
+
+    var writableSources = gpii.ul.api.sources.request.listWritableSources(that.options.sources, user);
+    writableSources.sort();
+
+    that.sendResponse(200, { sources: readSources, writableSources: writableSources });
 };
 
 /**
