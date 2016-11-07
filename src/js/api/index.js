@@ -80,7 +80,10 @@ fluid.defaults("gpii.ul.api", {
                     initBlock: {
                         options: {
                             contextToOptionsRules: {
-                                req:      "req",
+                                req: {
+                                    "params": "req.params",
+                                    "query":  "req.query"
+                                },
                                 product:  "product",
                                 products: "products",
                                 model: {
