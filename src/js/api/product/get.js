@@ -80,7 +80,7 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         }
         // No need to look up sources, just send what we have now.
         else {
-            that.sendResponse(200, { req: that.options.request, product: that.productRecord});
+            that.sendResponse(200, { product: that.productRecord });
         }
     }
 };
@@ -117,7 +117,7 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
         // Sort the child records by source, and sid, so that the order is consistent
         gpii.sort(that.productRecord.sources, ["source", "sid"]);
 
-        that.sendResponse(200, { req: that.options.request, product: that.productRecord});
+        that.sendResponse(200, { product: that.productRecord});
     }
 };
 
@@ -238,12 +238,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.html", {
         bodyToExpose: {
             "layout": "layout", // This is required to support custom layouts
             "model": {
-                "user":     "req.session._ul_user",
                 "product":  "product"
-            },
-            "req":  {
-                "query":  "req.query",
-                "params": "req.params"
             }
         }
     }
