@@ -62,7 +62,7 @@ gpii.ul.api.sources.request.handleRequest = function (that) {
  *
  */
 gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
-    return gpii.ul.api.sources.request.listSources(sources, user, "view")
+    return gpii.ul.api.sources.request.listSources(sources, user, "view");
 };
 
 /**
@@ -75,7 +75,7 @@ gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
  *
  */
 gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
-    return gpii.ul.api.sources.request.listSources(sources, user, "edit")
+    return gpii.ul.api.sources.request.listSources(sources, user, "edit");
 };
 
 /**

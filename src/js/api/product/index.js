@@ -6,7 +6,7 @@ var fluid = require("infusion");
 require("gpii-express");
 
 require("./get");
-require("./update")
+require("./update");
 require("./delete");
 
 fluid.defaults("gpii.ul.api.product", {

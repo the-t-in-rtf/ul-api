@@ -78,7 +78,7 @@ gpii.ul.api.updates.handler.json.processCouchResponse = function (that, couchRes
         // Group into a set of unfiltered clusters by UID.
         fluid.each(unifiedRecords, function (unifiedRecord) {
             if (sourceRecords[unifiedRecord.uid]) {
-                gpii.sort(sourceRecords[unifiedRecord.uid], ["source", "sid"])
+                gpii.sort(sourceRecords[unifiedRecord.uid], ["source", "sid"]);
                 unifiedRecord.sources = sourceRecords[unifiedRecord.uid];
             }
         });

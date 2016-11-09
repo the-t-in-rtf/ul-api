@@ -33,6 +33,7 @@
   "devDependencies": {
     "ajv": "4.6.0",
     "eslint": "3.5.0",
+    "eslint-config-fluid": "1.0.0",
     "fluid-grunt-eslint": "18.1.2",
     "foundation-sites": "6.2.4-rc1",
     "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#c5f401181b1f021e13400bf7a5d117880cb18b16",
