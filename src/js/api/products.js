@@ -138,7 +138,7 @@ gpii.ul.api.products.handler.processCouchResponse = function (that, couchRespons
     }
     else {
         fluid.each(couchResponse.rows, function (row) {
-            if (gpii.ul.api.products.handler.matchesFilters(that, row)) {
+            if (gpii.ul.api.products.handler.matchesFilters(that, row.value)) {
                 products.push(fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove));
             }
         });

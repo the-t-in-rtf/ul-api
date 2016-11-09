@@ -38,7 +38,7 @@
     },
     {
       "uid": "unifiedNewer",
-      "status": "new",
+      "status": "deleted",
       "source": "~existing",
       "sid": "contrib5",
       "name": "sample product 5",

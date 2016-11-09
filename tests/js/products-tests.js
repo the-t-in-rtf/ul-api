@@ -117,8 +117,19 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             message: "You do not have permission to view one or more of the sources you requested."
         },
         authorizedSource: {
+            "total_rows": 3,
             "params": {
                 "sources": [ "~existing" ],
+                "offset": 0,
+                "limit": 250,
+                "unified": false
+            }
+        },
+        sourceAndStatus: {
+            "total_rows": 1,
+            "params": {
+                "sources": [ "~existing" ],
+                "status":  "deleted",
                 "offset": 0,
                 "limit": 250,
                 "unified": false
@@ -356,6 +367,29 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                     ]
                 },
                 {
+                    name: "Use both a source and status in a single query...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{sourceAndStatusLoginRequest}.send",
+                            args: [{ username: "existing", password: "password"}]
+                        },
+                        {
+                            event:     "{sourceAndStatusLoginRequest}.events.onComplete",
+                            listener:  "{sourceAndStatusRequest}.send"
+                        },
+                        {
+                            event:     "{sourceAndStatusRequest}.events.onComplete",
+                            listener:  "gpii.tests.ul.api.checkResultsBySource",
+                            args:      ["We should be able to see our private deleted record...", "{that}.options.expected.sourceAndStatus", "@expand:JSON.parse({arguments}.0)", 1, ["~existing"]] // message, expected, actual, minRecords, sources
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args:  ["The correct status code should have been returned...", 200, "{sourceAndStatusRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
                     name: "Request a set of unified records...",
                     type: "test",
                     sequence: [
@@ -478,6 +512,15 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             type: "gpii.test.ul.api.request",
             options: {
                 endpoint: "api/products?sources=%22~existing%22&unified=false"
+            }
+        },
+        sourceAndStatusLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        sourceAndStatusRequest: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/products?sources=%22~existing%22&unified=false&status=%22deleted%22"
             }
         },
         unifiedRequest: {
