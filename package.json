@@ -23,10 +23,10 @@
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#9bc7d7254d941cdea1bf168d3f9477907a72b9e8",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#a3017d562125415a98b9d11675fdf5ddc7ebadf7",
     "gpii-location-bar-relay": "git://github.com/the-t-in-rtf/gpii-location-bar-relay#db00b6e2168517d1e7d80d64224f024fa3ff248d",
-    "gpii-pouchdb-lucene": "0.1.0-dev.20161027T075313Z.8ef66e1",
+    "gpii-pouchdb-lucene": "git://github.com/the-t-in-rtf/gpii-pouchdb-lucene#8ef66e1c41bab3ca02c3f53f7c7ef77740927383",
     "gpii-sort": "git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20",
     "handlebars": "4.0.5",
-    "infusion": "git://github.com/the-t-in-rtf/infusion.git#056bd1a246fd63f0123fcd375db8f6b157e245b8",
+    "infusion": "git://github.com/the-t-in-rtf/infusion.git#8202f87093d60bdf7c58d95a41ecdf27aca0eca9",
     "marked": "0.3.6",
     "pagedown": "1.1.0"
   },

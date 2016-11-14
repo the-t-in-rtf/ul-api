@@ -242,6 +242,7 @@ fluid.defaults("gpii.ul.api.products", {
         offset:  0,
         limit:   250,
         unified: true,
+        sortBy:  "/name",
         sources: ["unified"]
     },
     distributeOptions: [
