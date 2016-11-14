@@ -260,14 +260,22 @@ fluid.defaults("gpii.ul.api.products", {
         }
     ],
     handlers: {
+        // If we have no "accepts" headers or accept text/html, send HTML.
         html: {
             contentType:   "text/html",
             handlerGrades: ["gpii.ul.api.products.handler.html"]
         },
+        // If we accept json, send that.
         json: {
             priority:      "after:html",
             contentType:   "application/json",
             handlerGrades: ["gpii.ul.api.products.handler"]
+        },
+        // Otherwise, send HTML.
+        default: {
+            priority:      "after:json",
+            contentType:   "*/*",
+            handlerGrades: ["gpii.ul.api.products.handler.html"]
         }
     }
 });
