@@ -2,6 +2,8 @@
 // tests for all read methods
 "use strict";
 var fluid = require("infusion");
+fluid.logObjectRenderChars = 20000;
+
 var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
@@ -403,7 +405,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                 },
                 {
                     "uid": "unifiedNewer",
-                    "status": "new",
+                    "status": "deleted",
                     "source": "~existing",
                     "sid": "contrib5",
                     "name": "sample product 5",

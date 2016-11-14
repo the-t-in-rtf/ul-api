@@ -48,7 +48,7 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                         },
                         {
                             "uid": "unifiedNewer",
-                            "status": "new",
+                            "status": "deleted",
                             "source": "~existing",
                             "sid": "contrib5",
                             "name": "sample product 5",
@@ -94,7 +94,7 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
                         },
                         {
                             "uid": "unifiedNewer",
-                            "status": "new",
+                            "status": "deleted",
                             "source": "~existing",
                             "sid": "contrib5",
                             "name": "sample product 5",

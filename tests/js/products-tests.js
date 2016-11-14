@@ -66,6 +66,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": ["unified"],
                 "unified": true,
                 "offset": 0,
+                "sortBy": "/name",
                 "limit": 250
             }
         },
@@ -78,6 +79,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "status":  "deleted",
                 "unified": true,
                 "offset": 0,
+                "sortBy": "/name",
                 "limit": 250
             }
         },
@@ -87,6 +89,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "status": ["deleted", "new"],
                 "unified": true,
                 "offset": 0,
+                "sortBy": "/name",
                 "limit": 250
             }
         },
@@ -100,6 +103,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": [ "unified" ],
                 "offset": 0,
                 "limit": 250,
+                "sortBy": "/name",
                 "unified": true
             }
         },
@@ -109,6 +113,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": [ "unified" ],
                 "offset": 0,
                 "limit": 250,
+                "sortBy": "/name",
                 "unified": true
             }
         },
@@ -122,6 +127,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": [ "~existing" ],
                 "offset": 0,
                 "limit": 250,
+                "sortBy": "/name",
                 "unified": false
             }
         },
@@ -131,6 +137,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": [ "~existing" ],
                 "status":  "deleted",
                 "offset": 0,
+                "sortBy": "/name",
                 "limit": 250,
                 "unified": false
             }
