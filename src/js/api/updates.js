@@ -109,6 +109,7 @@ gpii.ul.api.updates.handler.json.processCouchResponse = function (that, couchRes
             }
         });
 
+        gpii.sort(matchingClusters, ["name"]);
         that.sendResponse(200, { params: userOptions, total_rows: matchingClusters.length, products: matchingClusters });
     }
 
