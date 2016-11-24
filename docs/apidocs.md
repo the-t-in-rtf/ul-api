@@ -12,9 +12,8 @@ This section describes the data objects which are accepted by and returned by th
 
 ## Product Records
 
-A product is a distinct piece of software or equipment.  Products may have more than one version or edition, which may provide different features.  For more information about editions (versions or models of a product), see the ["Editions"](#editions) section.
-
-All products in the Unified Listing have the following common fields:
+A product is a distinct piece of software or equipment.  All products in the Unified Listing have the following common 
+fields:
 
 |Field                      | Description |
 | ------------------------- | ----------- |
@@ -24,7 +23,7 @@ All products in the Unified Listing have the following common fields:
 | `sid` (required)          | The unique identifier to identify this record in the source database.|
 | `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "unified".|
 | `status` (required)       | The status of this record.  Current supported values are listed below under ["status"](#statuses).|
-| `uid` (required)          | The Universal ID ("uid") is an id that is unique in the Unified listing and which is constant for different editions of a product (see ["editions"](#editions)).  "Source" products use this field to indicate which "unified" record they are associated with (if any).|
+| `uid` (required)          | The Universal ID ("uid") is the ID of the "unified" record for a given product.  "Source" products use this field to indicate which "unified" record they are associated with (if any). |
 | `updated` (required)      | The date at which the record was last updated.|
 | `language`                | The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.|
 
@@ -341,11 +340,10 @@ current user is listed as the author.  You must be logged in to use this REST en
 
 ## `GET /api/product/{source}/{sid}{?includeSources}`
 
-Returns a single product identified by its `source` and `sid`.  Only the latest published version is displayed by
-default.  For ["unified" records](#unified-records), full source products are not included by default.
+Returns a single product identified by its `source` and `sid`.  For ["unified" records](#unified-records), source products are included by default.
 
 + Parameters
-    + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source data rather than simply displaying a list of source IDs.  Defaults to "false".
+    + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source records associated with this record.  Defaults to "false".
 
 + Response 200 (application/record+json)
     + Headers
@@ -373,19 +371,6 @@ default.  For ["unified" records](#unified-records), full source products are no
             },
             "status": "active",
             "language: "en_us",
-            "editions": {
-                "default": {
-                    "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                    "settingsHandlers": [],
-                    "lifeCycleManager": {}
-                }
-            },
-            "ontologies": {
-                "iso9999": {
-                    "primaryCode": "22.39.12",
-                    "secondaryCodes": [ "22.39.07" ]
-                }
-            },
             "updated": "2014-11-30T22:04:15Z"
         }
         ```
@@ -393,7 +378,7 @@ default.  For ["unified" records](#unified-records), full source products are no
 
 ## `GET /api/products{?sources,status,updatedSince,offset,limit,unified,sortBy}`
 
-Return the list of products, optionally filtered by source, status, or date of last update.
+Return a list of products, with optional filters (see below).
 
 + Parameters
     + `sources` (optional, string) ... Only display products from a particular source.  If this is omitted, records from all visible sources are displayed. For a single value, you can supply a string. For multiple values, you must supply an array
