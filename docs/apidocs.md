@@ -7,6 +7,7 @@ This API allows developers to read, create, and update products stored in the Un
 This document describes the REST API, including the syntax required to use all commands, and the format of all data to be passed into and returned from the API.
 
 # Data Objects
+
 This section describes the data objects which are accepted by and returned by the Unified Listing API.
 
 ## Product Records
@@ -21,11 +22,10 @@ All products in the Unified Listing have the following common fields:
 | `manufacturer` (required) | A JSON object describing the manufacturer (see ["Manufacturer"](#manufacturers) below).|
 | `name` (required)         | The name of the product.|
 | `sid` (required)          | The unique identifier to identify this record in the source database.|
-| `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "ul".|
+| `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "unified".|
 | `status` (required)       | The status of this record.  Current supported values are listed below under ["status"](#statuses).|
 | `uid` (required)          | The Universal ID ("uid") is an id that is unique in the Unified listing and which is constant for different editions of a product (see ["editions"](#editions)).  "Source" products use this field to indicate which "unified" record they are associated with (if any).|
 | `updated` (required)      | The date at which the record was last updated.|
-| `images`                  | Images of the product, if available (see ["Images"](#images) below).|
 | `language`                | The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.|
 
 ## Source Records
@@ -34,19 +34,18 @@ The Unified Listing contains source products pulled from sources such as [EASTIN
 
 In addition to the fields described in ["Product records"](#product-records), a source record includes the following additional fields:
 
-| Field                   | Description |
-| ----------------------- | ----------- |
-| `sourceData` (required) | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|
+| Field        | Description |
+| ------------ | ----------- |
+| `sourceData` | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|
 
 
-A JSON representation of a source record with all fields looks as follows:
+Here is an example JSON representation of a source record with all fields:
 
     {
         "source": "siva",
         "sid": "19449",
         "name": "ANS - SET PUNTATORI ANS",
         "description": "",
-
         "manufacturer": {
             "name": "ASSOCIAZIONE NAZIONALE SUBVEDENTI",
             "address": "Via Clericetti, 22",
@@ -121,17 +120,22 @@ A JSON representation of a source record with all fields looks as follows:
 
 ## Unified Listing Records
 
-The Unified Listing also contains "unified" records, which are a summary in US English of one or more source products.  In addition to the fields mentioned in ["Product records"](#product-records), a "unified" record supports the following additional fields:
+The Unified Listing also contains "unified" records, which are a summary in US English of one or more source products.  
+When adding or editing a record, all of the fields mentioned in ["Product records"](#product-records) are supported.
 
-| Field                 | Description |
-| --------------------- | ----------- |
-| `sources` (required)  | An array containing a list of "source" products (see ["Source Records"](#source-records) above). |
-| `editions` (required) | A hash containing one or more "editions" of the product (see ["Editions"](#editions) below).  At least one edition named "default" is required. |
+When viewing a record returned by the API, you may also see the following additional fields.
 
-A full "unified" record in JSON format looks something like:
+| Field     | Description |
+| --------- | ----------- |
+| `sources` | An array containing a list of "source" products (see ["Source Records"](#source-records) above). |
+
+This field is not editable, and will be rejected if you pass it as part of a new record or an update.  In most endpoints,
+you can retrieve records without this field by setting the `unified` option to `false`.
+
+Here is an example of a full "unified" record in JSON format, as might be returned by the search:
 
     {
-        "source": "ul",
+        "source": "unified",
         "uid": "com.maker.win7.sample",
         "sid": "com.maker.win7.sample",
         "name": "A Sample Unified Listing Record",
@@ -150,19 +154,6 @@ A full "unified" record in JSON format looks something like:
         "status": "active",
         "language: "en_us",
         "sources": [ "siva:2345" ],
-        "editions": {
-            "default": {
-                "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                "settingsHandlers": [],
-                "lifeCycleManager": {}
-            }
-        },
-        "ontologies": {
-            "iso9999": {
-                "primaryCode": "22.39.12",
-                "secondaryCodes": [ "22.39.07" ]
-            }
-        },
         "updated": "2014-11-30T22:04:15Z"
     }
 
@@ -209,70 +200,6 @@ The company or individual that produces a product is called a "manufacturer" in 
         "url": "http://www.maker.com/"
     }
 
-## Images
-
-Many of the databases we federate include pictures with a product listing.  If available, we store this information in the `images` field of a source record.  This field is an array, there can be multiple images for a single product.  We need two pieces of information about each image. First, we need a URL where the image can be found.  Second, we need text we can use to describe the image for screen readers.  Each entry looks roughly like:
-
-    {
-      "url": "http://www.vlibank.be/scan.jsp?PID=A10149&TYPE=jpg&RANG=A&SIZE=medium",
-      "description": "Mini Joystick with Push - / USB"
-    }
-
-## Ontologies
-
-There are many ways of classifying products and product features.  In the Unified Listing, we provide support for multiple ontologies without proscribing a set format.  The only thing that is required is that the ontology itself have a key which is unique within the given record.
-
-Here is an example of the ontologies section of a product represented in JSON format (based on the data we have from EASTIN):
-
-    "ontologies": {
-        "iso9999": {
-            "primaryCode": "22.39.12",
-            "secondaryCodes": [ "22.39.07" ]
-        }
-    }
-
-## Editions
-
-A software product may have various versions or editions that operate on different platforms.  A physical device may have multiple editions that provide different features.
-
-Each variation on the product that has different features is an "edition" of the product.  Variations that are only cosmetically different (such as different colors) should not need to have more than one edition.
-
-An edition is required to have a unique key.  There must be at least one edition, called "default" which is used when the version or variation is otherwise unknown.
-
-The simplest set of editions represented in JSON format looks something like the following:
-
-    editions: {
-        "default": {
-            "contexts": {
-                "OS": [{
-                        "id": "android",
-                        "version": ">=0.1"
-                    }]
-            },
-            "settingsHandlers": [
-                {
-                    "type": "gpii.settingsHandlers.noSettings",
-                    "capabilities": [
-                        "display.screenReader",
-                        "applications.com\\.android\\.freespeech.id",
-                        "display.screenReader.applications.com\\.android\\.freespeech.name"
-                    ]
-                }
-            ],
-            "lifecycleManager": {
-                "start": [
-                    {
-                        "type": "gpii.androidActivityManager.startFreespeech"
-                    }
-                ],
-                "stop": [
-                    {
-                    }
-                ]
-            }
-        }
-    }
-
 # Encoding of Query Variables
 
 All query string variables must be [percent encoded](https://tools.ietf.org/html/rfc3986#section-2.1) stringified JSON.
@@ -291,7 +218,7 @@ something like:
 ## `/api/user`
 
 Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
-create an account, log in, etc. are described [in the user management API documentation](/api/user/).
+create an account, log in, etc. are described [in the user management API documentation](https://github.com/GPII/gpii-express-user/).
 
 ## `POST /api/product`
 
@@ -464,17 +391,18 @@ default.  For ["unified" records](#unified-records), full source products are no
         ```
 
 
-## `GET /api/products{?sources,status,updated,offset,limit,unified}`
+## `GET /api/products{?sources,status,updatedSince,offset,limit,unified,sortBy}`
 
 Return the list of products, optionally filtered by source, status, or date of last update.
 
 + Parameters
     + `sources` (optional, string) ... Only display products from a particular source.  If this is omitted, records from all visible sources are displayed. For a single value, you can supply a string. For multiple values, you must supply an array
     + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
-    + `updated` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
+    + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.
     + `unified` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  Defaults to `true`.  If this is set to `true` and `sources` is set, the `unified` source is automatically added to the list of `sources` (see above).
+    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
 + Response 200 (application/headers+json)
     + Headers
@@ -491,7 +419,7 @@ Return the list of products, optionally filtered by source, status, or date of l
             },
             "products": [
                 {
-                    "source": "ul",
+                    "source": "unified",
                     "uid": "com.maker.win7.sample",
                     "sid": "com.maker.win7.sample",
                     "name": "A Sample Unified Listing Record",
@@ -510,13 +438,6 @@ Return the list of products, optionally filtered by source, status, or date of l
                     "status": "active",
                     "language: "en_us",
                     "sources": [ "siva:2345" ],
-                    "editions": {
-                        "default": {
-                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                            "settingsHandlers": [],
-                            "lifeCycleManager": {}
-                        }
-                    }
                     "updated": "2014-11-30T22:04:15Z"
                 }
             ],
@@ -529,16 +450,16 @@ also be used to list the records from one or more sources, for example, to displ
 you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 
 
-## `GET /api/search{?q,status,sortBy,offset,limit}`
+## `GET /api/search{?q,status,offset,limit,sortBy}`
 
 Performs a full text search of all data, returns matching products, grouped by the "unified" record they are associated with.
 
  + Parameters
     + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
-    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
     + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
+    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
  + Response 200 (application/search+json)
      + Headers
@@ -558,7 +479,7 @@ Performs a full text search of all data, returns matching products, grouped by t
              },
              "products": [
                 {
-                    "source": "ul",
+                    "source": "unified",
                     "uid": "com.maker.win7.sample",
                     "sid": "com.maker.win7.sample",
                     "name": "A Sample Unified Listing Record",
@@ -577,13 +498,6 @@ Performs a full text search of all data, returns matching products, grouped by t
                     "status": "active",
                     "language: "en_us",
                     "sources": [ "siva:2345" ],
-                    "editions": {
-                        "default": {
-                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                            "settingsHandlers": [],
-                            "lifeCycleManager": {}
-                        }
-                    }
                     "updated": "2014-11-30T22:04:15Z"
                 }
              ],
@@ -591,16 +505,16 @@ Performs a full text search of all data, returns matching products, grouped by t
          }
          ```
 
- ## GET /api/suggest/{?q,source,status,sort}
+ ## GET /api/suggest/{?q,status,sortBy}
 
 Suggest a short list of products that match the search terms.  Performs a search as in /api/search, but only returns 5
-results and does not support paging.  Equivalent to `/api/search?q=<SEARCH>&results=5&unified=false`.  Used to suggest related products
-when building a "unified" record.
+results and does not support paging.  Equivalent to `/api/search?q=<SEARCH>&results=5&unified=false`.  This is intended
+for use in things like "autocomplete", where a fuller list would be too cumbersome.
 
  + Parameters
      + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax][1] to construct more complex searches.
-     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
      + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
+     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
  + Response 200 (application/search+json)
      + Headers
@@ -617,7 +531,7 @@ when building a "unified" record.
              },
              "products": [
                 {
-                    "source": "ul",
+                    "source": "unified",
                     "uid": "com.maker.win7.sample",
                     "sid": "com.maker.win7.sample",
                     "name": "A Sample Unified Listing Record",
@@ -636,13 +550,6 @@ when building a "unified" record.
                     "status": "active",
                     "language: "en_us",
                     "sources": [ "siva:2345" ],
-                    "editions": {
-                        "default": {
-                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                            "settingsHandlers": [],
-                            "lifeCycleManager": {}
-                        }
-                    }
                     "updated": "2014-11-30T22:04:15Z"
                 }
              ],
@@ -675,7 +582,7 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
              },
              "products": [
                 {
-                    "source": "ul",
+                    "source": "unified",
                     "uid": "com.maker.win7.sample",
                     "sid": "com.maker.win7.sample",
                     "name": "A Sample Unified Listing Record",
@@ -694,13 +601,6 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
                     "status": "active",
                     "language: "en_us",
                     "sources": [ "siva:2345" ],
-                    "editions": {
-                        "default": {
-                            "contexts": { "OS": { "id": "android", "version": ">=0.1" } },
-                            "settingsHandlers": [],
-                            "lifeCycleManager": {}
-                        }
-                    }
                     "updated": "2014-11-30T22:04:15Z"
                 }
              ],
