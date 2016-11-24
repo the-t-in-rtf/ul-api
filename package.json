@@ -18,7 +18,7 @@
   "homepage": "https://github.com/GPII/ul-api",
   "dependencies": {
     "gpii-binder": "git://github.com/the-t-in-rtf/gpii-binder#0bb79d96aeb5b9ed19efd01fbc9149440f6fe4a4",
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express#baa1558d22ee7abcb6d6b6410af7cc95693f1b80",
+    "gpii-express": "1.0.0",
     "gpii-express-user": "git://github.com/the-t-in-rtf/gpii-express-user.git#df88d54741a203f11bd962966252f1389108a694",
     "gpii-handlebars": "git://github.com/the-t-in-rtf/gpii-handlebars.git#9bc7d7254d941cdea1bf168d3f9477907a72b9e8",
     "gpii-json-schema": "git://github.com/the-t-in-rtf/gpii-json-schema.git#a3017d562125415a98b9d11675fdf5ddc7ebadf7",
