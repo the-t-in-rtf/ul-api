@@ -74,6 +74,18 @@
             "verified":    true
         },
         {
+            "_id":         "org.couchdb.user:sai",
+            "type":        "user",
+            "name":        "sai",
+            "username":    "sai",
+            "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
+            "salt":        "secret",
+            "iterations":  10,
+            "email":       "sai@localhost",
+            "roles":       ["sai"],
+            "verified":    true
+        },
+        {
             "_id": "_design/lookup",
             "views": {
                 "byUsernameOrEmail": {

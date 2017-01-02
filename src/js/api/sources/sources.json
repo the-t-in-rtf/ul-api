@@ -43,6 +43,10 @@
       "view": ["reviewers", "sat"],
       "edit": ["sat"]
     },
+    "sai": {
+        "view": ["reviewers", "sai"],
+        "edit": ["sai"]
+    },
     "~": {
         "view": ["~", "reviewers"]
     }
