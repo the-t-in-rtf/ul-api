@@ -133,7 +133,7 @@
         "url": {
           "type": "string",
           "description": "The manufacturer's web site.",
-          "format": "url",
+          "format": "uri",
           "errors": {
             "type":      "The manufacturer's URL  must be a string.",
             "minLength": "The manufacturer's URL must be a valid URL."

@@ -4,8 +4,20 @@
 var fluid       = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
+var jqUnit = require("node-jqunit");
+
 require("../../../");
 gpii.ul.api.loadTestingSupport();
+
+fluid.registerNamespace("gpii.tests.ul.api.product.updates");
+
+gpii.tests.ul.api.product.updates.verifyRecordUpdated = function (expectedRecord, actualRecord) {
+    jqUnit.assertLeftHand("The record should have been updated...", expectedRecord, actualRecord);
+
+    var fiveMinutesAgo = new Date(Date.now() - 300000);
+    var dateUpdated = new Date(actualRecord.updated);
+    jqUnit.assertTrue("The record should have been flagged as having been updated in the last five minutes", dateUpdated > fiveMinutesAgo);
+};
 
 fluid.defaults("gpii.tests.ul.api.product.post.request", {
     gradeNames: ["gpii.test.ul.api.request"],
@@ -16,6 +28,16 @@ fluid.defaults("gpii.tests.ul.api.product.post.request", {
 fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     inputs: {
+        ancientNewRecord: {
+            description: "A record that is around ten years old, but which we're just hearing about now.",
+            manufacturer: { name: "Buffalo Trace"},
+            name: "Ancient One",
+            sid: "ancient",
+            source: "~existing",
+            status: "active",
+            uid: "1421059432806-826608318",
+            updated: "2007-01-03T02:08:35.699Z"
+        },
         validNewRecord: {
             description: "sample description",
             manufacturer: { name: "sample manufacturer"},
@@ -31,7 +53,7 @@ fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
             name: "testing POST /api/product/:source/:sid",
             tests: [
                 {
-                    name: "Try to create a record without logging in...",
+                    name: "Try to create a valid record without logging in...",
                     type: "test",
                     sequence: [
                         {
@@ -72,6 +94,64 @@ fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
                             args: ["The status code should be correct...", 400, "{invalidRecord}.nativeResponse.statusCode"]
                         }
                     ]
+                },
+                {
+                    name: "Update a single record...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{validRecordLogin}.send",
+                            args: [{ username: "existing", password: "password" }]
+                        },
+                        {
+                            event:    "{validRecordLogin}.events.onComplete",
+                            listener: "{validRecordPost}.send",
+                            args: ["{that}.options.inputs.validNewRecord"]
+                        },
+                        {
+                            event:    "{validRecordPost}.events.onComplete",
+                            listener: "{validRecordVerify}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{validRecordVerify}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.updates.verifyRecordUpdated",
+                            args:     ["{that}.options.inputs.validNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be correct...", 200, "{validRecordVerify}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
+                    name: "Add a record with an explicit `updated` value...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{ancientRecordLogin}.send",
+                            args: [{ username: "existing", password: "password" }]
+                        },
+                        {
+                            event:    "{ancientRecordLogin}.events.onComplete",
+                            listener: "{ancientRecordPost}.send",
+                            args: ["{that}.options.inputs.ancientNewRecord"]
+                        },
+                        {
+                            event:    "{ancientRecordPost}.events.onComplete",
+                            listener: "{ancientRecordVerify}.send",
+                            args:     []
+                        },
+                        {
+                            event:    "{ancientRecordVerify}.events.onComplete",
+                            listener: "jqUnit.assertDeepEq",
+                            args:     ["The record should have been updated, including the supplied (older) date of last update...", "{that}.options.inputs.ancientNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
+                        },
+                        {
+                            func: "jqUnit.assertEquals",
+                            args: ["The status code should be correct...", 200, "{ancientRecordVerify}.nativeResponse.statusCode"]
+                        }
+                    ]
                 }
             ]
         }
@@ -88,6 +168,30 @@ fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
         },
         invalidRecord: {
             type: "gpii.tests.ul.api.product.post.request"
+        },
+        validRecordLogin: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        validRecordPost: {
+            type: "gpii.tests.ul.api.product.post.request"
+        },
+        validRecordVerify: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint:   "api/product/~existing/contrib99"
+            }
+        },
+        ancientRecordLogin: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        ancientRecordPost: {
+            type: "gpii.tests.ul.api.product.post.request"
+        },
+        ancientRecordVerify: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint:   "api/product/~existing/ancient"
+            }
         }
     },
     expected: {

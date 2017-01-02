@@ -23,6 +23,10 @@ gpii.ul.api.product.update.handler.handleRequest = function (that) {
 gpii.ul.api.product.update.handler.processReadResponse = function (that, couchResponse) {
     var suppliedRecord = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
+    if (!suppliedRecord.updated) {
+        suppliedRecord.updated = (new Date()).toISOString();
+    };
+
     if (!couchResponse) {
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchReadResponse});
     }
@@ -35,6 +39,7 @@ gpii.ul.api.product.update.handler.processReadResponse = function (that, couchRe
         var updatedRecord = fluid.copy(suppliedRecord);
         updatedRecord._id = couchRecord._id;
         updatedRecord._rev = couchRecord._rev;
+
         that.productPutter.set({ id: couchRecord._id}, updatedRecord);
     }
     else {
