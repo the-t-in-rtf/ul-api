@@ -29,6 +29,10 @@ fluid.defaults("gpii.tests.ul.api.harness", {
         api:    7633,
         couch:  7634
     },
+    distributeOptions: {
+        record: 120000,
+        target: "{that gpii.express.handler}.options.timeout"
+    },
     urls: {
         couch: {
             expander: {
