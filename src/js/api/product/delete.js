@@ -20,6 +20,15 @@ gpii.ul.api.product["delete"].handler.handleRequest = function (that) {
     }
 };
 
+/**
+ *
+ * Examine the results of reading the existing data from CouchDB and continue processing.
+ *
+ * @param that - The handler component.
+ * @param couchResponse - The raw response from CouchDB.
+ * @returns {*} - The original response from couch so that further onRead listeners have access to it.
+ *
+ */
 gpii.ul.api.product["delete"].handler.processReadResponse = function (that, couchResponse) {
     if (!couchResponse) {
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchReadResponse});
@@ -31,7 +40,8 @@ gpii.ul.api.product["delete"].handler.processReadResponse = function (that, couc
         var record = couchResponse.rows[0].value;
         var updatedRecord = fluid.copy(record);
         updatedRecord.status = "deleted";
-        that.productWriter.set({ id: record._id}, updatedRecord);
+        var promise = that.productWriter.set({ id: record._id}, updatedRecord);
+        promise.then(that.handleSuccess, that.handleError);
     }
     else {
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.duplicateFound});
@@ -105,18 +115,6 @@ fluid.defaults("gpii.ul.api.product.delete.handler", {
                 },
                 termMap: {
                     "id": "%id"
-                },
-                listeners: {
-                    "onWrite.displayReceipt": {
-                        funcName: "gpii.ul.api.product.delete.handler.processWriteResponse",
-                        args: ["{gpii.express.handler}", "{arguments}.0"] // couchResponse
-                    },
-                    "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
-                        // args: [ 500, "{arguments}.0"] // statusCode, body
-                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
-                    }
                 }
             }
         }
@@ -125,6 +123,14 @@ fluid.defaults("gpii.ul.api.product.delete.handler", {
         handleRequest: {
             funcName: "gpii.ul.api.product.delete.handler.handleRequest",
             args:     ["{that}"]
+        },
+        handleSuccess: {
+            funcName: "gpii.ul.api.product.delete.handler.processWriteResponse",
+            args:     ["{that}", "{arguments}.0"] // couchResponse
+        },
+        handleError: {
+            func: "{that}.sendResponse",
+            args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
         }
     }
 });

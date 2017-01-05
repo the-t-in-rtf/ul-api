@@ -13,7 +13,7 @@ gpii.ul.api.product.update.handler.handleRequest = function (that) {
     if (writeableSources.indexOf(suppliedRecord.source) !== -1) {
         // get the current record's ID
         var params = [suppliedRecord.source, suppliedRecord.sid];
-        that.productReader.get({ key: JSON.stringify(params)});
+        that.productReader.get({ key: JSON.stringify(params)}).then(that.processReadResponse, that.handleError);
     }
     else {
         that.options.next({ isError: true, statusCode: 401, message: that.options.messages.notAuthorized});
@@ -31,7 +31,8 @@ gpii.ul.api.product.update.handler.processReadResponse = function (that, couchRe
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchReadResponse});
     }
     else if (couchResponse.rows.length === 0) {
-        that.productPoster.set({}, suppliedRecord);
+        that.statusCode = 201;
+        that.productPoster.set({}, suppliedRecord).then(that.processWriteResponse, that.handleError);
     }
     else if (couchResponse.rows.length === 1) {
         var couchRecord = couchResponse.rows[0].value;
@@ -40,7 +41,7 @@ gpii.ul.api.product.update.handler.processReadResponse = function (that, couchRe
         updatedRecord._id = couchRecord._id;
         updatedRecord._rev = couchRecord._rev;
 
-        that.productPutter.set({ id: couchRecord._id}, updatedRecord);
+        that.productPutter.set({ id: couchRecord._id}, updatedRecord).then(that.processWriteResponse, that.handleError);
     }
     else {
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.duplicateFound});
@@ -55,7 +56,9 @@ gpii.ul.api.product.update.handler.processWriteResponse = function (that, couchR
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchWriteResponse});
     }
     else {
-        that.sendResponse(200, { statusCode: 200, message: that.options.messages.recordUpdated});
+        var record = fluid.filterKeys(couchResponse, ["_id", "_rev"], true);
+        var messageKey = that.statusCode === 200 ? "recordUpdated" : "recordCreated";
+        that.sendResponse(that.statusCode, { statusCode: that.statusCode, message: that.options.messages[messageKey], product: record });
     }
 
     return couchResponse;
@@ -64,12 +67,16 @@ gpii.ul.api.product.update.handler.processWriteResponse = function (that, couchR
 
 fluid.defaults("gpii.ul.api.product.update.handler", {
     gradeNames: ["gpii.express.handler"],
+    members: {
+        statusCode: 200
+    },
     messages: {
         duplicateFound:       "More than one record exists for this source and SID.  Contact an administrator for help.",
         noCouchWriteResponse: "Could not update record.  Contact an administrator for help.",
         noCouchReadResponse:  "Could not retrieve the original record from the database.  Contact an administrator for help.",
         notAuthorized:        "You are not authorized to view this record.",
         notFound:             "Could not find a record matching the specified source and id.",
+        recordCreated:        "Record created.",
         recordUpdated:        "Record updated."
     },
     components: {
@@ -85,18 +92,6 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
                 },
                 termMap: {
                     "key": "%key"
-                },
-                listeners: {
-                    "onRead.processReadResponse": {
-                        func: "{gpii.express.handler}.processReadResponse",
-                        args:  ["{arguments}.0"] // couchResponse
-                    },
-                    "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
-                        // args: [ 500, "{arguments}.0"] // statusCode, body
-                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
-                    }
                 }
             }
         },
@@ -112,18 +107,6 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
                 },
                 termMap: {
                     "id": "%id"
-                },
-                listeners: {
-                    "onWrite.processWriteResponse": {
-                        func: "{gpii.express.handler}.processWriteResponse",
-                        args:  ["{arguments}.0"] // couchResponse
-                    },
-                    "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
-                        // args: [ 500, "{arguments}.0"] // statusCode, body
-                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
-                    }
                 }
             }
         },
@@ -132,19 +115,7 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
             options: {
                 gradeNames: ["kettle.dataSource.URL.writable"],
                 writeMethod: "POST",
-                url: "{gpii.ul.api}.options.urls.ulDb",
-                listeners: {
-                    "onWrite.processWriteResponse": {
-                        func: "{gpii.express.handler}.processWriteResponse",
-                        args:  ["{arguments}.0"] // couchResponse
-                    },
-                    "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
-                        args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
-                        // args: [ 500, "{arguments}.0"] // statusCode, body
-                        // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
-                    }
-                }
+                url: "{gpii.ul.api}.options.urls.ulDb"
             }
         }
     },
@@ -152,6 +123,12 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
         processWriteResponse: {
             funcName: "gpii.ul.api.product.update.handler.processWriteResponse",
             args:     ["{that}", "{arguments}.0"] // couchResponse
+        },
+        handleError: {
+            func: "{gpii.express.handler}.sendResponse",
+            args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
+            // args: [ 500, "{arguments}.0"] // statusCode, body
+            // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
         },
         handleRequest: {
             funcName: "gpii.ul.api.product.update.handler.handleRequest",
