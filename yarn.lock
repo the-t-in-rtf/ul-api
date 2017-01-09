@@ -1741,9 +1741,9 @@ gpii-pouchdb@1.0.1-dev.20161219T174439Z.2373866:
     testem "1.13.0"
     underscore-node "0.1.2"
 
-"gpii-sort@git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20":
-  version "1.0.0"
-  resolved "git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20"
+gpii-sort@1.0.0-dev.20160630T152357Z.3508dc6:
+  version "1.0.0-dev.20160630T152357Z.3508dc6"
+  resolved "https://registry.yarnpkg.com/gpii-sort/-/gpii-sort-1.0.0-dev.20160630T152357Z.3508dc6.tgz#2c971866a993660ec23788d7ab145c33daccc408"
   dependencies:
     infusion "2.0.0-dev.20160519T222603Z.754d2c6"
 

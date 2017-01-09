@@ -24,7 +24,7 @@
     "gpii-json-schema": "1.0.0-dev.20161219T192320Z.03caf53",
     "gpii-location-bar-relay": "1.0.0-dev.20170106T133727Z.180e737",
     "gpii-pouchdb-lucene": "0.1.0-dev.20170106T133425Z.4d44038",
-    "gpii-sort": "git://github.com/the-t-in-rtf/gpii-sort#3508dc67e9d84311249192102c22829931315b20",
+    "gpii-sort": "1.0.0-dev.20160630T152357Z.3508dc6",
     "handlebars": "4.0.5",
     "infusion": "2.0.0-dev.20161219T170555Z.5778f7e",
     "marked": "0.3.6",
