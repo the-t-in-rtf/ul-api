@@ -2095,6 +2095,17 @@
         }
       },
       "updated": "2015-01-12T12:08:56.721Z"
+    },
+    {
+      "source": "sai",
+      "sid":    "orphaned",
+      "status": "new",
+      "name": "Orphaned source record",
+      "description": "This record initially is not associated with a unified record...",
+      "manufacturer": {
+        "name": "Weyland-Yutani Corporation"
+      },
+      "updated": "2017-01-09T13:59:56.721Z"
     }
   ]
 }
