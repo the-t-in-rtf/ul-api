@@ -5,7 +5,7 @@
     },
     "Vlibank": {
         "view": ["*"],
-        "edit": ["import"]
+        "edit": ["importer"]
     },
     "Siva": {
         "view": ["*"],
