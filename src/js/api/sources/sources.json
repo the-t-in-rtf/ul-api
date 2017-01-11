@@ -45,7 +45,7 @@
     },
     "sai": {
         "view": ["reviewers", "sai"],
-        "edit": ["sai"]
+        "edit": ["reviewers", "sai"]
     },
     "~": {
         "view": ["~", "reviewers"]
