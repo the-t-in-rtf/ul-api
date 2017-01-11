@@ -27,6 +27,8 @@ gpii.ul.api.product.update.handler.processReadResponse = function (that, couchRe
         suppliedRecord.updated = (new Date()).toISOString();
     };
 
+    that.productRecord = suppliedRecord;
+
     if (!couchResponse) {
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchReadResponse});
     }
@@ -56,9 +58,8 @@ gpii.ul.api.product.update.handler.processWriteResponse = function (that, couchR
         that.options.next({ isError: true, statusCode: 500, message: that.options.messages.noCouchWriteResponse});
     }
     else {
-        var record = fluid.filterKeys(couchResponse, ["_id", "_rev"], true);
         var messageKey = that.statusCode === 200 ? "recordUpdated" : "recordCreated";
-        that.sendResponse(that.statusCode, { statusCode: that.statusCode, message: that.options.messages[messageKey], product: record });
+        that.sendResponse(that.statusCode, { statusCode: that.statusCode, message: that.options.messages[messageKey], product: that.productRecord });
     }
 
     return couchResponse;
@@ -144,7 +145,6 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
 fluid.defaults("gpii.ul.api.product.update", {
     gradeNames:   ["gpii.ul.api.validationGatedContentAware"],
     method:       ["put", "post"],
-    // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path:         ["/"],
     routerOptions: {
         mergeParams: true
