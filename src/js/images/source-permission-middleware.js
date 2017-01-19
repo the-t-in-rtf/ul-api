@@ -12,7 +12,7 @@
 var fluid = require("infusion");
 var gpii = fluid.registerNamespace("gpii");
 
-fluid.require("%ul-api/src/js/sources/index.js");
+require("../sources/");
 
 fluid.registerNamespace("gpii.ul.images.sourcePermissionMiddleware");
 
