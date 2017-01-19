@@ -131,6 +131,7 @@ fluid.defaults("gpii.ul.api.harness", {
                         options: {
                             priority: "after:api",
                             path: "/hbs",
+                            method: "get",
                             templateDirs: "{harness}.options.templateDirs"
                         }
                     },
