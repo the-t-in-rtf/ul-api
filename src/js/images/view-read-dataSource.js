@@ -38,6 +38,14 @@ gpii.ul.images.dataSources.couch.transformCouchResult = function (that, rawRespo
     }
 };
 
+gpii.ul.images.dataSources.couch.encodeUriComponent = function (value) {
+    return encodeURIComponent(value);
+};
+
+fluid.defaults("gpii.ul.images.dataSources.couch.encodeUriComponent", {
+    gradeNames: ["fluid.standardTransformFunction"]
+});
+
 /*
 
     For convenience, we provide reusable rules for views and individual records.
@@ -60,7 +68,13 @@ gpii.ul.images.dataSources.couch.rules = {
         metadata: {
             "uid":         "uid",
             "source":      "source",
-            "image_id":    "image_id",
+            // We need this transform because of sources like Rehadat, which use slashes in the image_id.
+            "image_id":    {
+                transform: {
+                    type:      "gpii.ul.images.dataSources.couch.encodeUriComponent",
+                    inputPath: "image_id"
+                }
+            },
             "description": "description",
             "copyright":   "copyright",
             "status":      "status"
