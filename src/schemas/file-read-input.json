@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id":      "file-read-input.json",
+  "title":   "File reader input Schema",
+  "type":    "object",
+  "definitions": {
+    "uid": {
+      "type": "string",
+      "errors": {
+        "type": "The 'uid' URL parameter must be a valid string."
+      }
+    },
+    "source": {
+      "type": "string",
+      "errors": {
+        "type": "The 'source' URL parameter must be a valid string."
+      }
+    },
+    "image_id": {
+      "type": "string",
+      "errors": {
+        "type": "The 'image_id' URL parameter must be a valid string."
+      }
+    },
+    "width": {
+      "type": "string",
+      "errors": {
+        "type": "The 'width' query parameter must be a valid string."
+      }
+    }
+  },
+  "properties": {
+    "uid":      { "$ref": "#/definitions/uid" },
+    "source":   { "$ref": "#/definitions/source" },
+    "image_id": { "$ref": "#/definitions/image_id" },
+    "width":    { "$ref": "#/definitions/width" }
+  },
+  "required": ["uid", "source", "image_id"],
+  "errors": {
+    "#/required/0": "You must provide a 'UID' URL parameter.  See the API docs for details.",
+    "#/required/1": "You must provide a 'source' URL parameter.  See the API docs for details.",
+    "#/required/2": "You must provide an 'image_id' URL parameter.  See the API docs for details."
+  }
+}

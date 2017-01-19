@@ -1,0 +1,12 @@
+{
+  "docs": [
+    {
+      "_id": "_design/gallery",
+      "views": {
+        "byUid": {
+          "map": "function (doc) { if (doc.type === \"gallery\") { emit(doc.uid, doc); } }"
+        }
+      }
+    }
+  ]
+}

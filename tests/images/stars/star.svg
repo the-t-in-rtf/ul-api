@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="210mm"
+   viewBox="0 0 744.09449 744.09448"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="star.svg"
+   inkscape:export-filename="/Users/duhrer/Source/rtf/ul-image-api/tests/images/star.png"
+   inkscape:export-xdpi="281.42999"
+   inkscape:export-ydpi="281.42999">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 561.91455 : 1"
+       inkscape:vp_y="0 : 615.90468 : 0"
+       inkscape:vp_z="744.09448 : 561.91455 : 1"
+       inkscape:persp3d-origin="372.04724 : 453.88875 : 1"
+       id="perspective5838" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="42.85714 : 297.60965 : 1"
+       inkscape:vp_y="0 : 999.99996 : 0"
+       inkscape:vp_z="832.6659 : 171.89537 : 1"
+       inkscape:persp3d-origin="437.76152 : 27.930244 : 1"
+       id="perspective5836" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-188.57143 : 554.75251 : 1"
+       inkscape:vp_y="0 : 999.99996 : 0"
+       inkscape:vp_z="555.52305 : 554.75251 : 1"
+       inkscape:persp3d-origin="183.47581 : 379.35881 : 1"
+       id="perspective5778" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-31.428572 : 414.75252 : 1"
+       inkscape:vp_y="0 : 999.99998 : 0"
+       inkscape:vp_z="712.66592 : 414.75252 : 1"
+       inkscape:persp3d-origin="340.61867 : 239.35882 : 1"
+       id="perspective5734" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5724"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop5726" />
+      <stop
+         style="stop-color:#d06584;stop-opacity:0;"
+         offset="1"
+         id="stop5728" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="246.49544"
+     inkscape:cy="453.05298"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:showpageshadow="false"
+     inkscape:snap-object-midpoints="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="951"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline"
+     transform="translate(0,-308.26772)">
+    <path
+       sodipodi:type="star"
+       style="opacity:1;fill:#5dd8e1;fill-opacity:1;fill-rule:nonzero;stroke:#4c2f15;stroke-width:46.27099991;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path5854"
+       sodipodi:sides="5"
+       sodipodi:cx="377.14285"
+       sodipodi:cy="718.07648"
+       sodipodi:r1="341.77209"
+       sodipodi:r2="170.88605"
+       sodipodi:arg1="0.94568779"
+       sodipodi:arg2="1.5740063"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 577.14285,995.21934 376.59431,888.96164 175.36773,993.92964 214.45189,770.36121 52.438967,611.42025 277.14285,579.50505 378.23994,376.30614 478.03041,580.1499 702.52477,613.50703 539.4948,771.40459 Z"
+       inkscape:transform-center-x="-0.31565168"
+       inkscape:transform-center-y="-31.458695"
+       transform="matrix(0.93107274,0,0,0.97353878,27.261312,22.390778)" />
+  </g>
+</svg>

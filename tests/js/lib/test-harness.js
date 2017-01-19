@@ -4,16 +4,15 @@
 /* eslint-env node */
 "use strict";
 var fluid = require("infusion");
-
 var gpii  = fluid.registerNamespace("gpii");
+var os    = require("os");
 
-require("../../../");
-
-fluid.require("%gpii-express");
+fluid.require("%ul-api");
+fluid.require("%ul-api/src/js/harness.js");
 fluid.require("%gpii-pouchdb");
 fluid.require("%gpii-pouchdb-lucene");
-fluid.require("%gpii-express-user");
-fluid.require("%gpii-handlebars");
+
+require("../lib/provisioner");
 
 fluid.registerNamespace("gpii.tests.ul.api.harness");
 gpii.tests.ul.api.harness.stopServer = function (that) {
@@ -21,52 +20,37 @@ gpii.tests.ul.api.harness.stopServer = function (that) {
     gpii.express.stopServer(that.pouch);
 };
 
+gpii.tests.ul.api.harness.getOriginalsPath = function (that) {
+    return gpii.tests.ul.api.harness.getPath(that, "originals");
+};
+
+gpii.tests.ul.api.harness.getCachePath = function (that) {
+    return gpii.tests.ul.api.harness.getPath(that, "cache");
+};
+
+gpii.tests.ul.api.harness.getPath = function (that, dirName) {
+    var uniqueDirName = that.id + "-" + dirName;
+    return gpii.ul.api.images.file.resolvePath(os.tmpDir(), uniqueDirName);
+};
+
 fluid.defaults("gpii.tests.ul.api.harness", {
-    gradeNames:   ["fluid.component"],
-    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
+    gradeNames:   ["gpii.ul.api.harness"],
+    originalsDir: "@expand:gpii.tests.ul.api.harness.getOriginalsPath({that})",
+    cacheDir:     "@expand:gpii.tests.ul.api.harness.getCachePath({that})",
     ports: {
         api:    7633,
         couch:  7634
     },
-    distributeOptions: {
-        record: 120000,
-        target: "{that gpii.express.handler}.options.timeout"
-    },
-    urls: {
-        couch: {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/", { port: "{that}.options.ports.couch" }]
-            }
-        },
-        ulDb: {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.ul"}]
-            }
-        },
-        usersDb: {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.users"}]
-            }
-        }
-    },
-    dbNames: {
-        ul:    "ul",
-        users: "users"
-    },
     events: {
-        apiReady:          null,
-        apiStopped:        null,
         constructFixtures: null,
         pouchStarted:      null,
         pouchStopped:      null,
+        provisionerStarted: null,
         onFixturesConstructed: {
             events: {
                 apiReady:      "apiReady",
-                pouchStarted:  "pouchStarted"
+                pouchStarted:  "pouchStarted",
+                provisionerStarted: "provisionerStarted"
             }
         },
         onFixturesStopped: {
@@ -85,61 +69,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
     },
     components: {
         express: {
-            type: "gpii.express.withJsonQueryParser",
-            createOnEvent: "constructFixtures",
-            options: {
-                // gradeNames: ["gpii.express.user.withRequiredMiddleware"],
-                port :   "{harness}.options.ports.api",
-                templateDirs: "{harness}.options.templateDirs",
-                events: {
-                    apiReady: null,
-                    onReady: {
-                        events: {
-                            apiReady: "apiReady",
-                            onStarted: "onStarted"
-                        }
-                    }
-                },
-                listeners: {
-                    onReady:   {
-                        func: "{harness}.events.apiReady.fire"
-                    },
-                    onStopped: {
-                        func: "{harness}.events.apiStopped.fire"
-                    }
-                },
-                components: {
-                    api: {
-                        type: "gpii.ul.api",
-                        options: {
-                            templateDirs: "{harness}.options.templateDirs",
-                            priority: "after:jsonQueryParser",
-                            urls:     "{harness}.options.urls",
-                            listeners: {
-                                "onReady.notifyParent": {
-                                    func: "{harness}.events.apiReady.fire"
-                                }
-                            }
-                        }
-                    },
-                    inline: {
-                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
-                        options: {
-                            priority: "after:api",
-                            path: "/hbs",
-                            templateDirs: "{harness}.options.templateDirs"
-                        }
-                    },
-                    modules: {
-                        type: "gpii.express.router.static",
-                        options: {
-                            priority: "after:api",
-                            path: "/modules",
-                            content: "%ul-api/node_modules"
-                        }
-                    }
-                }
-            }
+            createOnEvent: "constructFixtures"
         },
         pouch: {
             type: "gpii.express",
@@ -167,33 +97,38 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                     }
                 }
             }
+        },
+        provisioner: {
+            type: "gpii.tests.ul.api.provisioner",
+            createOnEvent: "constructFixtures",
+            options: {
+                originalsDir: "{harness}.options.originalsDir",
+                cacheDir:     "{harness}.options.cacheDir",
+                listeners: {
+                    "onProvisioned.notifyParent": {
+                        func: "{harness}.events.provisionerStarted.fire"
+                    }
+                }
+            }
         }
     }
 });
 
-// A harness that includes search integration (loads more slowly).
 fluid.registerNamespace("gpii.tests.ul.api.harness.withLucene");
 gpii.tests.ul.api.harness.stopServer.withLucene = function (that) {
     gpii.tests.ul.api.harness.stopServer(that);
     that.lucene.events.onReadyForShutdown.fire();
 };
 
+// A test harness that includes search integration (loads more slowly).
 fluid.defaults("gpii.tests.ul.api.harness.withLucene", {
-    gradeNames:   ["gpii.tests.ul.api.harness"],
+    gradeNames:   ["gpii.tests.ul.api.harness", "gpii.ul.api.harness.withLucene"],
     ports: {
         lucene: 7635
     },
-    urls: {
-        lucene: {
-            expander: {
-                funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/local/%dbName/_design/lucene/by_content", { port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
-            }
-        }
-    },
     events: {
-        luceneStarted:     null,
-        luceneStopped:     null,
+        luceneStarted: null,
+        luceneStopped: null,
         onFixturesConstructed: {
             events: {
                 apiReady:      "apiReady",
@@ -220,15 +155,15 @@ fluid.defaults("gpii.tests.ul.api.harness.withLucene", {
             type: "gpii.pouch.lucene",
             createOnEvent: "constructFixtures",
             options: {
-                port: "{harness}.options.ports.lucene",
-                dbUrl: "{harness}.options.urls.couch",
+                port: "{gpii.ul.api.harness.withLucene}.options.ports.lucene",
+                dbUrl: "{gpii.ul.api.harness.withLucene}.options.urls.couch",
                 processTimeout: 4000,
                 listeners: {
                     "onStarted.notifyParent": {
-                        func: "{harness}.events.luceneStarted.fire"
+                        func: "{gpii.ul.api.harness.withLucene}.events.luceneStarted.fire"
                     },
                     "onShutdownComplete.notifyParent": {
-                        func: "{harness}.events.luceneStopped.fire"
+                        func: "{gpii.ul.api.harness.withLucene}.events.luceneStopped.fire"
                     }
                 }
             }

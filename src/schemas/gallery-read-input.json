@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id":      "gallery-read-input.json",
+  "title":   "gallery 'read' input schema",
+  "type":    "object",
+  "definitions": {
+    "uid": {
+      "type": "string",
+      "errors": {
+        "type": "The 'uid' URL parameter must be a valid string."
+      }
+    }
+  },
+  "properties": {
+    "uid":      { "$ref": "#/definitions/uid" }
+  },
+  "required": ["uid"],
+  "errors": {
+    "#/required/0": "You must provide a 'UID' URL parameter.  See the API docs for details."
+  }
+}

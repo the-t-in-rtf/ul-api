@@ -1,0 +1,59 @@
+{
+  "docs": [
+    {
+      "_id":         "known-id",
+      "uid":         "1421059432806-826608318",
+      "type":        "metadata",
+      "source":      "~contributor",
+      "image_id":    "c.png",
+      "description": "An image of the letter C.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "approved"
+    },
+    {
+      "uid":         "1421059432806-826608318",
+      "source":      "~contributor",
+      "type":        "metadata",
+      "image_id":    "d.png",
+      "description": "An image of the letter D.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "rejected"
+    },
+    {
+      "uid":         "1421059432806-826608318",
+      "source":      "~contributor",
+      "type":        "metadata",
+      "image_id":    "e.png",
+      "description": "An image of the letter E.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "new"
+    },
+    {
+      "uid":         "1421059432806-826608318",
+      "source":      "unified",
+      "type":        "metadata",
+      "image_id":    "a.png",
+      "description": "An image of the letter A.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "approved"
+    },
+    {
+      "uid":         "1421059432806-826608318",
+      "source":      "unified",
+      "type":        "metadata",
+      "image_id":    "b.png",
+      "description": "An image of the letter B.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "verified"
+    },
+    {
+      "uid":         "1421059432806-826608318",
+      "source":      "unified",
+      "type":        "metadata",
+      "image_id":    "c.png",
+      "description": "An image of the letter C.",
+      "copyright":   "Copyright 2016 Raising the Floor International. Licensed under the Creative Commons Attribution 4.0 International License, see https://creativecommons.org/licenses/by/4.0/",
+      "status":      "approved"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-require("./src/js/api/index");
+require("./src/js/");
 
 fluid.module.register("ul-api", __dirname, require);
 
