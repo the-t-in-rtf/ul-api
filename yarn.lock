@@ -562,7 +562,7 @@ color-string@^1.4.0:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
-color@^1.0.2:
+color@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/color/-/color-1.0.3.tgz#e48e832d85f14ef694fb468811c2d5cfe729b55d"
   dependencies:
@@ -1657,7 +1657,7 @@ globby@^5.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-got@^6.6.3:
+got@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-6.7.1.tgz#240cd05785a9a18e561dc1b44b41c763ef1e8db0"
   dependencies:
@@ -1744,6 +1744,19 @@ gpii-handlebars@1.0.0-dev.20161219T181822Z.0445c4c:
 gpii-handlebars@1.0.0-dev.20170106T133859Z.ea8de03:
   version "1.0.0-dev.20170106T133859Z.ea8de03"
   resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20170106T133859Z.ea8de03.tgz#dda5b505f415da81cc45177b281002140d4c87b8"
+  dependencies:
+    express-handlebars "1.2.2"
+    gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
+    gpii-express "1.0.1-dev.20170106T131203Z.a048e61"
+    handlebars "4.0.6"
+    infusion "2.0.0-dev.20161219T170555Z.5778f7e"
+    marked "0.3.6"
+    pagedown "1.1.0"
+    underscore-node "0.1.2"
+
+gpii-handlebars@1.0.0-dev.20170119T113843Z.6e17ea6:
+  version "1.0.0-dev.20170119T113843Z.6e17ea6"
+  resolved "https://registry.yarnpkg.com/gpii-handlebars/-/gpii-handlebars-1.0.0-dev.20170119T113843Z.6e17ea6.tgz#8ea7f4d5c98d81909a87daefdb724b4405564180"
   dependencies:
     express-handlebars "1.2.2"
     gpii-binder "1.0.0-dev.20161219T173834Z.5ecfb7b"
@@ -2881,7 +2894,11 @@ mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
 
-nan@^2.4.0, nan@~2.4.0:
+nan@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.5.0.tgz#aa8f1e34531d807e9e27755b234b4a6ec0c152a8"
+
+nan@~2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.4.0.tgz#fb3c59d45fe4effe215f0b890f8adf6eb32d2232"
 
@@ -3909,14 +3926,14 @@ setprototypeof@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.0.1.tgz#52009b27888c4dc48f591949c0a8275834c1ca7e"
 
-sharp@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/sharp/-/sharp-0.17.0.tgz#c0acc68924e2491cb46d6d912b5c19b553032b8d"
+sharp@0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/sharp/-/sharp-0.17.1.tgz#aeb8ab921691b016a00f042d61f152144cd20f9d"
   dependencies:
     caw "^2.0.0"
-    color "^1.0.2"
-    got "^6.6.3"
-    nan "^2.4.0"
+    color "^1.0.3"
+    got "^6.7.1"
+    nan "^2.5.0"
     semver "^5.3.0"
     tar "^2.2.1"
 
