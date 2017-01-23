@@ -34,12 +34,10 @@
     "eslint": "3.12.2",
     "eslint-config-fluid": "1.0.0",
     "fluid-grunt-eslint": "18.1.2",
-    "foundation-sites": "6.2.4-rc1",
     "gpii-pouchdb": "1.0.1-dev.20161219T174439Z.2373866",
     "grunt": "1.0.1",
     "grunt-jsonlint": "1.1.0",
     "istanbul": "0.4.5",
-    "jquery": "2.1.4",
     "kettle": "1.3.0",
     "node-jqunit": "1.1.4",
     "request": "2.79.0"
