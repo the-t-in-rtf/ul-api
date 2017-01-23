@@ -25,16 +25,12 @@
     "gpii-location-bar-relay": "1.0.0-dev.20170106T133727Z.180e737",
     "gpii-pouchdb-lucene": "0.1.0-dev.20170106T133425Z.4d44038",
     "gpii-sort": "1.0.0-dev.20160630T152357Z.3508dc6",
-    "handlebars": "4.0.5",
     "infusion": "2.0.0-dev.20161219T170555Z.5778f7e",
-    "marked": "0.3.6",
     "mkdirp": "0.5.1",
     "ncp": "2.0.0",
-    "pagedown": "1.1.0",
     "sharp": "0.17.1"
   },
   "devDependencies": {
-    "ajv": "4.6.0",
     "eslint": "3.12.2",
     "eslint-config-fluid": "1.0.0",
     "fluid-grunt-eslint": "18.1.2",
@@ -44,11 +40,7 @@
     "grunt-jsonlint": "1.1.0",
     "istanbul": "0.4.5",
     "jquery": "2.1.4",
-    "json-schema-ref-parser": "3.1.2",
-    "jsonlint": "1.6.2",
-    "jsonpointer.js": "0.4.0",
     "kettle": "1.3.0",
-    "moment": "2.15.0",
     "node-jqunit": "1.1.4",
     "request": "2.79.0"
   }
