@@ -37,6 +37,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
     gradeNames:   ["gpii.ul.api.harness"],
     originalsDir: "@expand:gpii.tests.ul.api.harness.getOriginalsPath({that})",
     cacheDir:     "@expand:gpii.tests.ul.api.harness.getCachePath({that})",
+    setLogging:   true,
     ports: {
         api:    7633,
         couch:  7634
