@@ -37,7 +37,7 @@
     },
     "unified": {
         "view": ["*"],
-        "edit": ["reviewers"]
+        "edit": ["reviewers", "importer"]
     },
     "SolutionsOntologyFinal": {
       "view": ["reviewers", "sat"],
