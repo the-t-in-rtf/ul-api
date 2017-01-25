@@ -45,7 +45,11 @@
     },
     "sai": {
         "view": ["reviewers", "sai"],
-        "edit": ["reviewers", "sai"]
+        "edit": ["importer", "sai"]
+    },
+    "GARI": {
+        "view": ["*"],
+        "edit": ["importer", "gari"]
     },
     "~": {
         "view": ["~", "reviewers"]
