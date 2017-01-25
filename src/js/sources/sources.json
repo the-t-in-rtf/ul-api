@@ -44,7 +44,7 @@
       "edit": ["sat"]
     },
     "sai": {
-        "view": ["reviewers", "sai"],
+        "view": ["reviewers", "importer", "sai"],
         "edit": ["importer", "sai"]
     },
     "GARI": {
