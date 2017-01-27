@@ -14,6 +14,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
             "sources": [
                 "Dlf data",
                 "EASTIN Admin",
+                "GARI",
                 "Handicat",
                 "Hjælpemiddelbasen",
                 "Hulpmiddelenwijzer",
@@ -29,6 +30,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
             "sources": [
                 "Dlf data",
                 "EASTIN Admin",
+                "GARI",
                 "Handicat",
                 "Hjælpemiddelbasen",
                 "Hulpmiddelenwijzer",
