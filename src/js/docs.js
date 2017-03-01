@@ -32,7 +32,7 @@ gpii.ul.api.docs.middleware = function (that, req, res) {
 
 fluid.defaults("gpii.ul.api.docs", {
     gradeNames: ["gpii.express.middleware"],
-    path:       "/",
+    path:       ["/", "/docs"],
     method:     "get",
     template:   "pages/docs",
     layout:     "main",
