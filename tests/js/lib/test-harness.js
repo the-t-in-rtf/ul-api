@@ -90,6 +90,14 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                         type: "gpii.pouch.express",
                         options: {
                             path: "/",
+                            // The following whisks away the inherited options that would disable the leaky "changes"
+                            // endpoint. Turns out couchdb-lucene searches will fail with overly vague "not found"
+                            // errors if that endpoint is not present.
+                            distributeOptions: {
+                                source:       "{that}.options.expressPouchConfig.overrideMode",
+                                target:       "{that}.options.devNull",
+                                removeSource: true
+                            },
                             databases: {
                                 users: { data: "%ul-api/tests/data/users.json" },
                                 ul:    { data: ["%ul-api/tests/data/pilot.json", "%ul-api/tests/data/deleted.json", "%ul-api/tests/data/updates.json", "%ul-api/tests/data/views.json", "%ul-api/tests/data/whetstone.json"] }
