@@ -3,7 +3,7 @@
 The Unified Listing is a resource for people who want to find assistive technology solutions and mainstream products with
 assistive features.  The live instance can be found at:
 
-http://terms.gpii.net
+http://ul.gpii.net
 
 This package provides a working copy of the Unified Listing API, including the [API documentation](./src/js/api/docs/apidocs.md),
 and sample data that can be used to test integrations with the UL API.
