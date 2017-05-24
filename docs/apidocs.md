@@ -36,7 +36,7 @@ In addition to the fields described in ["Product records"](#product-records), a 
 | Field        | Description |
 | ------------ | ----------- |
 | `sourceData` | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|
-
+| `sourceURL`  | An optional URL where the original version of this record in the source site can be found.|
 
 Here is an example JSON representation of a source record with all fields:
 
@@ -57,6 +57,7 @@ Here is an example JSON representation of a source record with all fields:
         },
         "status": "discontinued",
         "language: "it_it",
+        "sourceURL": "http://portale.siva.it/it-IT/databases/products/detail/id-19449",
         "sourceData": {
             "ManufacturerAddress": "Via Clericetti, 22",
             "ManufacturerPostalCode": "20133",

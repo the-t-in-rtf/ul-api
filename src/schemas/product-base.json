@@ -178,6 +178,11 @@
       "type": "object",
       "description": "The original source record represented as a JSON object."
     },
+    "sourceURL": {
+      "type": "string",
+      "format": "uri",
+      "description": "A URI where the original source record can be viewed on the provider's site."
+    },
     "sources": {
       "type": "array",
       "description": "A list of records that are associated with this one.  Only used by 'unified' records.",
