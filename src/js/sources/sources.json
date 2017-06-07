@@ -31,8 +31,12 @@
         "view": ["*"],
         "edit": ["importer"]
     },
-    "Dlf data": {
+    "ATAust": {
         "view": ["*"],
+        "edit": ["importer"]
+    },
+    "Dlf data": {
+        "view": ["reviewers", "importer"],
         "edit": ["importer"]
     },
     "unified": {
