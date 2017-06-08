@@ -24,11 +24,11 @@
         "edit": ["importer"]
     },
     "Hulpmiddelenwijzer": {
-        "view": ["*"],
+        "view": ["reviewers", "importer"],
         "edit": ["importer"]
     },
     "Oaeg": {
-        "view": ["*"],
+        "view": ["reviewers", "importer"],
         "edit": ["importer"]
     },
     "ATAust": {
