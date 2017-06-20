@@ -42,7 +42,8 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
     that.options.request.productsParams = fluid.merge(null, that.options.defaultParams, userOptions);
 
     // The list of desired sources is an array of source names, i.e. ["unified", "Handicat"]
-    var desiredSources = fluid.makeArray(that.options.request.productsParams.sources);
+
+    var desiredSources = that.options.request.productsParams.sources ? fluid.makeArray(that.options.request.productsParams.sources) : gpii.ul.api.sources.request.listReadableSources(gpii.ul.api.sources.sources, user);
     if (that.options.request.productsParams.unified && desiredSources.indexOf("unified") === -1) {
         desiredSources.push("unified");
     }
@@ -241,8 +242,7 @@ fluid.defaults("gpii.ul.api.products", {
         offset:  0,
         limit:   250,
         unified: true,
-        sortBy:  "/name",
-        sources: ["unified"]
+        sortBy:  "/name"
     },
     distributeOptions: [
         {
