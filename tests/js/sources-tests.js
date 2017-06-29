@@ -14,7 +14,6 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
             "sources": [
                 "ATAust",
                 "EASTIN Admin",
-                "GARI",
                 "Handicat",
                 "Hjælpemiddelbasen",
                 "Rehadat",
@@ -28,7 +27,6 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
             "sources": [
                 "ATAust",
                 "EASTIN Admin",
-                "GARI",
                 "Handicat",
                 "Hjælpemiddelbasen",
                 "Rehadat",

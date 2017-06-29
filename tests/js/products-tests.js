@@ -2,6 +2,9 @@
 // Tests for GET /api/product
 "use strict";
 var fluid = require("infusion");
+
+fluid.logObjectRenderChars = 2048;
+
 var gpii  = fluid.registerNamespace("gpii");
 
 var jqUnit = require("node-jqunit");
@@ -58,12 +61,23 @@ gpii.tests.ul.api.checkUnifiedRecords = function (body) {
     jqUnit.assertTrue("At least one unified record should have source records...", hasSourceRecords);
 };
 
+gpii.tests.ul.api.products.defaultSources = [
+    "Handicat",
+    "Vlibank",
+    "Siva",
+    "EASTIN Admin",
+    "Hjælpemiddelbasen",
+    "Rehadat",
+    "ATAust",
+    "unified"
+];
+
 fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     expected: {
         defaults: {
             "params": {
-                "sources": ["unified"],
+                "sources": gpii.tests.ul.api.products.defaultSources,
                 "unified": true,
                 "offset": 0,
                 "sortBy": "/name",
@@ -71,11 +85,11 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             }
         },
         loggedIn: {
-            "sources": [ "unified", "~existing" ]
+            "sources": gpii.tests.ul.api.products.defaultSources.concat("~existing")
         },
         singleStatus: {
             "params": {
-                "sources": ["unified"],
+                "sources": gpii.tests.ul.api.products.defaultSources,
                 "status":  "deleted",
                 "unified": true,
                 "offset": 0,
@@ -85,7 +99,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         },
         multiStatus: {
             "params": {
-                "sources": ["unified"],
+                "sources": gpii.tests.ul.api.products.defaultSources,
                 "status": ["deleted", "new"],
                 "unified": true,
                 "offset": 0,
@@ -100,7 +114,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             "total_rows": 0,
             "params": {
                 "updated":  "3000-01-01T16:54:12.023Z",
-                "sources": [ "unified" ],
+                "sources": gpii.tests.ul.api.products.defaultSources,
                 "offset": 0,
                 "limit": 250,
                 "sortBy": "/name",
@@ -110,7 +124,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         distantPast: {
             "params": {
                 "updated":  "1970-01-01T16:54:12.023Z",
-                "sources": [ "unified" ],
+                "sources": gpii.tests.ul.api.products.defaultSources,
                 "offset": 0,
                 "limit": 250,
                 "sortBy": "/name",
@@ -148,7 +162,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "limit":   1,
                 "unified": false,
                 "sortBy": "\\updated",
-                "sources": [ "unified"]
+                "sources": ["unified"]
             },
             products: [{
                 "uid": "futureKind",
@@ -169,7 +183,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "limit":   1,
                 "unified": false,
                 "sortBy": "updated",
-                "sources": [ "unified"]
+                "sources": ["unified"]
             },
             products: [{
                 "source": "unified",
@@ -539,13 +553,13 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         newestUnifiedRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?sortBy=%22%5C%5Cupdated%22&limit=1&unified=false"
+                endpoint: "api/products?sortBy=%22%5C%5Cupdated%22&limit=1&unified=false&sources=%22unified%22"
             }
         },
         oldestUnifiedRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?sortBy=%22updated%22&limit=1&unified=false"
+                endpoint: "api/products?sortBy=%22updated%22&limit=1&unified=false&sources=%22unified%22"
             }
         }
     }
