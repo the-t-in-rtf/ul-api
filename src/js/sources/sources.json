@@ -52,7 +52,7 @@
         "edit": ["importer", "sai"]
     },
     "GARI": {
-        "view": ["gari", "reviewers"],
+        "view": ["gari", "importer", "reviewers"],
         "edit": ["importer", "gari"]
     },
     "~": {
