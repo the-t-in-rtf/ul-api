@@ -1,0 +1,13 @@
+{
+  "docs": [
+    {
+      "_id": "_design/md5",
+      "views": {
+        "byMd5": {
+            "map": "function (doc) {\n  if (doc.uid) { emit(doc.md5sum, doc); }\n}",
+            "reduce": "_count"
+        }
+      }
+    }
+  ]
+}
