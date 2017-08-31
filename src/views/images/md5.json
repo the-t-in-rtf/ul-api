@@ -7,6 +7,9 @@
             "map": "function (doc) {\n  if (doc.uid) { emit(doc.md5sum, doc); }\n}",
             "reduce": "_count"
         }
+      },
+      "lists": {
+          "html": "function (head, req) {\n    var row;\n    start({headers: {'Content-Type': 'text/html'}});\n    while (row = getRow()) {\n        send('<img src=\\\"http://localhost:4896/api/images/file/' + row.value.uid + '/' + row.value.source + '/' + row.value.image_id + '\\\"/><br/>\\n');\n    }\n}"
       }
     }
   ]
