@@ -100,7 +100,7 @@ fluid.defaults("gpii.tests.ul.api.harness", {
                             },
                             databases: {
                                 users: { data: "%ul-api/tests/data/users.json" },
-                                ul:    { data: ["%ul-api/tests/data/pilot.json", "%ul-api/tests/data/deleted.json", "%ul-api/tests/data/updates.json", "%ul-api/tests/data/views.json", "%ul-api/tests/data/whetstone.json"] }
+                                ul:    { data: ["%ul-api/tests/data/pilot.json", "%ul-api/tests/data/duplicates.json", "%ul-api/tests/data/deleted.json", "%ul-api/tests/data/updates.json", "%ul-api/tests/data/views.json", "%ul-api/tests/data/whetstone.json"] }
                             }
                         }
                     }

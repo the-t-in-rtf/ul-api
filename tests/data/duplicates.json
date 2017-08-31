@@ -1,0 +1,28 @@
+{
+  "docs": [
+    {
+      "uid": "hasDuplicate",
+      "status": "deleted",
+      "source": "unified",
+      "sid": "isDuplicate",
+      "name": "A duplicate...",
+      "description": "This record is a duplicate.",
+      "manufacturer": {
+        "name": "ACME Corp."
+      },
+      "updated": "2017-08-31"
+    },
+    {
+      "uid": "hasDuplicate",
+      "status": "new",
+      "source": "unified",
+      "sid": "hasDuplicate",
+      "name": "The original...",
+      "description": "This record is the original.",
+      "manufacturer": {
+        "name": "ACME Corp."
+      },
+      "updated": "2017-08-31"
+    }
+  ]
+}
