@@ -25,7 +25,7 @@ gpii.tests.ul.api.product.get.verifyContent = function (message, response, body,
 
 gpii.tests.ul.api.product.get.verifyRedirect = function (response) {
     jqUnit.assertEquals("The status code should be correct...", 301, response.statusCode);
-    jqUnit.assertEquals("The redirect destination should be correct...", "/api/product/unified/hasDuplicate", response.headers.location);
+    jqUnit.assertEquals("The redirect destination should be correct...", "/api/product/unified/mergedOriginal", response.headers.location);
 };
 
 fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {

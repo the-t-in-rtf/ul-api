@@ -18,6 +18,7 @@ require("./search");
 require("./sources");
 require("./updates");
 require("./images");
+require("./merge");
 
 fluid.defaults("gpii.ul.api", {
     gradeNames:   ["gpii.express.router", "gpii.hasRequiredOptions"],
@@ -184,6 +185,12 @@ fluid.defaults("gpii.ul.api", {
                 urls:         "{gpii.ul.api}.options.urls",
                 originalsDir: "{gpii.ul.api}.options.originalsDir",
                 cacheDir:     "{gpii.ul.api}.options.cacheDir"
+            }
+        },
+        merge: {
+            type: "gpii.ul.api.merge",
+            options: {
+                priority: "after:updates"
             }
         },
         docs: {

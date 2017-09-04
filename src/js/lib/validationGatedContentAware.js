@@ -7,29 +7,29 @@
 "use strict";
 var fluid = require("infusion");
 
-// TODO:  Move this to gpii-json-schema once we've exercised it a bit here.
-fluid.defaults("gpii.ul.api.validationGatedContentAware", {
+fluid.defaults("gpii.ul.api.validatingEndpoint", {
     gradeNames: ["gpii.express.router"],
     events: {
         onSchemasDereferenced: null
+    },
+    rules: {
+        validationErrorsToResponse: {
+            isError:    { literalValue: true },
+            statusCode: { literalValue: 400 },
+            message: {
+                literalValue: "{that}.options.messages.error"
+            },
+            fieldErrors: ""
+        }
     },
     components: {
         validationMiddleware: {
             type: "gpii.schema.validationMiddleware",
             options: {
                 priority:   "first",
-                rules: {
-                    validationErrorsToResponse: {
-                        isError:    { literalValue: true },
-                        statusCode: { literalValue: 400 },
-                        message: {
-                            literalValue: "{that}.options.messages.error"
-                        },
-                        fieldErrors: ""
-                    }
-                },
+                rules: "{gpii.ul.api.validatingEndpoint}.options.rules",
                 schemaDirs: "{gpii.ul.api}.options.schemaDirs",
-                schemaKey:  "{gpii.ul.api.validationGatedContentAware}.options.schemas.input",
+                schemaKey:  "{gpii.ul.api.validatingEndpoint}.options.schemas.input",
                 messages: {
                     error: "The information you provided is incomplete or incorrect.  Please check the following:"
                 },
@@ -47,9 +47,16 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
                 priority: "after:validationMiddleware",
                 templateKey: "pages/validation-error"
             }
-        },
-        // TODO:  Add JSON Schema header information about our error format
-        // If we've made it this far, we don't need the above headers
+        }
+    }
+});
+
+fluid.defaults("gpii.ul.api.validationGatedContentAware", {
+    gradeNames: ["gpii.ul.api.validatingEndpoint"],
+    events: {
+        onSchemasDereferenced: null
+    },
+    components: {
         contentAwareMiddleware: {
             type: "gpii.express.middleware.contentAware",
             options: {

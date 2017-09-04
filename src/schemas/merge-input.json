@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "id": "merge-input.json",
+  "properties": {
+    "target": {
+      "$ref": "product-base.json#/definitions/uid"
+    },
+    "sources": {
+      "anyOf": [
+        {
+          "$ref": "product-base.json#/definitions/uid"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "product-base.json#/definitions/uid"
+          }
+        }
+      ]
+    }
+  },
+  "required": ["target", "sources"],
+  "errors": {
+    "#/required/0": "The 'target' URL parameter is required.",
+    "#/required/1": "The 'sources' URL parameter is required."
+  }
+}

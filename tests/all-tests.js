@@ -4,6 +4,7 @@
 "use strict";
 
 require("./js/docs-tests");
+require("./js/merge-tests");
 require("./js/product");
 require("./js/products-tests");
 require("./js/search-tests");

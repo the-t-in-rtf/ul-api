@@ -215,12 +215,10 @@ something like:
 
 # API REST endpoints
 
-## `/api/user`
 
-Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
-create an account, log in, etc. are described [in the user management API documentation](https://github.com/GPII/gpii-express-user/).
+## Core API
 
-## `POST /api/product`
+### `POST /api/product`
 
 Creates a new product record.  Regardless of the information provided, all products default to the "new" status until
 they are reviewed and flagged as "active".  You must be logged in to use this REST endpoint.
@@ -244,8 +242,8 @@ they are reviewed and flagged as "active".  You must be logged in to use this RE
     ```
 + Response 200 (application/record+json)
     + Headers
-        + Content-Type: application/message+json; profile=https://registry.gpii.net/schema/record.json#
-        + Link: <https://registry.gpii.net/schema/record.json#>; rel="describedBy"
+        + Content-Type: application/message+json; profile=https://api.ul.gpii.net/schemas/record.json#
+        + Link: <https://api.ul.gpii.net/schemas/record.json#>; rel="describedBy"
     + Body
 
         ```
@@ -268,7 +266,7 @@ they are reviewed and flagged as "active".  You must be logged in to use this RE
         }
         ```
 
-## `PUT /api/product`
+### `PUT /api/product`
 
 Update an existing product.  You must provide a complete record in JSON format.  Returns the updated product record.
 You must be logged in to use this REST endpoint.
@@ -295,8 +293,8 @@ Note: If you do not submit an "updated" field, the current date will be used.
 
 + Response 200 (application/record+json)
     + Headers
-        + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/message.json#
-        + Link: <https://registry.gpii.net/schema/message.json#>; rel="describedBy"
+        + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/message.json#
+        + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
     + Body
 
         ```
@@ -319,7 +317,7 @@ Note: If you do not submit an "updated" field, the current date will be used.
         }
         ```
 
-## `DELETE /api/product/{source}/{sid}`
+### `DELETE /api/product/{source}/{sid}`
 
 Flags the record with `source` and `sid` as deleted.  If an author is supplied, gives them credit, otherwise the
 current user is listed as the author.  You must be logged in to use this REST endpoint.
@@ -329,8 +327,8 @@ current user is listed as the author.  You must be logged in to use this REST en
 
 + Response 200 (application/json)
     + Headers
-        + Content-Type: application/message+json; profile=https://registry.gpii.net/schema/message.json#
-        + Link: <https://registry.gpii.net/schema/message.json#>; rel="describedBy"
+        + Content-Type: application/message+json; profile=https://api.ul.gpii.net/schemas/message.json#
+        + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
     + Body
 
         ```
@@ -339,7 +337,7 @@ current user is listed as the author.  You must be logged in to use this REST en
         }
         ```
 
-## `GET /api/product/{source}/{sid}{?includeSources}`
+### `GET /api/product/{source}/{sid}{?includeSources}`
 
 Returns a single product identified by its `source` and `sid`.  For ["unified" records](#unified-records), source products are included by default.
 
@@ -348,8 +346,8 @@ Returns a single product identified by its `source` and `sid`.  For ["unified" r
 
 + Response 200 (application/record+json)
     + Headers
-        + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/record.json#
-        + Link: <https://registry.gpii.net/schema/record.json#>; rel="describedBy"
+        + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/record.json#
+        + Link: <https://api.ul.gpii.net/schemas/record.json#>; rel="describedBy"
     + Body
 
         ```
@@ -377,7 +375,7 @@ Returns a single product identified by its `source` and `sid`.  For ["unified" r
         ```
 
 
-## `GET /api/products{?sources,status,updatedSince,offset,limit,unified,sortBy}`
+### `GET /api/products{?sources,status,updatedSince,offset,limit,unified,sortBy}`
 
 Return a list of products, with optional filters (see below).
 
@@ -392,8 +390,8 @@ Return a list of products, with optional filters (see below).
 
 + Response 200 (application/headers+json)
     + Headers
-        + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/products.json#
-        + Link: <https://registry.gpii.net/schema/products.json#>; rel="describedBy"
+        + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/products.json#
+        + Link: <https://api.ul.gpii.net/schemas/products.json#>; rel="describedBy"
     + Body
 
         ```
@@ -436,7 +434,7 @@ also be used to list the records from one or more sources, for example, to displ
 you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 
 
-## `GET /api/search{?q,status,offset,limit,sortBy}`
+### `GET /api/search{?q,status,offset,limit,sortBy}`
 
 Performs a full text search of all data, returns matching products, grouped by the "unified" record they are associated with.
 
@@ -449,8 +447,8 @@ Performs a full text search of all data, returns matching products, grouped by t
 
  + Response 200 (application/search+json)
      + Headers
-         + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/search.json#
-         + Link: <https://registry.gpii.net/schema/search.json#>; rel="describedBy"
+         + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/search.json#
+         + Link: <https://api.ul.gpii.net/schemas/search.json#>; rel="describedBy"
      + Body
 
          ```
@@ -491,7 +489,7 @@ Performs a full text search of all data, returns matching products, grouped by t
          }
          ```
 
- ## GET /api/suggest/{?q,status,sortBy}
+ ### GET /api/suggest/{?q,status,sortBy}
 
 Suggest a short list of products that match the search terms.  Performs a search as in /api/search, but only returns 5
 results and does not support paging.  Equivalent to `/api/search?q=<SEARCH>&results=5&unified=false`.  This is intended
@@ -504,8 +502,8 @@ for use in things like "autocomplete", where a fuller list would be too cumberso
 
  + Response 200 (application/search+json)
      + Headers
-         + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/search.json#
-         + Link: <https://registry.gpii.net/schema/search.json#>; rel="describedBy"
+         + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/search.json#
+         + Link: <https://api.ul.gpii.net/schemas/search.json#>; rel="describedBy"
      + Body
 
          ```
@@ -543,7 +541,7 @@ for use in things like "autocomplete", where a fuller list would be too cumberso
          }
          ```
 
- ## `GET /api/updates/{?sources,updatedSince,sourcesNewer}`
+ ### `GET /api/updates/{?sources,updatedSince,sourcesNewer}`
 
 Compare "unified" records to one or more "sources" and highlight "updates", which by default are cases in which the
 "unified" record has been updated more recently than the "source" record.
@@ -555,8 +553,8 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
 
  + Response 200 (application/updates+json)
      + Headers
-         + Content-Type: application/record+json; profile=https://registry.gpii.net/schema/updates.json#
-         + Link: <https://registry.gpii.net/schema/updates.json#>; rel="describedBy"
+         + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/updates.json#
+         + Link: <https://api.ul.gpii.net/schemas/updates.json#>; rel="describedBy"
      + Body
 
          ```
@@ -593,4 +591,48 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
              "retrievedAt": "2014-05-25T11:23:32.441Z"
          }
          ```
+
+## Merge API
+
+### `POST /api/merge?{target,sources}`
+
+Merge one or more duplicated "unified" records with an "original" record.  This will:
+
+1. Associate all source records previously associated with a "duplicate" with the "original" record instead.
+2. Update each "duplicate" record's `uid` value to point to the "original" record.
+3. Flag each "duplicate" as deleted.
+
+All changes will be performed as a single update.  A merge cannot be undone in a single step.  To manually unmerge a
+record:
+
+1. Change the status of the merged record to "new" or another non-deleted status.
+2. Change the merged record's `uid` to match its own `sid` value.
+3. Update each source record that should be associated with the merged record to use the merged record's `sid` as its `uid` value.
+
+ + Parameters
+     + `target` (required, String) ... The unique identifier (uid) for the "original" unified record.
+     + `sources` (required, String|Array) ... One or more unique identifiers (uids) for records which are duplicates of the "original" referred to by `target`.
+
+ + Response 200 (application/updates+json)
+     + Headers
+         + Content-Type: application/record+json; profile=https://api.ul.gpii.net/schemas/message.json#
+         + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
+     + Body
+
+         ```
+         {
+            message: "Records merged successfully."
+         }
+         ```
+
+## User Management
+
+Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
+create an account, log in, etc. are described [in the user management API documentation](https://github.com/GPII/gpii-express-user/).
+
+## Image API
+
+The image management API endpoints are described [in the image API documentation](image-apidocs.md).
+
+
 
