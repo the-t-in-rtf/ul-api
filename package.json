@@ -14,12 +14,12 @@
   },
   "homepage": "https://github.com/GPII/ul-api",
   "dependencies": {
-    "gpii-binder": "1.0.3-dev.20170505T070144Z.9dc2d8c",
-    "gpii-express": "1.0.7",
+    "gpii-binder": "1.0.3",
+    "gpii-express": "1.0.9",
     "gpii-express-user": "1.0.0-dev.20170420T094715Z.667e69a",
     "gpii-handlebars": "1.0.1",
-    "gpii-json-schema": "1.0.1",
-    "gpii-location-bar-relay": "1.0.1",
+    "gpii-json-schema": "1.0.2",
+    "gpii-location-bar-relay": "1.0.2",
     "gpii-pouchdb-lucene": "0.1.0-dev.20170523T095210Z.7508cd5",
     "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
     "infusion": "3.0.0-dev.20170127T130413Z.103de6e",
@@ -28,15 +28,15 @@
     "sharp": "0.18.1"
   },
   "devDependencies": {
-    "eslint": "3.19.0",
+    "eslint": "4.6.1",
     "eslint-config-fluid": "1.1.0",
     "fluid-grunt-eslint": "18.1.2",
-    "gpii-pouchdb": "1.0.3-dev.20170504T114846Z.9f83c96",
+    "gpii-pouchdb": "1.0.7",
     "grunt": "1.0.1",
     "grunt-jsonlint": "1.1.0",
     "istanbul": "0.4.5",
-    "kettle": "1.5.0",
-    "node-jqunit": "1.1.4",
+    "kettle": "1.7.0",
+    "node-jqunit": "1.1.7",
     "request": "2.81.0"
   }
 }
