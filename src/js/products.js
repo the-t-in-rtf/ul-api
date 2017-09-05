@@ -116,7 +116,7 @@ gpii.ul.api.products.handler.processCouchResponse = function (that, couchRespons
         fluid.each(couchResponse.rows, function (row) {
             var productRecord = fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove);
             if (productRecord.source === "unified") {
-                unifiedRecordsByUid[productRecord.uid] = productRecord;
+                unifiedRecordsByUid[productRecord.sid] = productRecord;
             }
             else {
                 if (!childrenByUid[productRecord.uid]) {

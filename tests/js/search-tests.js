@@ -28,10 +28,10 @@ gpii.tests.ul.api.search.hasNoSearchResults = function (body) {
 // Confirm whether the first record contains any source data.  Used to check permissions by source.
 gpii.tests.ul.api.search.checkSourceRecords = function (body, shouldHaveSourceData) {
     if (shouldHaveSourceData) {
-        jqUnit.assertTrue("There should be source data...", body.products[0].sources.length > 0);
+        jqUnit.assertTrue("There should be source data...", fluid.get(body, "products.0.sources.length") > 0);
     }
     else {
-        jqUnit.assertTrue("There should not be any source data...", body.products[0].sources.length === 0);
+        jqUnit.assertTrue("There should not be any source data...", fluid.get(body, "products.0.sources.length") === 0);
     }
 };
 

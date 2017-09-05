@@ -52,9 +52,10 @@ gpii.ul.api.search.handler.processSearchResponse = function (that, luceneRespons
         var distinctKeys = {};
         var unifiedKeys  = [];
         fluid.each(luceneResponse.rows, function (record) {
-            if (!distinctKeys[record.fields.uid]) {
-                distinctKeys[record.fields.uid] = true;
-                unifiedKeys.push(record.fields.uid);
+            var uid = record.fields.source === "unified" ? record.fields.sid : record.fields.uid;
+            if (!distinctKeys[uid]) {
+                distinctKeys[uid] = true;
+                unifiedKeys.push(uid);
             }
         });
 
@@ -89,7 +90,7 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
         fluid.each(couchResponse.rows, function (row) {
             var productRecord = fluid.censorKeys(fluid.copy(row.value), that.options.couchFieldsToRemove);
             if (productRecord.source === "unified") {
-                unifiedRecordsByUid[productRecord.uid] = productRecord;
+                unifiedRecordsByUid[productRecord.sid] = productRecord;
             }
             else {
                 if (!childrenByUid[productRecord.uid]) {
