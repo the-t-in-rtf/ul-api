@@ -90,7 +90,7 @@ fluid.defaults("gpii.ul.api.images.file.read.handler", {
     gradeNames: ["gpii.express.handler"],
     messages: {
         fileNotFound: "Can't find an original image to resize.",
-        mkdirError:   "Error creating directory to hold original image",
+        mkdirError:   "Error creating directory to hold resized image",
         resizeError:  "Error resizing original image.",
         saveError:    "Error saving resized image to disk."
     },
