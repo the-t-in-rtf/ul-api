@@ -3,6 +3,9 @@
     {
       "_id": "_design/metadata",
       "views": {
+        "byUid": {
+          "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.uid, doc); } }"
+        },
         "bySource": {
           "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.source, doc); } }"
         },
