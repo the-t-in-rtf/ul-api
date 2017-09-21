@@ -45,7 +45,7 @@
     },
     "SolutionsOntologyFinal": {
       "view": ["reviewers", "sat"],
-      "edit": ["sat"]
+      "edit": ["importer", "sat"]
     },
     "sai": {
         "view": ["reviewers", "importer", "sai"],
