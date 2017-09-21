@@ -18,7 +18,7 @@
       "type": "string",
       "description": "The unique identifier to identify this record in the source database.",
       "minLength": 1,
-      "maxLength": 50,
+      "maxLength": 100,
       "errors": {
         "type":      "You must provide a source ID for this product.",
         "minLength": "You must provide a source ID for this product.",
