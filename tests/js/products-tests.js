@@ -284,7 +284,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                         {
                             event:     "{multiStatusRequest}.events.onComplete",
                             listener:  "gpii.tests.ul.api.checkResultsByStatus",
-                            args:      ["Requesting a single status should return the expected results...", "{that}.options.expected.multiStatus", "@expand:JSON.parse({arguments}.0)", 2, ["deleted", "new"]] //  message, expected, actual, minRecords
+                            args:      ["Requesting multiple statuses should return the expected results...", "{that}.options.expected.multiStatus", "@expand:JSON.parse({arguments}.0)", 2, ["deleted", "new"]] //  message, expected, actual, minRecords
                         },
                         {
                             func: "jqUnit.assertEquals",

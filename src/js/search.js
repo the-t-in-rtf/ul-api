@@ -120,9 +120,12 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
         if (uid && distinctUids.indexOf(uid) === -1) {
             distinctUids.push(uid);
 
+
             // Look up the full record from the upstream results.
             var unifiedRecord = unifiedRecordsByUid[uid];
-            if (unifiedRecord) {
+            // If we are limiting by statuses for a "unified" view, the status of the unified record trumps.
+            var acceptableStatuses = fluid.makeArray(that.options.request.query.statuses);
+            if (unifiedRecord && (!acceptableStatuses.length || acceptableStatuses.indexOf(unifiedRecord.status) !== -1)) {
                 products.push(unifiedRecord);
             }
             else {
