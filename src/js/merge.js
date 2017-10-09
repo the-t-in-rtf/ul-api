@@ -72,6 +72,9 @@ gpii.ul.api.merge.handleRecordsLookupSuccess = function (that, lookupResults) {
     else if (!duplicateRecords.length) {
         that.sendResponse(404, { isError: true, message: "You must specify one or more valid source records to merge with the target reocord."});
     }
+    else if (targetRecord.sid !== targetRecord.uid) {
+        that.sendResponse(400, { isError: true, message: "You cannot merge duplicates with a record that has already been merged."});
+    }
     else {
         var updatePayload = fluid.transform(duplicateRecords.concat(childRecords), function (row) {
             var updatedValue = fluid.copy(row);

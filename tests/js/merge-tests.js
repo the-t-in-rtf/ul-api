@@ -148,6 +148,30 @@ fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
                     ]
                 },
                 {
+                    name: "Try to create a merge loop...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{mergeLoopLoginRequest}.send",
+                            args: [{ username: "importer", password: "password" }]
+                        },
+                        {
+                            event: "{mergeLoopLoginRequest}.events.onComplete",
+                            listener: "jqUnit.assertEquals",
+                            args: ["The login should have been successful...", 200, "{mergeLoopLoginRequest}.nativeResponse.statusCode"]
+                        },
+                        {
+                            func: "{mergeLoopRequest}.send",
+                            args: [{}, { termMap: { target: "mergedDuplicate", sources: "mergedOriginal"} }]
+                        },
+                        {
+                            event:     "{mergeLoopRequest}.events.onComplete",
+                            listener:  "jqUnit.assertEquals",
+                            args:      ["We should have been rejected because our merge would have created a redirect loop...", 400, "{mergeLoopRequest}.nativeResponse.statusCode"]
+                        }
+                    ]
+                },
+                {
                     name: "Merge a record succesfully...",
                     type: "test",
                     sequence: [
@@ -228,6 +252,12 @@ fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
             type: "gpii.test.ul.api.request.login"
         },
         missingPermissionRequest: {
+            type: "gpii.test.ul.api.merge.request.withData"
+        },
+        mergeLoopLoginRequest: {
+            type: "gpii.test.ul.api.request.login"
+        },
+        mergeLoopRequest: {
             type: "gpii.test.ul.api.merge.request.withData"
         },
         remergeLoginRequest: {
