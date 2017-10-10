@@ -18,7 +18,7 @@
     "gpii-express": "1.0.9",
     "gpii-express-user": "1.0.0-dev.20170420T094715Z.667e69a",
     "gpii-handlebars": "1.0.1",
-    "gpii-json-schema": "1.0.2",
+    "gpii-json-schema": "1.0.3",
     "gpii-location-bar-relay": "1.0.2",
     "gpii-pouchdb-lucene": "0.1.0-dev.20170523T095210Z.7508cd5",
     "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
