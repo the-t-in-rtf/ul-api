@@ -16,7 +16,7 @@ package.
 To use this package, you must have a supported version of [`node.js`](https://nodejs.org/) installed.  Currently, the
 package is developed with and tested against the 6.9.1 LTS version of node.  Once you have `node` installed:
 
-1. Install the required libraries by running `npm install` (or [`yarn install`](https://yarnpkg.com/)).
+1. Install the required libraries by running `npm install`.
 2. Launch the API test harness using the command `node tests/js/launch-test-harness.js`.
 3. An instance of the API with test data will be available at:  http://localhost:6714/api/
 4. See [the API docs](./src/js/api/docs/apidocs.md) for details on the available API endpoints and options for each.
@@ -67,4 +67,4 @@ writable using the `eastin` test user, password `password`.  The source associat
 
 # Running the Tests in this Package
 
-To run the tests in this package, use the command `npm test` (or [`yarn test`](https://yarnpkg.com/)).
+To run the tests in this package, use the command `npm test`.
