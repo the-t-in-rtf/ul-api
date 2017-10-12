@@ -1,23 +1,25 @@
 {
-  "type": "object",
-  "id": "updates-input.json",
-  "description": "The JSON Schema used to validate user input to /api/updates.",
-  "properties": {
-    "updatedSince": {
-      "$ref": "filters.json#/definitions/updatedSince"
+    "type": "object",
+    "id": "updates-input.json",
+    "description": "The JSON Schema used to validate user input to /api/updates.",
+    "properties": {
+        "updatedSince": {
+            "$ref": "filters.json#/definitions/updatedSince"
+        },
+        "sources": {
+            "$ref": "filters.json#/definitions/sources"
+        },
+        "sourcesNewer": {
+            "type": "boolean",
+            "error": {
+                "type": "The `sourcesNewer` field must be either `true` or `false`."
+            }
+        }
     },
-    "sources": {
-      "$ref": "filters.json#/definitions/sources"
-    },
-    "sourcesNewer": {
-      "type": "boolean",
-      "error": {
-        "type": "The `sourcesNewer` field must be either `true` or `false`."
-      }
+    "required": [
+        "sources"
+    ],
+    "errors": {
+        "#required/0": "You must indicate one or more sources to compare to the `unified` records."
     }
-  },
-  "required": ["sources"],
-  "errors": {
-    "#required/0": "You must indicate one or more sources to compare to the `unified` records."
-  }
 }

@@ -1,64 +1,72 @@
 {
-  "docs": [
-    {
-      "uid": "mergedOriginal",
-      "status": "deleted",
-      "source": "unified",
-      "sid": "mergedDuplicate",
-      "name": "A duplicate...",
-      "description": "This record is a duplicate.",
-      "manufacturer": {
-        "name": "ACME Corp."
-      },
-      "updated": "2017-08-31"
-    },
-    {
-      "uid": "mergedOriginal",
-      "status": "new",
-      "source": "unified",
-      "sid": "mergedOriginal",
-      "name": "The original...",
-      "description": "This record is the original.",
-      "manufacturer": {
-        "name": "ACME Corp."
-      },
-      "updated": "2017-08-31"
-    },
-    {
-      "uid": "unmergedOriginal",
-      "source": "unified",
-      "sid": "unmergedOriginal",
-      "name": "Unmerged Original 1",
-      "description": "An original, waiting to have content merged with it.",
-      "manufacturer": { "name": "ACME Corp."},
-      "updated": "2017-08-31"
-    },
-    {
-      "uid": "unmergedDuplicate",
-      "source": "unified",
-      "sid": "unmergedDuplicate",
-      "name": "Unmerged Dupe 1",
-      "description": "A duplicate, waiting to be merged.",
-      "manufacturer": { "name": "ACME Corp."},
-      "updated": "2017-08-31"
-    },
-    {
-      "uid": "unmergedDuplicate",
-      "source": "ATAust",
-      "sid": "child1",
-      "name": "Dupe Child 1",
-      "description": "First child of duplicate.",
-      "manufacturer": { "name": "ACME Corp."},
-      "updated": "2017-08-31"
-    },
-    {
-      "uid": "unmergedDuplicate",
-      "source": "ATAust",
-      "sid": "child2",
-      "name": "Dupe Child 2",
-      "description": "Second child of duplicate.",
-      "manufacturer": { "name": "ACME Corp."},
-      "updated": "2017-08-31"
-    }
-  ]
+    "docs": [
+        {
+            "uid": "mergedOriginal",
+            "status": "deleted",
+            "source": "unified",
+            "sid": "mergedDuplicate",
+            "name": "A duplicate...",
+            "description": "This record is a duplicate.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        },
+        {
+            "uid": "mergedOriginal",
+            "status": "new",
+            "source": "unified",
+            "sid": "mergedOriginal",
+            "name": "The original...",
+            "description": "This record is the original.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        },
+        {
+            "uid": "unmergedOriginal",
+            "source": "unified",
+            "sid": "unmergedOriginal",
+            "name": "Unmerged Original 1",
+            "description": "An original, waiting to have content merged with it.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        },
+        {
+            "uid": "unmergedDuplicate",
+            "source": "unified",
+            "sid": "unmergedDuplicate",
+            "name": "Unmerged Dupe 1",
+            "description": "A duplicate, waiting to be merged.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        },
+        {
+            "uid": "unmergedDuplicate",
+            "source": "ATAust",
+            "sid": "child1",
+            "name": "Dupe Child 1",
+            "description": "First child of duplicate.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        },
+        {
+            "uid": "unmergedDuplicate",
+            "source": "ATAust",
+            "sid": "child2",
+            "name": "Dupe Child 2",
+            "description": "Second child of duplicate.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31"
+        }
+    ]
 }

@@ -1,34 +1,34 @@
 {
-  "docs": [
-    {
-      "_id": "_design/ul",
-      "views": {
-        "records_by_uid": {
-          "map": "function (doc) {\n    if (doc.uid) { emit(doc.uid, doc); }\n}"
+    "docs": [
+        {
+            "_id": "_design/ul",
+            "views": {
+                "records_by_uid": {
+                    "map": "function (doc) {\n    if (doc.uid) { emit(doc.uid, doc); }\n}"
+                },
+                "records_by_source": {
+                    "map": "function (doc) {\n    if (doc.source) {\n        emit(doc.source, doc);\n    }\n}"
+                },
+                "products": {
+                    "map": "function(doc) {\n    if (doc.source && doc.sid) {\n        emit([doc.source, doc.sid],doc);\n    }\n}"
+                },
+                "orphans": {
+                    "map": "function(doc) {\n    if (!doc.uid && doc.source !== \"unified\") {\n        emit([doc.source, doc.sid], doc);\n    }\n}"
+                }
+            }
         },
-        "records_by_source": {
-          "map": "function (doc) {\n    if (doc.source) {\n        emit(doc.source, doc);\n    }\n}"
-        },
-        "products": {
-          "map": "function(doc) {\n    if (doc.source && doc.sid) {\n        emit([doc.source, doc.sid],doc);\n    }\n}"
-        },
-        "orphans": {
-          "map": "function(doc) {\n    if (!doc.uid && doc.source !== \"unified\") {\n        emit([doc.source, doc.sid], doc);\n    }\n}"
+        {
+            "_id": "_design/lucene",
+            "fulltext": {
+                "by_content": {
+                    "index": "function(doc) { \n    if (!doc._id.match(/^_design/)) {\n        var ret=new Document();\n\n        var defs = \"\";\n\n        // We have to store values we wish to use in field:value queries\n        // We also include them in the value of the defaults field (used when no qualifiers are added)\n        var keysToStore = [\"uid\",\"source\",\"sid\", \"status\", \"name\", \"description\", \"language\"];\n        for (var i in keysToStore) {\n            var field = keysToStore[i];\n            if (doc[field]) {\n                ret.add(doc[field],{\"field\":field, \"store\":\"yes\"});\n                defs += \" \" + doc[field] + \" \";\n            }\n        }\n\n        if (doc.manufacturer && doc.manufacturer.name) {\n            ret.add(doc.manufacturer.name,{\"field\": \"manufacturer\", \"store\":\"yes\"});\n            defs += \" \" + doc.manufacturer.name + \" \";\n        }\n\n        // All of the data is added to the default field so that unqualified searches match any data found in the record.\n        ret.add(defs,{\"field\":\"default\", \"store\": \"no\"});\n\n        //log.debug(\"indexed document '\" + doc.uniqueId + \"'...\");\n\n        return ret;\n    }\n    else {\n        //log.debug(\"skipping indexing of design document '\" + doc._id + \"'...\");\n    }\n\n    return null;\n}",
+                    "defaults": {
+                        "field": "uniqueId",
+                        "store": "yes"
+                    },
+                    "analyzer": "perfield:{default:\"porter\",uid:\"keyword\",source:\"keyword\",language:\"keyword\",status:\"keyword\"}"
+                }
+            }
         }
-      }
-    },
-    {
-      "_id": "_design/lucene",
-      "fulltext": {
-        "by_content": {
-          "index": "function(doc) { \n    if (!doc._id.match(/^_design/)) {\n        var ret=new Document();\n\n        var defs = \"\";\n\n        // We have to store values we wish to use in field:value queries\n        // We also include them in the value of the defaults field (used when no qualifiers are added)\n        var keysToStore = [\"uid\",\"source\",\"sid\", \"status\", \"name\", \"description\", \"language\"];\n        for (var i in keysToStore) {\n            var field = keysToStore[i];\n            if (doc[field]) {\n                ret.add(doc[field],{\"field\":field, \"store\":\"yes\"});\n                defs += \" \" + doc[field] + \" \";\n            }\n        }\n\n        if (doc.manufacturer && doc.manufacturer.name) {\n            ret.add(doc.manufacturer.name,{\"field\": \"manufacturer\", \"store\":\"yes\"});\n            defs += \" \" + doc.manufacturer.name + \" \";\n        }\n\n        // All of the data is added to the default field so that unqualified searches match any data found in the record.\n        ret.add(defs,{\"field\":\"default\", \"store\": \"no\"});\n\n        //log.debug(\"indexed document '\" + doc.uniqueId + \"'...\");\n\n        return ret;\n    }\n    else {\n        //log.debug(\"skipping indexing of design document '\" + doc._id + \"'...\");\n    }\n\n    return null;\n}",
-          "defaults": {
-            "field": "uniqueId",
-            "store": "yes"
-          },
-          "analyzer": "perfield:{default:\"porter\",uid:\"keyword\",source:\"keyword\",language:\"keyword\",status:\"keyword\"}"
-        }
-      }
-    }
-  ]
+    ]
 }

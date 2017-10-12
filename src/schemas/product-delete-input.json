@@ -1,17 +1,20 @@
 {
-  "type": "object",
-  "id": "product-delete-input.json",
-  "properties": {
-    "sid": {
-      "$ref": "product-base.json#/definitions/sid"
+    "type": "object",
+    "id": "product-delete-input.json",
+    "properties": {
+        "sid": {
+            "$ref": "product-base.json#/definitions/sid"
+        },
+        "source": {
+            "$ref": "product-base.json#/definitions/source"
+        }
     },
-    "source": {
-      "$ref": "product-base.json#/definitions/source"
+    "required": [
+        "source",
+        "sid"
+    ],
+    "errors": {
+        "#/required/0": "The 'source' URL parameter is required.",
+        "#/required/1": "The 'sid' URL parameter is required."
     }
-  },
-  "required": ["source", "sid"],
-  "errors": {
-    "#/required/0": "The 'source' URL parameter is required.",
-    "#/required/1": "The 'sid' URL parameter is required."
-  }
 }

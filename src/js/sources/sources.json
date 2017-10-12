@@ -1,61 +1,132 @@
 {
     "Handicat": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Vlibank": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Siva": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "EASTIN Admin": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Hjælpemiddelbasen": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Rehadat": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Hulpmiddelenwijzer": {
-        "view": ["reviewers", "importer"],
-        "edit": ["importer"]
+        "view": [
+            "reviewers",
+            "importer"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Oaeg": {
-        "view": ["reviewers", "importer"],
-        "edit": ["importer"]
+        "view": [
+            "reviewers",
+            "importer"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "ATAust": {
-        "view": ["*"],
-        "edit": ["importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "Dlf data": {
-        "view": ["reviewers", "importer"],
-        "edit": ["importer"]
+        "view": [
+            "reviewers",
+            "importer"
+        ],
+        "edit": [
+            "importer"
+        ]
     },
     "unified": {
-        "view": ["*"],
-        "edit": ["reviewers", "importer"]
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "reviewers",
+            "importer"
+        ]
     },
     "SolutionsOntologyFinal": {
-      "view": ["reviewers", "sat"],
-      "edit": ["importer", "sat"]
+        "view": [
+            "reviewers",
+            "sat"
+        ],
+        "edit": [
+            "importer",
+            "sat"
+        ]
     },
     "sai": {
-        "view": ["reviewers", "importer", "sai"],
-        "edit": ["importer", "sai"]
+        "view": [
+            "reviewers",
+            "importer",
+            "sai"
+        ],
+        "edit": [
+            "importer",
+            "sai"
+        ]
     },
     "GARI": {
-        "view": ["gari", "importer", "reviewers"],
-        "edit": ["importer", "gari"]
+        "view": [
+            "gari",
+            "importer",
+            "reviewers"
+        ],
+        "edit": [
+            "importer",
+            "gari"
+        ]
     },
     "~": {
-        "view": ["~", "reviewers"]
+        "view": [
+            "~",
+            "reviewers"
+        ]
     }
 }

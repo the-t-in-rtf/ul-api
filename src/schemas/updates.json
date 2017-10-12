@@ -1,25 +1,25 @@
 {
-  "type": "object",
-  "id": "updates.json",
-  "description": "The JSON Schema used in reporting differences between the unified listing and one or more sources.",
-  "properties": {
-    "total_rows": {
-      "$ref": "paging.json#/definitions/total_rows"
+    "type": "object",
+    "id": "updates.json",
+    "description": "The JSON Schema used in reporting differences between the unified listing and one or more sources.",
+    "properties": {
+        "total_rows": {
+            "$ref": "paging.json#/definitions/total_rows"
+        },
+        "params": {
+            "$ref": "updates-input.json"
+        },
+        "products": {
+            "$ref": "products-base.json#/definitions/products"
+        },
+        "retrievedAt": {
+            "$ref": "retrieved-at.json#/definitions/retrievedAt"
+        }
     },
-    "params": {
-      "$ref": "updates-input.json"
-    },
-    "products": {
-      "$ref": "products-base.json#/definitions/products"
-    },
-    "retrievedAt": {
-      "$ref": "retrieved-at.json#/definitions/retrievedAt"
-    }
-  },
-  "required": [
-    "total_rows",
-    "params",
-    "products",
-    "retrievedAt"
-  ]
+    "required": [
+        "total_rows",
+        "params",
+        "products",
+        "retrievedAt"
+    ]
 }

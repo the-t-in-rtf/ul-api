@@ -15,5 +15,12 @@
             "$ref": "retrieved-at.json#/definitions/retrievedAt"
         }
     },
-    "required": ["total_rows","offset","limit","filters","products","retrievedAt"]
+    "required": [
+        "total_rows",
+        "offset",
+        "limit",
+        "filters",
+        "products",
+        "retrievedAt"
+    ]
 }

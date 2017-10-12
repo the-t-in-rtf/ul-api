@@ -1,41 +1,48 @@
 {
-  "type": "object",
-  "id": "product-update-input.json",
-  "$ref": "product-base.json",
-  "required": ["description", "manufacturer", "name", "sid", "source", "status"],
-  "properties": {
-    "source": {
-      "$ref": "product-base.json#/definitions/source"
+    "type": "object",
+    "id": "product-update-input.json",
+    "$ref": "product-base.json",
+    "required": [
+        "description",
+        "manufacturer",
+        "name",
+        "sid",
+        "source",
+        "status"
+    ],
+    "properties": {
+        "source": {
+            "$ref": "product-base.json#/definitions/source"
+        },
+        "sid": {
+            "$ref": "product-base.json#/definitions/sid"
+        },
+        "uid": {
+            "$ref": "product-base.json#/definitions/uid"
+        },
+        "name": {
+            "$ref": "product-base.json#/definitions/name"
+        },
+        "description": {
+            "$ref": "product-base.json#/definitions/description"
+        },
+        "manufacturer": {
+            "$ref": "product-base.json#/definitions/manufacturer"
+        },
+        "status": {
+            "$ref": "product-base.json#/definitions/status"
+        },
+        "updated": {
+            "$ref": "product-base.json#/definitions/updated"
+        }
     },
-    "sid": {
-      "$ref": "product-base.json#/definitions/sid"
-    },
-    "uid": {
-      "$ref": "product-base.json#/definitions/uid"
-    },
-    "name": {
-      "$ref": "product-base.json#/definitions/name"
-    },
-    "description": {
-      "$ref": "product-base.json#/definitions/description"
-    },
-    "manufacturer": {
-      "$ref": "product-base.json#/definitions/manufacturer"
-    },
-    "status": {
-      "$ref": "product-base.json#/definitions/status"
-    },
-    "updated": {
-      "$ref": "product-base.json#/definitions/updated"
+    "errors": {
+        "#/required/0": "A description is required.",
+        "#/required/1": "A manufacturer is required.",
+        "#/required/2": "A name is required.",
+        "#/required/3": "A source ID is required.",
+        "#/required/4": "A source is required.",
+        "#/required/5": "A status is required.",
+        "#/required/6": "An uid is required."
     }
-  },
-  "errors": {
-    "#/required/0": "A description is required.",
-    "#/required/1": "A manufacturer is required.",
-    "#/required/2": "A name is required.",
-    "#/required/3": "A source ID is required.",
-    "#/required/4": "A source is required.",
-    "#/required/5": "A status is required.",
-    "#/required/6": "An uid is required."
-  }
 }

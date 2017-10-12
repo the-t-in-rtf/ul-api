@@ -12,5 +12,7 @@
             "description": "An optional message describing the results of a REST call."
         }
     },
-    "required": ["message"]
+    "required": [
+        "message"
+    ]
 }

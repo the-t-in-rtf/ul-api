@@ -1,101 +1,120 @@
 {
     "docs": [
         {
-            "_id":         "org.couchdb.user:sample",
-            "type":        "user",
-            "name":        "sample",
-            "username":    "sample",
+            "_id": "org.couchdb.user:sample",
+            "type": "user",
+            "name": "sample",
+            "username": "sample",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "sample@localhost",
-            "roles":       ["role1", "role3"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "sample@localhost",
+            "roles": [
+                "role1",
+                "role3"
+            ],
+            "verified": true
         },
         {
-            "_id":               "org.couchdb.user:unverified",
-            "type":              "user",
-            "name":              "unverified",
-            "username":          "unverified",
-            "derived_key":       "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
+            "_id": "org.couchdb.user:unverified",
+            "type": "user",
+            "name": "unverified",
+            "username": "unverified",
+            "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
             "verification_code": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":              "secret",
-            "iterations":        10,
-            "email":             "unverified@localhost",
-            "roles":             ["role1", "role2"],
-            "verified":          false
+            "salt": "secret",
+            "iterations": 10,
+            "email": "unverified@localhost",
+            "roles": [
+                "role1",
+                "role2"
+            ],
+            "verified": false
         },
         {
-            "_id":         "org.couchdb.user:existing",
-            "type":        "user",
-            "name":        "existing",
-            "username":    "existing",
+            "_id": "org.couchdb.user:existing",
+            "type": "user",
+            "name": "existing",
+            "username": "existing",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "existing@localhost",
-            "roles":       ["role3", "role2"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "existing@localhost",
+            "roles": [
+                "role3",
+                "role2"
+            ],
+            "verified": true
         },
         {
-            "_id":         "org.couchdb.user:reviewer",
-            "type":        "user",
-            "name":        "reviewer",
-            "username":    "reviewer",
+            "_id": "org.couchdb.user:reviewer",
+            "type": "user",
+            "name": "reviewer",
+            "username": "reviewer",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "reviewer@localhost",
-            "roles":       ["reviewers"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "reviewer@localhost",
+            "roles": [
+                "reviewers"
+            ],
+            "verified": true
         },
         {
-            "_id":         "org.couchdb.user:importer",
-            "type":        "user",
-            "name":        "importer",
-            "username":    "importer",
+            "_id": "org.couchdb.user:importer",
+            "type": "user",
+            "name": "importer",
+            "username": "importer",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "importer@localhost",
-            "roles":       ["importer"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "importer@localhost",
+            "roles": [
+                "importer"
+            ],
+            "verified": true
         },
         {
-            "_id":         "org.couchdb.user:sat",
-            "type":        "user",
-            "name":        "sat",
-            "username":    "sat",
+            "_id": "org.couchdb.user:sat",
+            "type": "user",
+            "name": "sat",
+            "username": "sat",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "sat@localhost",
-            "roles":       ["sat"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "sat@localhost",
+            "roles": [
+                "sat"
+            ],
+            "verified": true
         },
         {
-            "_id":         "org.couchdb.user:eastin",
-            "type":        "user",
-            "name":        "eastin",
-            "username":    "eastin",
+            "_id": "org.couchdb.user:eastin",
+            "type": "user",
+            "name": "eastin",
+            "username": "eastin",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "eastin@localhost",
-            "roles":       ["eastin"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "eastin@localhost",
+            "roles": [
+                "eastin"
+            ],
+            "verified": true
         },
         {
-            "_id":         "org.couchdb.user:sai",
-            "type":        "user",
-            "name":        "sai",
-            "username":    "sai",
+            "_id": "org.couchdb.user:sai",
+            "type": "user",
+            "name": "sai",
+            "username": "sai",
             "derived_key": "dd11a6d074786fc914cbcdbc7ec5a06ad002812a",
-            "salt":        "secret",
-            "iterations":  10,
-            "email":       "sai@localhost",
-            "roles":       ["sai"],
-            "verified":    true
+            "salt": "secret",
+            "iterations": 10,
+            "email": "sai@localhost",
+            "roles": [
+                "sai"
+            ],
+            "verified": true
         },
         {
             "_id": "_design/lookup",

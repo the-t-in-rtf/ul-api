@@ -36,5 +36,12 @@
             "$ref": "product-base.json#/definitions/updated"
         }
     },
-   "required": ["source","sid","name","description", "manufacturer", "status"]
+    "required": [
+        "source",
+        "sid",
+        "name",
+        "description",
+        "manufacturer",
+        "status"
+    ]
 }

@@ -1,9 +1,12 @@
 {
-  "docs": [
-    {
-      "uid":    "1421059432806-826608318",
-      "type":   "gallery",
-      "images": [ "b.png", "a.png"]
-    }
-  ]
+    "docs": [
+        {
+            "uid": "1421059432806-826608318",
+            "type": "gallery",
+            "images": [
+                "b.png",
+                "a.png"
+            ]
+        }
+    ]
 }

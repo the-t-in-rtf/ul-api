@@ -1,27 +1,27 @@
 {
-  "type": "object",
-  "id": "products-input.json",
-  "properties": {
-    "unified": {
-      "$ref": "output.json#/definitions/unified"
-    },
-    "limit": {
-      "$ref": "paging.json#/definitions/limit"
-    },
-    "offset": {
-      "$ref": "paging.json#/definitions/offset"
-    },
-    "sources": {
-      "$ref": "filters.json#/definitions/sources"
-    },
-    "sortBy": {
-      "$ref": "sort-by.json#/definitions/sortBy"
-    },
-    "status": {
-      "$ref": "filters.json#/definitions/status"
-    },
-    "updatedSince": {
-      "$ref": "filters.json#/definitions/updatedSince"
+    "type": "object",
+    "id": "products-input.json",
+    "properties": {
+        "unified": {
+            "$ref": "output.json#/definitions/unified"
+        },
+        "limit": {
+            "$ref": "paging.json#/definitions/limit"
+        },
+        "offset": {
+            "$ref": "paging.json#/definitions/offset"
+        },
+        "sources": {
+            "$ref": "filters.json#/definitions/sources"
+        },
+        "sortBy": {
+            "$ref": "sort-by.json#/definitions/sortBy"
+        },
+        "status": {
+            "$ref": "filters.json#/definitions/status"
+        },
+        "updatedSince": {
+            "$ref": "filters.json#/definitions/updatedSince"
+        }
     }
-  }
 }

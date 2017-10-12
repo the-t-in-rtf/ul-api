@@ -1,28 +1,28 @@
 {
-  "docs": [
-    {
-      "uid": "deletedRecord",
-      "status": "deleted",
-      "source": "unified",
-      "sid": "deletedRecord",
-      "name": "Deleted record",
-      "description": "This record has been deleted...",
-      "manufacturer": {
-        "name": "sample manufacturer 1"
-      },
-      "updated": "2015-01-01"
-    },
-    {
-      "uid": "deletedRecord",
-      "status": "new",
-      "source": "GARI",
-      "sid": "active",
-      "name": "Active record associated with deleted unified record...",
-      "description": "This record is still active...",
-      "manufacturer": {
-        "name": "sample manufacturer 1"
-      },
-      "updated": "2015-01-01"
-    }
-  ]
+    "docs": [
+        {
+            "uid": "deletedRecord",
+            "status": "deleted",
+            "source": "unified",
+            "sid": "deletedRecord",
+            "name": "Deleted record",
+            "description": "This record has been deleted...",
+            "manufacturer": {
+                "name": "sample manufacturer 1"
+            },
+            "updated": "2015-01-01"
+        },
+        {
+            "uid": "deletedRecord",
+            "status": "new",
+            "source": "GARI",
+            "sid": "active",
+            "name": "Active record associated with deleted unified record...",
+            "description": "This record is still active...",
+            "manufacturer": {
+                "name": "sample manufacturer 1"
+            },
+            "updated": "2015-01-01"
+        }
+    ]
 }

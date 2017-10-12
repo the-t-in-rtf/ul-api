@@ -2,7 +2,6 @@
     "type": "object",
     "id": "products-base.json",
     "description": "Common definitions used in validating user input and returning results related to the 'products' endpoint.",
-
     "definitions": {
         "products": {
             "type": "array",

@@ -1,88 +1,88 @@
 {
-  "docs": [
-    {
-      "uid": "unifiedNewer",
-      "status": "new",
-      "source": "unified",
-      "sid": "unifiedNewer",
-      "name": "sample product 1",
-      "description": "sample description 1",
-      "manufacturer": {
-        "name": "sample manufacturer 1"
-      },
-      "updated": "2015-01-01"
-    },
-    {
-      "uid": "futureKind",
-      "status": "new",
-      "source": "unified",
-      "sid": "futureKind",
-      "name": "A record ahead of its time.",
-      "description": "The skies are made of diamonds.",
-      "manufacturer": {
-        "name": "Professor Yana"
-      },
-      "updated": "3000-01-01"
-    },
-    {
-      "uid": "unifiedNewer",
-      "status": "new",
-      "source": "~existing",
-      "sid": "contrib1",
-      "name": "sample product 1",
-      "description": "sample description 1",
-      "manufacturer": {
-        "name": "sample manufacturer 1"
-      },
-      "updated": "2014-01-01"
-    },
-    {
-      "uid": "unifiedNewer",
-      "status": "deleted",
-      "source": "~existing",
-      "sid": "contrib5",
-      "name": "sample product 5",
-      "description": "sample description 5",
-      "manufacturer": {
-        "name": "sample manufacturer 5"
-      },
-      "updated": "2014-05-01"
-    },
-    {
-      "uid": "unifiedOlder",
-      "status": "new",
-      "source": "unified",
-      "sid": "unifiedOlder",
-      "name": "sample product 2",
-      "description": "sample description 2",
-      "manufacturer": {
-        "name": "sample manufacturer 2"
-      },
-      "updated": "2013-01-01"
-    },
-    {
-      "uid": "unifiedOlder",
-      "status": "new",
-      "source": "~existing",
-      "sid": "contrib2",
-      "name": "sample product 2",
-      "description": "sample description 2",
-      "manufacturer": {
-        "name": "sample manufacturer 2"
-      },
-      "updated": "2014-01-01"
-    },
-    {
-      "uid": "unifiedOlder",
-      "status": "new",
-      "source": "slashed/source",
-      "sid": "slashed/sid",
-      "name": "slashed",
-      "description": "Product with slashes in its source and sid...",
-      "manufacturer": {
-        "name": "sample manufacturer 3"
-      },
-      "updated": "2014-01-01"
-    }
-  ]
+    "docs": [
+        {
+            "uid": "unifiedNewer",
+            "status": "new",
+            "source": "unified",
+            "sid": "unifiedNewer",
+            "name": "sample product 1",
+            "description": "sample description 1",
+            "manufacturer": {
+                "name": "sample manufacturer 1"
+            },
+            "updated": "2015-01-01"
+        },
+        {
+            "uid": "futureKind",
+            "status": "new",
+            "source": "unified",
+            "sid": "futureKind",
+            "name": "A record ahead of its time.",
+            "description": "The skies are made of diamonds.",
+            "manufacturer": {
+                "name": "Professor Yana"
+            },
+            "updated": "3000-01-01"
+        },
+        {
+            "uid": "unifiedNewer",
+            "status": "new",
+            "source": "~existing",
+            "sid": "contrib1",
+            "name": "sample product 1",
+            "description": "sample description 1",
+            "manufacturer": {
+                "name": "sample manufacturer 1"
+            },
+            "updated": "2014-01-01"
+        },
+        {
+            "uid": "unifiedNewer",
+            "status": "deleted",
+            "source": "~existing",
+            "sid": "contrib5",
+            "name": "sample product 5",
+            "description": "sample description 5",
+            "manufacturer": {
+                "name": "sample manufacturer 5"
+            },
+            "updated": "2014-05-01"
+        },
+        {
+            "uid": "unifiedOlder",
+            "status": "new",
+            "source": "unified",
+            "sid": "unifiedOlder",
+            "name": "sample product 2",
+            "description": "sample description 2",
+            "manufacturer": {
+                "name": "sample manufacturer 2"
+            },
+            "updated": "2013-01-01"
+        },
+        {
+            "uid": "unifiedOlder",
+            "status": "new",
+            "source": "~existing",
+            "sid": "contrib2",
+            "name": "sample product 2",
+            "description": "sample description 2",
+            "manufacturer": {
+                "name": "sample manufacturer 2"
+            },
+            "updated": "2014-01-01"
+        },
+        {
+            "uid": "unifiedOlder",
+            "status": "new",
+            "source": "slashed/source",
+            "sid": "slashed/sid",
+            "name": "slashed",
+            "description": "Product with slashes in its source and sid...",
+            "manufacturer": {
+                "name": "sample manufacturer 3"
+            },
+            "updated": "2014-01-01"
+        }
+    ]
 }

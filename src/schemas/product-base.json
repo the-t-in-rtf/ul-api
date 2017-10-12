@@ -1,203 +1,202 @@
 {
-  "type": "object",
-  "id": "product-base.json",
-  "description": "Common definitions used in validating user input to and returning data from the 'product' REST endpoint.",
-  "definitions": {
-    "source": {
-      "type": "string",
-      "description": "The source of a record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to 'ul'.",
-      "minLength": 1,
-      "maxLength": 50,
-      "errors": {
-        "type":      "You must provide a source name for this product.",
-        "minLength": "You must provide a source name for this product.",
-        "maxLength": "You must provide a source name for this product."
-      }
-    },
-    "sid": {
-      "type": "string",
-      "description": "The unique identifier to identify this record in the source database.",
-      "minLength": 1,
-      "maxLength": 100,
-      "errors": {
-        "type":      "You must provide a source ID for this product.",
-        "minLength": "You must provide a source ID for this product.",
-        "maxLength": "You must provide a source ID for this product."
-      }
-    },
-    "uid": {
-      "type": "string",
-      "description": "The Universal ID ('uid') is an id that is unique in the Unified listing and which is constant for different editions of a product.  'Source' records use this field to indicate which 'unified' record they are associated with (if any).",
-      "minLength": 1,
-      "maxLength": 100,
-      "errors": {
-        "type":      "You must provide the ID of the Unified Listing for this product.",
-        "minLength": "You must provide the ID of the Unified Listing for this product.",
-        "maxLength": "You must provide the ID of the Unified Listing for this product."
-      }
-    },
-    "name": {
-      "type": "string",
-      "minLength": 1,
-      "description": "The name of the product.",
-      "errors": {
-        "type":      "You must provide the name of the product.",
-        "minLength": "You must provide the name of the product."
-      }
-    },
-    "description": {
-      "type": "string",
-      "minLength": 1,
-      "description": "A description of the product.",
-      "errors": {
-        "type":      "The product description must be a string.",
-        "minLength": "The product description must be one or more characters long."
-      }
-    },
-    "manufacturer": {
-      "type": "object",
-      "description": "A JSON object describing the manufacturer.",
-      "properties": {
+    "type": "object",
+    "id": "product-base.json",
+    "description": "Common definitions used in validating user input to and returning data from the 'product' REST endpoint.",
+    "definitions": {
+        "source": {
+            "type": "string",
+            "description": "The source of a record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to 'ul'.",
+            "minLength": 1,
+            "maxLength": 50,
+            "errors": {
+                "type": "You must provide a source name for this product.",
+                "minLength": "You must provide a source name for this product.",
+                "maxLength": "You must provide a source name for this product."
+            }
+        },
+        "sid": {
+            "type": "string",
+            "description": "The unique identifier to identify this record in the source database.",
+            "minLength": 1,
+            "maxLength": 100,
+            "errors": {
+                "type": "You must provide a source ID for this product.",
+                "minLength": "You must provide a source ID for this product.",
+                "maxLength": "You must provide a source ID for this product."
+            }
+        },
+        "uid": {
+            "type": "string",
+            "description": "The Universal ID ('uid') is an id that is unique in the Unified listing and which is constant for different editions of a product.  'Source' records use this field to indicate which 'unified' record they are associated with (if any).",
+            "minLength": 1,
+            "maxLength": 100,
+            "errors": {
+                "type": "You must provide the ID of the Unified Listing for this product.",
+                "minLength": "You must provide the ID of the Unified Listing for this product.",
+                "maxLength": "You must provide the ID of the Unified Listing for this product."
+            }
+        },
         "name": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The name of the manufacturer.",
-          "errors": {
-            "type":      "The product manufacturer's name must be a string.",
-            "minLength": "The product manufacturer's name must be one or more characters long."
-          }
+            "type": "string",
+            "minLength": 1,
+            "description": "The name of the product.",
+            "errors": {
+                "type": "You must provide the name of the product.",
+                "minLength": "You must provide the name of the product."
+            }
         },
-        "address": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The street address of the manufacturer (may also be used for the complete address).",
-          "errors": {
-            "type":      "The manufacturer's address must be a string.",
-            "minLength": "The manufacturer's address must be one or more characters long."
-          }
+        "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A description of the product.",
+            "errors": {
+                "type": "The product description must be a string.",
+                "minLength": "The product description must be one or more characters long."
+            }
         },
-        "postalCode": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The postal code (ZIP code, etc.) of the manufacturer.",
-          "errors": {
-            "type":      "The manufacturer's postal code must be a string.",
-            "minLength": "The manufacturer's postal code must be one or more characters long."
-          }
+        "manufacturer": {
+            "type": "object",
+            "description": "A JSON object describing the manufacturer.",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The name of the manufacturer.",
+                    "errors": {
+                        "type": "The product manufacturer's name must be a string.",
+                        "minLength": "The product manufacturer's name must be one or more characters long."
+                    }
+                },
+                "address": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The street address of the manufacturer (may also be used for the complete address).",
+                    "errors": {
+                        "type": "The manufacturer's address must be a string.",
+                        "minLength": "The manufacturer's address must be one or more characters long."
+                    }
+                },
+                "postalCode": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The postal code (ZIP code, etc.) of the manufacturer.",
+                    "errors": {
+                        "type": "The manufacturer's postal code must be a string.",
+                        "minLength": "The manufacturer's postal code must be one or more characters long."
+                    }
+                },
+                "cityTown": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The city/town in which the manufacturer is located.",
+                    "errors": {
+                        "type": "The manufacturer's city/town must be a string.",
+                        "minLength": "The manufacturer's city/town must be one or more characters long."
+                    }
+                },
+                "provinceRegion": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The province/region in which the manufacturer is located.",
+                    "errors": {
+                        "type": "The manufacturer's province/region must be a string.",
+                        "minLength": "The manufacturer's province/region must be one or more characters long."
+                    }
+                },
+                "country": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The country in which the manufacturer is located.",
+                    "errors": {
+                        "type": "The manufacturer's country must be a string.",
+                        "minLength": "The manufacturer's country must be one or more characters long."
+                    }
+                },
+                "phone": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The phone number of the manufacturer.",
+                    "errors": {
+                        "type": "The manufacturer's phone number must be a string.",
+                        "minLength": "The manufacturer's phone number must be one or more characters long."
+                    }
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "An email address at which the manufacturer can be contacted.",
+                    "errors": {
+                        "type": "The manufacturer's email address must be a string.",
+                        "form": "The manufacturer's email address must be valid."
+                    }
+                },
+                "url": {
+                    "type": "string",
+                    "description": "The manufacturer's web site.",
+                    "format": "uri",
+                    "errors": {
+                        "type": "The manufacturer's URL  must be a string.",
+                        "minLength": "The manufacturer's URL must be a valid URL."
+                    }
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "errors": {
+                "required/0": "You must provide the name of the product's manufacturer."
+            }
         },
-        "cityTown": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The city/town in which the manufacturer is located.",
-          "errors": {
-            "type":      "The manufacturer's city/town must be a string.",
-            "minLength": "The manufacturer's city/town must be one or more characters long."
-          }
+        "status": {
+            "type": "string",
+            "enum": [
+                "new",
+                "active",
+                "discontinued",
+                "deleted"
+            ],
+            "description": "The status of this record. Current supported values are: 'new', 'active', 'discontinued', 'deleted'.",
+            "errors": {
+                "type": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'.",
+                "enum": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'."
+            }
         },
-        "provinceRegion": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The province/region in which the manufacturer is located.",
-          "errors": {
-            "type":      "The manufacturer's province/region must be a string.",
-            "minLength": "The manufacturer's province/region must be one or more characters long."
-          }
+        "language": {
+            "$ref": "product-base.json#/definitions/languagePattern",
+            "description": "The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.",
+            "errors": {
+                "pattern": "You must provide a valid language code (ex: en_us).",
+                "type": "You must provide a valid language code (ex: en_us)."
+            }
         },
-        "country": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The country in which the manufacturer is located.",
-          "errors": {
-            "type":      "The manufacturer's country must be a string.",
-            "minLength": "The manufacturer's country must be one or more characters long."
-          }
+        "languagePattern": {
+            "type": "string",
+            "pattern": "^[a-zA-Z]{2}_[A-Za-z]{2}$"
         },
-        "phone": {
-          "type": "string",
-          "minLength": 1,
-          "description": "The phone number of the manufacturer.",
-          "errors": {
-            "type":      "The manufacturer's phone number must be a string.",
-            "minLength": "The manufacturer's phone number must be one or more characters long."
-          }
+        "sourceData": {
+            "type": "object",
+            "description": "The original source record represented as a JSON object."
         },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "An email address at which the manufacturer can be contacted.",
-          "errors": {
-            "type": "The manufacturer's email address must be a string.",
-            "form": "The manufacturer's email address must be valid."
-          }
+        "sourceURL": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URI where the original source record can be viewed on the provider's site."
         },
-        "url": {
-          "type": "string",
-          "description": "The manufacturer's web site.",
-          "format": "uri",
-          "errors": {
-            "type":      "The manufacturer's URL  must be a string.",
-            "minLength": "The manufacturer's URL must be a valid URL."
-          }
+        "sources": {
+            "type": "array",
+            "description": "A list of records that are associated with this one.  Only used by 'unified' records.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date at which the record was last updated.",
+            "errors": {
+                "format": "You must provide a valid date.",
+                "type": "You must provide a valid date."
+            }
         }
-      },
-      "required": [
-        "name"
-      ],
-      "errors": {
-        "required/0": "You must provide the name of the product's manufacturer."
-      }
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "new",
-        "active",
-        "discontinued",
-        "deleted"
-      ],
-      "description": "The status of this record. Current supported values are: 'new', 'active', 'discontinued', 'deleted'.",
-      "errors": {
-        "type": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'.",
-        "enum": "You must provide a valid status.  Currently supported values are: 'new', 'active', 'discontinued', and 'deleted'."
-      }
-    },
-    "language": {
-      "$ref": "product-base.json#/definitions/languagePattern",
-      "description": "The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.",
-      "errors": {
-        "pattern": "You must provide a valid language code (ex: en_us).",
-        "type":    "You must provide a valid language code (ex: en_us)."
-      }
-
-    },
-    "languagePattern": {
-      "type": "string",
-      "pattern": "^[a-zA-Z]{2}_[A-Za-z]{2}$"
-    },
-    "sourceData": {
-      "type": "object",
-      "description": "The original source record represented as a JSON object."
-    },
-    "sourceURL": {
-      "type": "string",
-      "format": "uri",
-      "description": "A URI where the original source record can be viewed on the provider's site."
-    },
-    "sources": {
-      "type": "array",
-      "description": "A list of records that are associated with this one.  Only used by 'unified' records.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "updated": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The date at which the record was last updated.",
-      "errors": {
-        "format": "You must provide a valid date.",
-        "type":    "You must provide a valid date."
-      }
     }
-  }
 }

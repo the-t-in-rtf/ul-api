@@ -1,56 +1,64 @@
 {
-  "id": "filters.json",
-  "description": "Common 'filter' parameter definitions used throughout the UL API.",
-  "definitions": {
-    "updatedSince": {
-      "type":        "string",
-      "anyOf": [
-        { "format": "date-time" },
-        { "format": "date" }
-      ],
-      "errors": {
-        "type":   "You must supply a valid date in ISO 8601 string format.",
-        "anyOf":  "You must supply a valid date in ISO 8601 string format."
-      }
-    },
-    "status": {
-      "anyOf": [
-        {  "$ref": "product-base.json#/definitions/status" },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "product-base.json#/definitions/status"
-          }
-        }
-      ],
-      "errors": {
-        "anyOf": "Invalid status.  See the API docs for supported values."
-      }
-    },
-    "sources": {
-      "anyOf": [
-        { "$ref": "product-base.json#/definitions/source" },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "product-base.json#/definitions/source"
-          }
-        }
-      ]
-    },
-    "filters": {
-      "type": "object",
-      "properties": {
+    "id": "filters.json",
+    "description": "Common 'filter' parameter definitions used throughout the UL API.",
+    "definitions": {
         "updatedSince": {
-          "$ref": "filters.json#/definitions/updatedSince"
+            "type": "string",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                }
+            ],
+            "errors": {
+                "type": "You must supply a valid date in ISO 8601 string format.",
+                "anyOf": "You must supply a valid date in ISO 8601 string format."
+            }
         },
         "status": {
-          "$ref": "filters.json#/definitions/status"
+            "anyOf": [
+                {
+                    "$ref": "product-base.json#/definitions/status"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "product-base.json#/definitions/status"
+                    }
+                }
+            ],
+            "errors": {
+                "anyOf": "Invalid status.  See the API docs for supported values."
+            }
         },
         "sources": {
-          "$ref": "filters.json#/definitions/sources"
+            "anyOf": [
+                {
+                    "$ref": "product-base.json#/definitions/source"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "product-base.json#/definitions/source"
+                    }
+                }
+            ]
+        },
+        "filters": {
+            "type": "object",
+            "properties": {
+                "updatedSince": {
+                    "$ref": "filters.json#/definitions/updatedSince"
+                },
+                "status": {
+                    "$ref": "filters.json#/definitions/status"
+                },
+                "sources": {
+                    "$ref": "filters.json#/definitions/sources"
+                }
+            }
         }
-      }
     }
-  }
 }

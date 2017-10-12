@@ -1,18 +1,18 @@
 {
-  "docs": [
-    {
-      "_id": "_design/metadata",
-      "views": {
-        "byUid": {
-          "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.uid, doc); } }"
-        },
-        "bySource": {
-          "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.source, doc); } }"
-        },
-        "combined": {
-          "map": "function (doc) { if (doc.type === \"metadata\") { emit([doc.uid, doc.source, doc.image_id], doc); } }"
+    "docs": [
+        {
+            "_id": "_design/metadata",
+            "views": {
+                "byUid": {
+                    "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.uid, doc); } }"
+                },
+                "bySource": {
+                    "map": "function (doc) { if (doc.type === \"metadata\") { emit(doc.source, doc); } }"
+                },
+                "combined": {
+                    "map": "function (doc) { if (doc.type === \"metadata\") { emit([doc.uid, doc.source, doc.image_id], doc); } }"
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

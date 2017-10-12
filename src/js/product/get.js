@@ -73,8 +73,8 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
         // Only work with the same data validated by the schema validation middleware.
         var input = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
-        // If this unified record is a duplicate, redirect to the record this one duplicates.
-        if (that.productRecord.source === "unified" && that.productRecord.uid !== that.productRecord.sid) {
+        // If this unified record is a duplicate, redirect to the record this one duplicates.  Can be bypassed by setting the `noRedirect` query variable to a "truthy" value.
+        if (that.productRecord.source === "unified" && that.productRecord.uid !== that.productRecord.sid && !input.noRedirect) {
             that.options.response.redirect(301, "/api/product/unified/" + that.productRecord.uid);
         }
         // Look up the sources if the "sources" flag is set in {that}.request.query.
@@ -281,7 +281,8 @@ fluid.defaults("gpii.ul.api.product.get", {
                         {literalValue: true}
                     ]
                 }
-            }
+            },
+            "noRedirect": "query.noRedirect"
         }
     },
     distributeOptions: [

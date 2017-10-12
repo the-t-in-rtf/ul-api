@@ -1,12 +1,12 @@
 {
-  "id": "output.json",
-  "description": "Definitions for input parameters that control the output format of various REST endpoints.",
-  "definitions": {
-    "includeSources": {
-      "type": "boolean"
-    },
-    "unified": {
-      "type": "boolean"
+    "id": "output.json",
+    "description": "Definitions for input parameters that control the output format of various REST endpoints.",
+    "definitions": {
+        "includeSources": {
+            "type": "boolean"
+        },
+        "unified": {
+            "type": "boolean"
+        }
     }
-  }
 }
