@@ -1,20 +1,26 @@
 {
-  "type": "object",
-  "id": "product-get-input.json",
-  "properties": {
-    "includeSources": {
-      "$ref": "output.json#/definitions/includeSources"
+    "type": "object",
+    "id": "product-get-input.json",
+    "properties": {
+        "noRedirect": {
+            "type": "boolean"
+        },
+        "includeSources": {
+            "$ref": "output.json#/definitions/includeSources"
+        },
+        "sid": {
+            "$ref": "product-base.json#/definitions/sid"
+        },
+        "source": {
+            "$ref": "product-base.json#/definitions/source"
+        }
     },
-    "sid": {
-      "$ref": "product-base.json#/definitions/sid"
-    },
-    "source": {
-      "$ref": "product-base.json#/definitions/source"
+    "required": [
+        "source",
+        "sid"
+    ],
+    "errors": {
+        "#/required/0": "The 'source' URL parameter is required.",
+        "#/required/1": "The 'sid' URL parameter is required."
     }
-  },
-  "required": ["source", "sid"],
-  "errors": {
-    "#/required/0": "The 'source' URL parameter is required.",
-    "#/required/1": "The 'sid' URL parameter is required."
-  }
 }

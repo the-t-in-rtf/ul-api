@@ -256,6 +256,28 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                             args:     ["{requestDuplicateRecord}.nativeResponse"]
                         }
                     ]
+                },
+                {
+                    name: "Request a duplicate record with the `noRedirect` option...",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{requestDuplicateRecordNoRedirect}.send",
+                            args: []
+                        },
+                        {
+                            event:    "{requestDuplicateRecordNoRedirect}.events.onComplete",
+                            listener: "gpii.tests.ul.api.product.get.verifyContent",
+                            // message, response, body, expected, statusCode
+                            args:     [
+                                "We should have seen the raw duplicate...",
+                                "{requestDuplicateRecordNoRedirect}.nativeResponse",
+                                "@expand:JSON.parse({arguments}.0)",
+                                "{that}.options.expected.duplicateNoRedirect",
+                                200
+                            ]
+                        }
+                    ]
                 }
             ]
         }
@@ -328,6 +350,12 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
                 endpoint: "api/product/unified/mergedDuplicate"
+            }
+        },
+        requestDuplicateRecordNoRedirect: {
+            type: "gpii.tests.ul.api.product.get.request",
+            options: {
+                endpoint: "api/product/unified/mergedDuplicate?noRedirect=true"
             }
         }
     },
@@ -457,6 +485,19 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
             isError: true,
             "statusCode": 401,
             message: "You are not authorized to view this record."
+        },
+        duplicateNoRedirect:         {
+            "uid": "mergedOriginal",
+            "status": "deleted",
+            "source": "unified",
+            "sid": "mergedDuplicate",
+            "name": "A duplicate...",
+            "description": "This record is a duplicate.",
+            "manufacturer": {
+                "name": "ACME Corp."
+            },
+            "updated": "2017-08-31",
+            "sources": []
         }
     }
 });
