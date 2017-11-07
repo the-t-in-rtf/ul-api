@@ -177,7 +177,7 @@
             "type": "object",
             "description": "The original source record represented as a JSON object."
         },
-        "sourceURL": {
+        "sourceUrl": {
             "type": "string",
             "format": "uri",
             "description": "A URI where the original source record can be viewed on the provider's site."

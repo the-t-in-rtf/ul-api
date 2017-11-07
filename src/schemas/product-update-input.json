@@ -32,6 +32,9 @@
         "sourceData": {
             "$ref": "product-base.json#/definitions/sourceData"
         },
+        "sourceUrl": {
+            "$ref": "product-base.json#/definitions/sourceUrl"
+        },
         "status": {
             "$ref": "product-base.json#/definitions/status"
         },
