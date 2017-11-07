@@ -44,5 +44,6 @@
         "#/required/4": "A source is required.",
         "#/required/5": "A status is required.",
         "#/required/6": "An uid is required."
-    }
+    },
+    "additionalProperties": false
 }
