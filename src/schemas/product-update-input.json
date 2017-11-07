@@ -29,6 +29,9 @@
         "manufacturer": {
             "$ref": "product-base.json#/definitions/manufacturer"
         },
+        "sourceData": {
+            "$ref": "product-base.json#/definitions/sourceData"
+        },
         "status": {
             "$ref": "product-base.json#/definitions/status"
         },
