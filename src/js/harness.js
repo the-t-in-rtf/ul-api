@@ -7,7 +7,6 @@ var gpii  = fluid.registerNamespace("gpii");
 
 fluid.require("%ul-api");
 fluid.require("%gpii-express");
-fluid.require("%gpii-pouchdb-lucene");
 fluid.require("%gpii-express-user");
 fluid.require("%gpii-handlebars");
 
