@@ -35,6 +35,9 @@
         "sourceUrl": {
             "$ref": "product-base.json#/definitions/sourceUrl"
         },
+        "language": {
+            "$ref": "product-base.json#/definitions/language"
+        },
         "status": {
             "$ref": "product-base.json#/definitions/status"
         },
