@@ -1,5 +1,6 @@
 {
     "Handicat": {
+        "name": "Handicat",
         "view": [
             "*"
         ],
@@ -8,6 +9,7 @@
         ]
     },
     "Vlibank": {
+        "name": "Vlibank",
         "view": [
             "*"
         ],
@@ -16,6 +18,7 @@
         ]
     },
     "Siva": {
+        "name": "Siva",
         "view": [
             "*"
         ],
@@ -24,6 +27,7 @@
         ]
     },
     "EASTIN Admin": {
+        "name": "EASTIN Admin",
         "view": [
             "*"
         ],
@@ -32,6 +36,7 @@
         ]
     },
     "Hjælpemiddelbasen": {
+        "name": "Hjælpemiddelbasen",
         "view": [
             "*"
         ],
@@ -40,6 +45,7 @@
         ]
     },
     "Rehadat": {
+        "name": "Rehadat",
         "view": [
             "*"
         ],
@@ -48,6 +54,7 @@
         ]
     },
     "Hulpmiddelenwijzer": {
+        "name": "Hulpmiddelenwijzer",
         "view": [
             "reviewers",
             "importer"
@@ -57,6 +64,7 @@
         ]
     },
     "Oaeg": {
+        "name": "Oaeg",
         "view": [
             "reviewers",
             "importer"
@@ -66,6 +74,7 @@
         ]
     },
     "ATAust": {
+        "name": "ATAust",
         "view": [
             "*"
         ],
@@ -74,6 +83,7 @@
         ]
     },
     "Dlf data": {
+        "name": "Dlf data",
         "view": [
             "reviewers",
             "importer"
@@ -83,6 +93,7 @@
         ]
     },
     "unified": {
+        "name": "Unified Listing Federation Hub",
         "view": [
             "*"
         ],
@@ -92,6 +103,7 @@
         ]
     },
     "SolutionsOntologyFinal": {
+        "name": "Solutions Ontology",
         "view": [
             "reviewers",
             "sat"
@@ -102,6 +114,7 @@
         ]
     },
     "sai": {
+        "name": "Unified Listing",
         "view": [
             "reviewers",
             "importer",
@@ -113,6 +126,7 @@
         ]
     },
     "GARI": {
+        "name": "GARI",
         "view": [
             "gari",
             "importer",
@@ -124,6 +138,7 @@
         ]
     },
     "~": {
+        "name": "Individual Contribution",
         "view": [
             "~",
             "reviewers"
