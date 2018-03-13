@@ -8,8 +8,8 @@
 var fluid  = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
-var marked = require("marked");
-var fs     = require("fs");
+var MarkDownIt = require("markdown-it");
+var fs         = require("fs");
 
 fluid.registerNamespace("gpii.ul.api.docs");
 
@@ -26,8 +26,9 @@ fluid.registerNamespace("gpii.ul.api.docs");
  *
  */
 gpii.ul.api.docs.middleware = function (that, req, res) {
-    var markdown = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
-    res.render(that.options.template, { "title": that.options.title, "body": marked(markdown, that.options.markedOptions), "layout": that.options.layout});
+    var markdownSource = fs.readFileSync(fluid.module.resolvePath(that.options.mdFile), {encoding: "utf8"});
+    var mdRenderer = new MarkDownIt();
+    res.render(that.options.template, { "title": that.options.title, "body": mdRenderer.render(markdownSource), "layout": that.options.layout});
 };
 
 fluid.defaults("gpii.ul.api.docs", {
@@ -38,8 +39,6 @@ fluid.defaults("gpii.ul.api.docs", {
     layout:     "main",
     title:      "UL API Documentation",
     mdFile:     "%ul-api/docs/apidocs.md",
-    markedOptions: {
-    },
     invokers: {
         middleware: {
             funcName: "gpii.ul.api.docs.middleware",

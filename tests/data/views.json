@@ -26,7 +26,7 @@
                         "field": "uniqueId",
                         "store": "yes"
                     },
-                    "analyzer": "perfield:{default:\"porter\",uid:\"keyword\",source:\"keyword\",language:\"keyword\",status:\"keyword\"}"
+                    "analyzer": "perfield:{default:\"standard\",uid:\"keyword\",source:\"keyword\",language:\"keyword\",status:\"keyword\"}"
                 }
             }
         }

@@ -82,19 +82,25 @@ fluid.defaults("gpii.ul.api", {
                 priority: "after:urlencoded",
                 templateDirs: "{gpii.ul.api}.options.templateDirs",
                 components: {
-                    initBlock: {
+                    renderer: {
                         options: {
-                            contextToOptionsRules: {
-                                req: {
-                                    "params": "req.params",
-                                    "query":  "req.query"
-                                },
-                                product:  "product",
-                                products: "products",
-                                model: {
-                                    user:     "req.session._ul_user",
-                                    product:  "product",
-                                    products: "products"
+                            components: {
+                                initBlock: {
+                                    options: {
+                                        contextToOptionsRules: {
+                                            req: {
+                                                "params": "req.params",
+                                                "query":  "req.query"
+                                            },
+                                            product:  "product",
+                                            products: "products",
+                                            model: {
+                                                user:     "req.session._ul_user",
+                                                product:  "product",
+                                                products: "products"
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
