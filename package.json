@@ -16,7 +16,7 @@
     "dependencies": {
         "gpii-binder": "1.0.3",
         "gpii-express": "1.0.13",
-        "gpii-express-user": "1.0.0",
+        "gpii-express-user": "1.0.1-dev.20180315T140513Z.173044a",
         "gpii-handlebars": "1.1.0",
         "gpii-json-schema": "1.0.5",
         "gpii-location-bar-relay": "1.0.3",

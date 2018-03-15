@@ -214,8 +214,8 @@ fluid.defaults("gpii.ul.api", {
         },
         jsonErrors: {
             type: "gpii.express.middleware.error",
-            priority: "after:htmlErrorHandler",
             options: {
+                priority: "after:htmlErrorHandler",
                 rules: {
                     errorOutputRules: {
                         "":     ""

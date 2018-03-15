@@ -169,8 +169,8 @@ fluid.defaults("gpii.ul.api.images.file.read", {
         },
         static: {
             type:     "gpii.express.router.static",
-            priority: "last",
             options: {
+                priority: "last",
                 content: ["{gpii.ul.api.images.file.read}.options.originalsDir", "{gpii.ul.api.images.file.read}.options.cacheDir"]
             }
         }
