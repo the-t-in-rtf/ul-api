@@ -70,7 +70,7 @@ gpii.ul.api.merge.handleRecordsLookupSuccess = function (that, lookupResults) {
         that.sendResponse(404, { isError: true, message: "Cannot find a valid unified record with the specified uid."});
     }
     else if (!duplicateRecords.length) {
-        that.sendResponse(404, { isError: true, message: "You must specify one or more valid source records to merge with the target reocord."});
+        that.sendResponse(404, { isError: true, message: "You must specify one or more valid source records to merge with the target record."});
     }
     else if (targetRecord.sid !== targetRecord.uid) {
         that.sendResponse(400, { isError: true, message: "You cannot merge duplicates with a record that has already been merged."});
