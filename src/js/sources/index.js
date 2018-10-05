@@ -35,7 +35,7 @@ fluid.registerNamespace("gpii.ul.api.sources.request");
  * Fulfills the standard contract for a `gpii.express.handler` instance:
  * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
  *
- * @param that - The component itself.
+ * @param {Object} that - The component itself.
  *
  */
 gpii.ul.api.sources.request.handleRequest = function (that) {
@@ -55,9 +55,9 @@ gpii.ul.api.sources.request.handleRequest = function (that) {
  *
  * A static function to filter a list of source definitions and return only those the current user can "view".
  *
- * @param sources {Object} A map of source definitions, keyed by name.
- * @param user {Object} The current object, as stored in the request session by gpii-express-user.
- * @returns {Array} An array of sources the current user can "view".
+ * @param {Object} sources - A map of source definitions, keyed by name.
+ * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @return {Array} An array of sources the current user can "view".
  *
  */
 gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
@@ -68,9 +68,9 @@ gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
  *
  * A static function to filter a list of source definitions and return only those the current user can "edit".
  *
- * @param sources {Object} A map of source definitions, keyed by name.
- * @param user {Object} The current object, as stored in the request session by gpii-express-user.
- * @returns {Array} An array of sources the current user can "edit".
+ * @param {Object} sources - A map of source definitions, keyed by name.
+ * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @return {Array} An array of sources the current user can "edit".
  *
  */
 gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
@@ -81,10 +81,10 @@ gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
  *
  * A static function to filter a list of source definitions down to those for which the current user has a specified permission.
  *
- * @param sources {Object} A map of source definitions, keyed by name.
- * @param user {Object} The current object, as stored in the request session by gpii-express-user.
- * @param permission {String} - The permission to look for, either "view" or "edit".
- * @returns {Array} An array of sources for which the current user has the selected permission.
+ * @param {Object} sources - A map of source definitions, keyed by name.
+ * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @param {String} permission - The permission to look for, either "view" or "edit".
+ * @return {Array} An array of sources for which the current user has the selected permission.
  *
  */
 gpii.ul.api.sources.request.listSources = function (sources, user, permission) {

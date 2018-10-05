@@ -22,8 +22,9 @@ gpii.ul.api.search.handler.handleRequest = function (that) {
  *  There is a hard limit of ~7,000 characters that you can use in a single query string, so we request products in
  *  smaller batches and knit them together once the entire sequence of promises has completed.
  *
- * @param that {Object} The handler component itself.
- * @param keys {Array} The full array of keys we are looking up.  We will only look up the full products based on the offset and limit.
+ * @param {Object} that - The handler component itself.
+ * @param {Array} keys - The full array of keys we are looking up.  We will only look up the full products based on the offset and limit.
+ * @return {Promise} A promise that will be resolved with the requested records or rejected if there is an error.
  *
  */
 gpii.ul.api.search.handler.getFullRecords = function (that, keys) {
@@ -74,8 +75,8 @@ gpii.ul.api.search.handler.processSearchResponse = function (that, luceneRespons
  *
  * A function to take one or more couch responses and knit them together into a final response for the user.
  *
- * @param that {Object} The handler component itself.
- * @param couchResponses {Array} An array of responses from CouchDB.
+ * @param {Object} that - The handler component itself.
+ * @param {Array} couchResponses - An array of responses from CouchDB.
  *
  */
 gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResponses) {
@@ -147,7 +148,8 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
  *
  * Parse the request parameters used by this endpoint and convert them for use with couchdb-lucene
  *
- * @param that {Object} The handler component itself.
+ * @param {Object} that - The handler component itself.
+ * @return {Object} The transformed query payload to be sent to couchdb-lucene.
  */
 gpii.ul.api.search.handler.requestToLucene = function (that) {
     // Break down the raw query into raw parameters and those that need to become part of the `q` variable.

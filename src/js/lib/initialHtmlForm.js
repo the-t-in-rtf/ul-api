@@ -10,10 +10,10 @@ fluid.registerNamespace("gpii.ul.api.middleware.initialHtmlForm");
  * This must be a separate piece of middleware and must be loaded before the schema validation because we serve the
  * initial form whether or not we have query data.
  *
- * @param that {Object} The middleware component itself.
- * @param request {Object} The Express request object.
- * @param response {Object} The Express response object.
- * @param next {Function} The next piece of middleware in the chain.
+ * @param {Object} that - The middleware component itself.
+ * @param {Object} request - The Express request object.
+ * @param {Object} response - The Express response object.
+ * @param {Function} next - The next piece of middleware in the chain.
  */
 gpii.ul.api.middleware.initialHtmlForm.renderFormOrDefer = function (that, request, response, next) {
     if (request.accepts(that.options.contentTypes)) {

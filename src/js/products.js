@@ -15,9 +15,9 @@ fluid.registerNamespace("gpii.ul.api.products.handler");
  *
  * Resolve user-specific keys like ~username to ~ so that we can can correctly check the permissions.
  *
- * @param sources {Array} An array of source names.
- * @param username {Object} The user object stored in our request session.
- * @returns {Array} The list of "resolved" source keys.
+ * @param {Array} sources - An array of source names.
+ * @param {Object} username - The user object stored in our request session.
+ * @return {Array} The list of "resolved" source keys.
  *
  */
 gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
@@ -33,7 +33,7 @@ gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
  * Fulfills the contract outlined in `gpii.express.handler`:
  * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
  *
- * @param that - The component itself
+ * @param {Object} that - The component itself
  *
  */
 gpii.ul.api.products.handler.handleRequest = function (that) {
@@ -71,9 +71,9 @@ gpii.ul.api.products.handler.handleRequest = function (that) {
  *
  * Confirm that an individual record matches the filters (source, "last updated" date) specified in the query parameters.
  *
- * @param that - The component itself.
- * @param record {Object} The record that is being evaluated.
- * @returns {boolean} `true` if the record matches all filters, `false` if it does not.
+ * @param {Object} that - The component itself.
+ * @param {Object} record - The record that is being evaluated.
+ * @return {Boolean} `true` if the record matches all filters, `false` if it does not.
  *
  */
 gpii.ul.api.products.handler.matchesFilters = function (that, record) {
@@ -99,8 +99,8 @@ gpii.ul.api.products.handler.matchesFilters = function (that, record) {
  *
  * Process the raw response from CouchDB and produce results that match the API documentation.
  *
- * @param that - The component itself.
- * @param couchResponse {Object} - The raw response from CouchDB.
+ * @param {Object} that - The component itself.
+ * @param {Object} couchResponse - The raw response from CouchDB.
  *
  */
 gpii.ul.api.products.handler.processCouchResponse = function (that, couchResponse) {

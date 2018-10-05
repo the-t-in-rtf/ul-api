@@ -11,10 +11,10 @@ fluid.registerNamespace("gpii.ul.api.images.file");
  *
  * Resolve a full path from a group of segments.
  *
- * @param baseDir {String} - A full or package-relative path to the base directory.
- * @param segments {String|Array} - One or more path segments, that will be resolved in order using `path.resolve`
+ * @param {String} baseDir - A full or package-relative path to the base directory.
+ * @param {String|Array} segments - One or more path segments, that will be resolved in order using `path.resolve`
  *
- * @returns {String} A string representing the full resolved path.
+ * @return {String} A string representing the full resolved path.
  */
 gpii.ul.api.images.file.resolvePath = function (baseDir, segments) {
     var resolvedPath = fluid.module.resolvePath(baseDir);

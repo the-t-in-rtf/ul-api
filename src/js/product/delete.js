@@ -23,9 +23,9 @@ gpii.ul.api.product["delete"].handler.handleRequest = function (that) {
  *
  * Examine the results of reading the existing data from CouchDB and continue processing.
  *
- * @param that - The handler component.
- * @param couchResponse - The raw response from CouchDB.
- * @returns {*} - The original response from couch so that further onRead listeners have access to it.
+ * @param {Object} that - The handler component.
+ * @param {Object} couchResponse - The raw response from CouchDB.
+ * @return {Object} - The raw response from CouchDB so that further onRead listeners have access to it.
  *
  */
 gpii.ul.api.product["delete"].handler.processReadResponse = function (that, couchResponse) {

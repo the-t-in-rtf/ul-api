@@ -8,9 +8,10 @@ fluid.registerNamespace("gpii.ul.api.htmlMessageHandler");
  *
  * Construct a handlebars context from our options and the supplied body, and render an HTML response.
  *
- * @param that - The component itself.
- * @param statusCode - The HTTP status code to send.
- * @param body - The JSON payload we are rendering as HTML.
+ * @param {Object} that - The component itself.
+ * @param {Integer} statusCode - The HTTP status code to send.
+ * @param {Object} body - The JSON payload we are rendering as HTML.
+ *
  */
 gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, body) {
     var componentContext = fluid.model.transformWithRules(that, that.options.rules.componentMaterialToExpose);

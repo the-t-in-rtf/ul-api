@@ -16,15 +16,13 @@ require("gpii-json-schema");
 
 require("../lib/validationGatedContentAware");
 
-// TODO:  Put the JSON Schema headers back in once we can figure out how to safely add the headers only on success.
-
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 
 /**
  *
  * Handle a single incoming request.  Performs an initial permission check and then requests data from CouchDB.
  *
- * @param that - The component itself.
+ * @param {Object} that - The component itself.
  *
  */
 gpii.ul.api.product.get.handler.handleRequest = function (that) {
@@ -45,8 +43,8 @@ gpii.ul.api.product.get.handler.handleRequest = function (that) {
  *
  * Process the CouchDB response for the main record.
  *
- * @param that - The component itself.
- * @param couchResponse {Object} - The raw response from CouchDB.
+ * @param {Object} that - The component itself.
+ * @param {Object} couchResponse - The raw response from CouchDB.
  *
  */
 gpii.ul.api.product.get.handler.processProductResponse = function (that, couchResponse) {
@@ -92,8 +90,8 @@ gpii.ul.api.product.get.handler.processProductResponse = function (that, couchRe
  *
  * For "unified" records, process the list of "children" returned from CouchDB.
  *
- * @param that - The component itself.
- * @param couchResponse {Object} - The raw list of "child" records for the main record's UID, as returned from CouchDB.
+ * @param {Object} that - The component itself.
+ * @param {Object} couchResponse - The raw list of "child" records for the main record's UID, as returned from CouchDB.
  *
  */
 gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchResponse) {
