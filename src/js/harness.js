@@ -42,37 +42,37 @@ fluid.defaults("gpii.ul.api.harness", {
         api: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port", { host: "{that}.options.hosts.api", port: "{that}.options.ports.api" }]
+                args:     ["http://%host:%port", { host: "{that}.options.hosts.api", port: "{that}.options.ports.api" }]
             }
         },
         couch: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch" }]
+                args:     ["http://%host:%port/", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch" }]
             }
         },
         imageDb: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { host: "{that}.options.host.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
+                args:     ["http://%host:%port/%dbName", { host: "{that}.options.host.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
             }
         },
         lucene: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/local/%dbName/_design/lucene/by_content", { port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
+                args:     ["http://%host:%port/local/%dbName/_design/lucene/by_content", { host: "{that}.options.hosts.lucene", port: "{that}.options.ports.lucene", dbName: "{that}.options.dbNames.ul"}]
             }
         },
         ulDb: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.ul"}]
+                args:     ["http://%host:%port/%dbName", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.ul"}]
             }
         },
         usersDb: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.users"}]
+                args:     ["http://%host:%port/%dbName", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.users"}]
             }
         }
     },
