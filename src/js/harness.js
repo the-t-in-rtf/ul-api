@@ -24,6 +24,11 @@ fluid.defaults("gpii.ul.api.harness", {
     originalsDir: "/opt/ul-files/originalsDir",
     cacheDir:     "/opt/ul-files/cacheDir",
     setLogging:   false,
+    hosts: {
+        api:    "localhost",
+        couch:  "localhost",
+        lucene: "localhost"
+    },
     ports: {
         api:    3367,
         couch:  5984,
@@ -37,19 +42,19 @@ fluid.defaults("gpii.ul.api.harness", {
         api: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port", { port: "{that}.options.ports.api" }]
+                args:     ["http://localhost:%port", { host: "{that}.options.hosts.api", port: "{that}.options.ports.api" }]
             }
         },
         couch: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/", { port: "{that}.options.ports.couch" }]
+                args:     ["http://localhost:%port/", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch" }]
             }
         },
         imageDb: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://localhost:%port/%dbName", { port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
+                args:     ["http://localhost:%port/%dbName", { host: "{that}.options.host.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
             }
         },
         lucene: {
