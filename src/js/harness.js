@@ -54,7 +54,7 @@ fluid.defaults("gpii.ul.api.harness", {
         imageDb: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://%host:%port/%dbName", { host: "{that}.options.host.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
+                args:     ["http://%host:%port/%dbName", { host: "{that}.options.hosts.couch", port: "{that}.options.ports.couch", dbName: "{that}.options.dbNames.images"}]
             }
         },
         lucene: {
