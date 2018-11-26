@@ -13,6 +13,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
         anonymous: {
             "sources": [
                 "ATAust",
+                "AbleData",
                 "EASTIN Admin",
                 "Handicat",
                 "Hjælpemiddelbasen",
@@ -26,6 +27,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
         loggedIn: {
             "sources": [
                 "ATAust",
+                "AbleData",
                 "EASTIN Admin",
                 "Handicat",
                 "Hjælpemiddelbasen",

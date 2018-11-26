@@ -1,6 +1,13 @@
 {
-    "Handicat": {
-        "name": "Handicat",
+    "~": {
+        "name": "Individual Contribution",
+        "view": [
+            "~",
+            "reviewers"
+        ]
+    },
+    "ATAust": {
+        "name": "ATAust",
         "view": [
             "*"
         ],
@@ -8,8 +15,8 @@
             "importer"
         ]
     },
-    "Vlibank": {
-        "name": "Vlibank",
+    "AbleData": {
+        "name": "AbleData",
         "view": [
             "*"
         ],
@@ -17,13 +24,26 @@
             "importer"
         ]
     },
-    "Siva": {
-        "name": "Siva",
+    "Dlf data": {
+        "name": "Dlf data",
         "view": [
-            "*"
+            "reviewers",
+            "importer"
         ],
         "edit": [
             "importer"
+        ]
+    },
+    "GARI": {
+        "name": "GARI",
+        "view": [
+            "gari",
+            "importer",
+            "reviewers"
+        ],
+        "edit": [
+            "importer",
+            "gari"
         ]
     },
     "EASTIN Admin": {
@@ -35,8 +55,8 @@
             "importer"
         ]
     },
-    "Hjælpemiddelbasen": {
-        "name": "Hjælpemiddelbasen",
+    "Handicat": {
+        "name": "Handicat",
         "view": [
             "*"
         ],
@@ -44,8 +64,8 @@
             "importer"
         ]
     },
-    "Rehadat": {
-        "name": "Rehadat",
+    "Hjælpemiddelbasen": {
+        "name": "Hjælpemiddelbasen",
         "view": [
             "*"
         ],
@@ -73,44 +93,13 @@
             "importer"
         ]
     },
-    "ATAust": {
-        "name": "ATAust",
+    "Rehadat": {
+        "name": "Rehadat",
         "view": [
             "*"
         ],
         "edit": [
             "importer"
-        ]
-    },
-    "Dlf data": {
-        "name": "Dlf data",
-        "view": [
-            "reviewers",
-            "importer"
-        ],
-        "edit": [
-            "importer"
-        ]
-    },
-    "unified": {
-        "name": "Unified Listing Federation Hub",
-        "view": [
-            "*"
-        ],
-        "edit": [
-            "reviewers",
-            "importer"
-        ]
-    },
-    "SolutionsOntologyFinal": {
-        "name": "Solutions Ontology",
-        "view": [
-            "reviewers",
-            "sat"
-        ],
-        "edit": [
-            "importer",
-            "sat"
         ]
     },
     "sai": {
@@ -125,23 +114,43 @@
             "sai"
         ]
     },
-    "GARI": {
-        "name": "GARI",
+    "Siva": {
+        "name": "Siva",
         "view": [
-            "gari",
-            "importer",
-            "reviewers"
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
+    },
+    "SolutionsOntologyFinal": {
+        "name": "Solutions Ontology",
+        "view": [
+            "reviewers",
+            "sat"
         ],
         "edit": [
             "importer",
-            "gari"
+            "sat"
         ]
     },
-    "~": {
-        "name": "Individual Contribution",
+    "Vlibank": {
+        "name": "Vlibank",
         "view": [
-            "~",
-            "reviewers"
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
+    },
+    "unified": {
+        "name": "Unified Listing Federation Hub",
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "reviewers",
+            "importer"
         ]
     }
 }

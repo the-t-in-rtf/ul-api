@@ -62,13 +62,14 @@ gpii.tests.ul.api.checkUnifiedRecords = function (body) {
 };
 
 gpii.tests.ul.api.products.defaultSources = [
-    "Handicat",
-    "Vlibank",
-    "Siva",
+    "ATAust",
+    "AbleData",
     "EASTIN Admin",
+    "Handicat",
     "Hjælpemiddelbasen",
     "Rehadat",
-    "ATAust",
+    "Siva",
+    "Vlibank",
     "unified"
 ];
 
