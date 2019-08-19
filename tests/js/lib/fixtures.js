@@ -82,4 +82,3 @@ fluid.defaults("gpii.test.ul.api.request.login", {
     method:     "POST",
     endpoint:   "api/user/login"
 });
-

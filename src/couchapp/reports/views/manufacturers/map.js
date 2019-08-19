@@ -17,5 +17,4 @@ function (doc) {
         }
         emit(strip(doc.manufacturer.name), { name: doc.manufacturer.name, address: address, country: doc.manufacturer.country, url: doc.manufacturer.url, phone: doc.manufacturer.phone, email: doc.manufacturer.email});
     }
-
 }

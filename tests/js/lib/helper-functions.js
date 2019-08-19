@@ -50,5 +50,3 @@ gpii.tests.ul.api.checkForCouchisms = function (products) {
 
     jqUnit.assertFalse("There should be no Couchisms in our data...", hasCouchisms);
 };
-
-
