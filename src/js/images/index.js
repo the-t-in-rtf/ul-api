@@ -36,47 +36,15 @@ fluid.defaults("gpii.ul.api.images", {
     },
     path: "/images",
     method: "use",
-    events: {
-        onFileEndpointReady:     null,
-        onGalleryEndpointReady:  null,
-        onMetadataEndpointReady: null,
-        // Various child middleware isn't ready until JSON Schemas are resolved, all are rolled up here.
-        onReady: {
-            onFileEndpointReady:     "onFileEndpointReady",
-            onGalleryEndpointReady:  "onGalleryEndpointReady",
-            onMetadataEndpointReady: "onMetadataEndpointReady"
-        }
-    },
     components: {
         file: {
-            type: "gpii.ul.api.images.file",
-            options: {
-                listeners: {
-                    "onReady.notifyParent": {
-                        func: "{gpii.ul.api.images}.events.onFileEndpointReady.fire"
-                    }
-                }
-            }
+            type: "gpii.ul.api.images.file"
         },
         gallery: {
-            type: "gpii.ul.api.images.gallery",
-            options: {
-                listeners: {
-                    "onReady.notifyParent": {
-                        func: "{gpii.ul.api.images}.events.onGalleryEndpointReady.fire"
-                    }
-                }
-            }
+            type: "gpii.ul.api.images.gallery"
         },
         metadata: {
-            type: "gpii.ul.api.images.metadata",
-            options: {
-                listeners: {
-                    "onReady.notifyParent": {
-                        func: "{gpii.ul.api.images}.events.onMetadataEndpointReady.fire"
-                    }
-                }
-            }
+            type: "gpii.ul.api.images.metadata"
         },
         bySource: {
             type: "gpii.ul.api.images.bySource",

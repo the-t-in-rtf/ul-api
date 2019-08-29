@@ -19,11 +19,10 @@ gpii.ul.api.harness.setLogging = function (that) {
 fluid.defaults("gpii.ul.api.harness", {
     gradeNames:   ["fluid.component"],
     templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     sessionKey:   "_ul_user",
     originalsDir: "/opt/ul-files/originalsDir",
     cacheDir:     "/opt/ul-files/cacheDir",
-    setLogging:   false,
+    setLogging:   true,
     hosts: {
         api:    "localhost",
         couch:  "localhost",
@@ -42,7 +41,7 @@ fluid.defaults("gpii.ul.api.harness", {
         api: {
             expander: {
                 funcName: "fluid.stringTemplate",
-                args:     ["http://%host:%port", { host: "{that}.options.hosts.api", port: "{that}.options.ports.api" }]
+                args:     ["http://%host:%port/", { host: "{that}.options.hosts.api", port: "{that}.options.ports.api" }]
             }
         },
         couch: {
@@ -81,10 +80,6 @@ fluid.defaults("gpii.ul.api.harness", {
         ul:    "ul",
         users: "users"
     },
-    events: {
-        apiReady:   null,
-        apiStopped: null
-    },
     listeners: {
         "onCreate.setLogging": {
             funcName: "gpii.ul.api.harness.setLogging",
@@ -95,39 +90,17 @@ fluid.defaults("gpii.ul.api.harness", {
         express: {
             type: "gpii.express.withJsonQueryParser",
             options: {
-                port :   "{harness}.options.ports.api",
-                templateDirs: "{harness}.options.templateDirs",
-                events: {
-                    apiReady: null,
-                    onReady: {
-                        events: {
-                            apiReady: "apiReady",
-                            onStarted: "onStarted"
-                        }
-                    }
-                },
-                listeners: {
-                    onReady:   {
-                        func: "{harness}.events.apiReady.fire"
-                    },
-                    onStopped: {
-                        func: "{harness}.events.apiStopped.fire"
-                    }
-                },
+                port :        "{gpii.ul.api.harness}.options.ports.api",
+                templateDirs: "{gpii.ul.api.harness}.options.templateDirs",
                 components: {
                     api: {
                         type: "gpii.ul.api",
                         options: {
                             priority:     "after:jsonQueryParser",
-                            templateDirs: "{harness}.options.templateDirs",
-                            originalsDir: "{harness}.options.originalsDir",
-                            cacheDir:     "{harness}.options.cacheDir",
-                            urls:         "{harness}.options.urls",
-                            listeners: {
-                                "onReady.notifyParent": {
-                                    func: "{harness}.events.apiReady.fire"
-                                }
-                            }
+                            templateDirs: "{gpii.ul.api.harness}.options.templateDirs",
+                            originalsDir: "{gpii.ul.api.harness}.options.originalsDir",
+                            cacheDir:     "{gpii.ul.api.harness}.options.cacheDir",
+                            urls:         "{gpii.ul.api.harness}.options.urls"
                         }
                     },
                     inline: {
@@ -136,7 +109,7 @@ fluid.defaults("gpii.ul.api.harness", {
                             priority: "after:api",
                             path: "/hbs",
                             method: "get",
-                            templateDirs: "{harness}.options.templateDirs"
+                            templateDirs: "{gpii.ul.api.harness}.options.templateDirs"
                         }
                     },
                     modules: {

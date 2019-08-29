@@ -11,6 +11,7 @@ var fluid = require("infusion");
 require("gpii-express");
 require("gpii-express-user");
 
+require("./schemas");
 require("./docs");
 require("./product");
 require("./products");
@@ -28,16 +29,7 @@ fluid.defaults("gpii.ul.api", {
     },
     path:         "/api",
     templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
-    schemaDirs:   ["%ul-api/src/schemas", "%gpii-express-user/src/schemas"],
     sessionKey:   "_ul_user",
-    events: {
-        productEndpointReady: null,
-        onReady: {
-            events: {
-                productEndpointReady: "productEndpointReady"
-            }
-        }
-    },
     distributeOptions: [
         {
             source: "{that}.options.sessionKey",
@@ -145,12 +137,7 @@ fluid.defaults("gpii.ul.api", {
         product: {
             type: "gpii.ul.api.product",
             options: {
-                priority: "after:user",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api}.events.productEndpointReady.fire"
-                    }
-                }
+                priority: "after:user"
             }
         },
         products: {

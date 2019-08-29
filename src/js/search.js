@@ -6,7 +6,8 @@ var gpii  = fluid.registerNamespace("gpii");
 require("gpii-sort");
 require("./sources");
 require("./lib/initialHtmlForm");
-require("./lib/validationMiddleware");
+
+fluid.require("%gpii-json-schema");
 
 fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
 
@@ -41,8 +42,7 @@ gpii.ul.api.search.handler.processSearchResponse = function (that, luceneRespons
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
     // Merge the search defaults with the parameters the user passed in.
-    // TODO:  Discuss whether we can avoid calling `fluid.merge` directly.
-    that.options.request.searchParams = fluid.merge(null, that.options.searchDefaults, userOptions);
+    that.options.request.searchParams = fluid.extend({}, that.options.searchDefaults, userOptions);
 
     if (!luceneResponse) {
         that.options.next({isError: true, statusCode: 500, params: that.options.request.searchParams, message: "No response from Lucene, can't prepare search results."});
@@ -246,9 +246,6 @@ fluid.defaults("gpii.ul.api.search", {
         offset:  0,
         limit:   250
     },
-    events: {
-        onSchemasDereferenced: null
-    },
     rules: {
         requestContentToValidate: {
             "": "query"
@@ -264,10 +261,6 @@ fluid.defaults("gpii.ul.api.search", {
             target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
         }
     ],
-    schemas: {
-        input:  "search-input.json",
-        output: "search-results.json"
-    },
     components: {
         htmlForm: {
             type: "gpii.ul.api.middleware.initialHtmlForm",
@@ -278,16 +271,24 @@ fluid.defaults("gpii.ul.api.search", {
         },
         // The JSON middleware requires valid input to access....
         validationMiddleware: {
-            type: "gpii.ul.api.middleware.validationMiddleware",
+            type: "gpii.schema.validationMiddleware",
             options: {
                 priority:   "after:htmlForm",
                 rules: {
                     requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate"
                 },
-                schemaKey:  "{gpii.ul.api.search}.options.schemas.input",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.search}.events.onSchemasDereferenced.fire"
+                inputSchema: {
+                    "type": "object",
+                    "properties": {
+                        "limit": gpii.ul.api.schemas.paging.limit,
+                        "offset": gpii.ul.api.schemas.paging.offset,
+                        "q": {
+                            "required": true,
+                            "type": "string"
+                        },
+                        "sortBy": gpii.ul.api.schemas.sortBy,
+                        "status": gpii.ul.api.schemas.filters.status,
+                        "updatedSince": gpii.ul.api.schemas.filters.updatedSince
                     }
                 }
             }
@@ -307,10 +308,6 @@ fluid.defaults("gpii.ul.api.search", {
 fluid.defaults("gpii.ul.api.suggest", {
     gradeNames: ["gpii.ul.api.search"],
     path: "/suggest",
-    distributeOptions: {
-        record: "suggest-input.json",
-        target: "{that gpii.schema.validationMiddleware}.options.schemaKey"
-    },
     searchDefaults: {
         offset:  0,
         limit:   5

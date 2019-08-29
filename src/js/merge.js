@@ -93,8 +93,8 @@ gpii.ul.api.merge.handleRecordsLookupSuccess = function (that, lookupResults) {
     }
 };
 
-gpii.ul.api.merge.handleUpdateWriteSuccess = function (that, writeResults) {
-    that.sendResponse(200, writeResults);
+gpii.ul.api.merge.handleUpdateWriteSuccess = function (that) {
+    that.sendResponse(200, { isError: false, message: "Records updated." });
 };
 
 gpii.ul.api.merge.handleError = function (that, errorPayload) {
@@ -165,16 +165,33 @@ fluid.defaults("gpii.ul.api.merge", {
             "": "query"
         }
     },
-    schemas: {
-        input:  "merge-input.json",
-        output: "message.json"
-    },
     components: {
         loginRequired: {
             type: "gpii.express.user.middleware.loginRequired",
             options: {
                 priority: "first",
                 sessionKey: "{gpii.ul.api}.options.sessionKey"
+            }
+        },
+        validationMiddleware: {
+            options: {
+                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
+                inputSchema: {
+                    "type": "object",
+                    "properties": {
+                        "target": gpii.ul.api.schemas.required.product.uid,
+                        "sources": {
+                            "required": true,
+                            "anyOf": [
+                                gpii.ul.api.schemas.product.uid,
+                                {
+                                    "type": "array",
+                                    "items": gpii.ul.api.schemas.product.uid
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         middleware: {

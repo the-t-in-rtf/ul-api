@@ -3,6 +3,8 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
+require("../schemas");
+
 fluid.registerNamespace("gpii.ul.api.product.update.handler");
 
 gpii.ul.api.product.update.handler.handleRequest = function (that) {
@@ -148,28 +150,46 @@ fluid.defaults("gpii.ul.api.product.update", {
     routerOptions: {
         mergeParams: true
     },
-    schemas: {
-        input: "product-update-input.json"
+    rules: {
+        requestContentToValidate: {
+            "":  "body"
+        }
     },
+    distributeOptions: [{
+        source: "{that}.options.rules.requestContentToValidate",
+        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+    }],
     handlers: {
         json: {
             contentType:   "application/json",
             handlerGrades: ["gpii.ul.api.product.update.handler"]
         }
     },
-    rules: {
-        requestContentToValidate: {
-            "":  "body"
+    components: {
+        validationMiddleware: {
+            options: {
+                rules: "{gpii.ul.api.product.update}.options.rules",
+                inputSchema: {
+                    "type": "object",
+
+                    "properties": {
+                        // Required fields
+                        "source": gpii.ul.api.schemas.required.product.source,
+                        "sid": gpii.ul.api.schemas.required.product.sid,
+                        "name": gpii.ul.api.schemas.required.product.name,
+                        "description": gpii.ul.api.schemas.required.product.description,
+                        "manufacturer": gpii.ul.api.schemas.required.product.manufacturer,
+                        "status": gpii.ul.api.schemas.required.product.status,
+                        // Optional fields
+                        "uid": gpii.ul.api.schemas.product.uid,
+                        "sourceData": gpii.ul.api.schemas.product.sourceData,
+                        "sourceUrl": gpii.ul.api.schemas.product.sourceUrl,
+                        "language": gpii.ul.api.schemas.product.language,
+                        "updated": gpii.ul.api.schemas.product.updated
+                    },
+                    "additionalProperties": false
+                }
+            }
         }
-    },
-    distributeOptions: [
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
-        },
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
-        }
-    ]
+    }
 });

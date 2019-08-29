@@ -15,22 +15,9 @@ require("./gallery-read");
 fluid.defaults("gpii.ul.api.images.gallery", {
     gradeNames: ["gpii.express.router"],
     path: "/gallery",
-    events: {
-        onReadReady: null,
-        onReady: {
-            onReadReady: "onReadReady"
-        }
-    },
     components: {
         read: {
-            type: "gpii.ul.api.images.gallery.read",
-            options: {
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.images.gallery}.events.onReadReady.fire"
-                    }
-                }
-            }
+            type: "gpii.ul.api.images.gallery.read"
         }
     }
 });

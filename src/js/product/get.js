@@ -15,6 +15,7 @@ require("gpii-express");
 require("gpii-json-schema");
 
 require("../lib/validationGatedContentAware");
+require("../schemas");
 
 fluid.registerNamespace("gpii.ul.api.product.get.handler");
 
@@ -253,9 +254,6 @@ fluid.defaults("gpii.ul.api.product.get", {
     routerOptions: {
         mergeParams: true
     },
-    schemas: {
-        input: "product-get-input.json"
-    },
     handlers: {
         html: {
             contentType:   "text/html",
@@ -269,8 +267,8 @@ fluid.defaults("gpii.ul.api.product.get", {
     },
     rules: {
         requestContentToValidate: {
-            "sid":            "params.sid",
-            "source":         "params.source",
+            "sid": "params.sid",
+            "source": "params.source",
             "includeSources": {
                 "transform": {
                     "type": "fluid.transforms.firstValue",
@@ -283,14 +281,30 @@ fluid.defaults("gpii.ul.api.product.get", {
             "noRedirect": "query.noRedirect"
         }
     },
-    distributeOptions: [
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
-        },
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
+    distributeOptions: [{
+        source: "{that}.options.rules.requestContentToValidate",
+        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+    }],
+    components: {
+        validationMiddleware: {
+            options: {
+                rules: {
+                    requestContentToValidate: "{gpii.ul.api.product.get}.options.rules.requestContentToValidate"
+                },
+                inputSchema: {
+                    "type": "object",
+                    "properties": {
+                        "noRedirect": {
+                            "type": "boolean"
+                        },
+                        "includeSources": {
+                            "type": "boolean"
+                        },
+                        "sid": gpii.ul.api.schemas.required.product.sid,
+                        "source": gpii.ul.api.schemas.required.product.source
+                    }
+                }
+            }
         }
-    ]
+    }
 });

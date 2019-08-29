@@ -26,23 +26,12 @@ Scan uploaded images with clamav.
 fluid.defaults("gpii.ul.api.images.file", {
     gradeNames: ["gpii.express.router"],
     path: "/file",
-    events: {
-        onReadReady: null,
-        onReady: {
-            onReadReady: "onReadReady"
-        }
-    },
     components: {
         read: {
             type: "gpii.ul.api.images.file.read",
             options: {
                 originalsDir: "{gpii.ul.api.images}.options.originalsDir",
-                cacheDir:     "{gpii.ul.api.images}.options.cacheDir",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.images.file}.events.onReadReady.fire"
-                    }
-                }
+                cacheDir:     "{gpii.ul.api.images}.options.cacheDir"
             }
         }
     }

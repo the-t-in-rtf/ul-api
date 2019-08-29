@@ -39,10 +39,10 @@ gpii.test.ul.api.images.dataSource.caseHolder.checkBulkRecords = function (messa
     });
     jqUnit.assertEquals(message + " (there should be no couchisms)", 0, couchisms);
 };
-// TODO: Test a 404
-// gpii.test.ul.api.images.dataSource.caseHolder.checkFourOhFour = function (response) {
-//     fluid.fail("write something here");
-// };
+
+//gpii.test.ul.api.images.dataSource.caseHolder.checkFourOhFour = function (response) {
+//    fluid.fail("write something here");
+//};
 
 fluid.defaults("gpii.test.ul.api.images.dataSource.caseHolder", {
     gradeNames: ["fluid.test.testCaseHolder"],
@@ -52,14 +52,6 @@ fluid.defaults("gpii.test.ul.api.images.dataSource.caseHolder", {
             {
                 name: "Test retrieving and processing a single record...",
                 sequence: [
-                    // TODO:  Convert to using sequences once we verify our approach in the login tests.
-                    {
-                        func: "{testEnvironment}.events.constructFixtures.fire"
-                    },
-                    {
-                        event:    "{testEnvironment}.events.onFixturesConstructed",
-                        listener: "fluid.identity"
-                    },
                     {
                         func: "{singleRecordSource}.get",
                         args: []
@@ -81,14 +73,6 @@ fluid.defaults("gpii.test.ul.api.images.dataSource.caseHolder", {
             {
                 name: "Test using a complex key structure with a view...",
                 sequence: [
-                    // TODO:  Convert to using sequences once we verify our approach in the login tests.
-                    {
-                        func: "{testEnvironment}.events.constructFixtures.fire"
-                    },
-                    {
-                        event:    "{testEnvironment}.events.onFixturesConstructed",
-                        listener: "fluid.identity"
-                    },
                     {
                         func: "{viewSource}.get",
                         args: [{ startKey: ["1421059432806-826608318"] }]
@@ -110,14 +94,6 @@ fluid.defaults("gpii.test.ul.api.images.dataSource.caseHolder", {
             {
                 name: "Test handling of 404 responses...",
                 sequence: [
-                    // TODO:  Convert to using sequences once we verify our approach in the login tests.
-                    {
-                        func: "{testEnvironment}.events.constructFixtures.fire"
-                    },
-                    {
-                        event:    "{testEnvironment}.events.onFixturesConstructed",
-                        listener: "fluid.identity"
-                    },
                     {
                         func: "{fourOhFourSource}.get",
                         args: []

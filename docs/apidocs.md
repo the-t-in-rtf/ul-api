@@ -240,10 +240,9 @@ they are reviewed and flagged as "active".  You must be logged in to use this RE
         "updated": "2012-10-02T15:24:00+02:00"
     }
     ```
-+ Response 200 (application/schema+json)
++ Response 200 (application/json)
     + Headers
-        + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/message.json#
-        + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
+        + Content-Type: application/json
     + Body
 
         ```
@@ -291,10 +290,9 @@ Note: If you do not submit an "updated" field, the current date will be used.
      }
     ```
 
-+ Response 200 (application/schema+json)
++ Response 200 (application/json)
     + Headers
-        + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/message.json#
-        + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
+        + Content-Type: application/json
     + Body
 
         ```
@@ -327,8 +325,7 @@ current user is listed as the author.  You must be logged in to use this REST en
 
 + Response 200 (application/json)
     + Headers
-        + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/message.json#
-        + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
+        + Content-Type: application/json
     + Body
 
         ```
@@ -344,10 +341,9 @@ Returns a single product identified by its `source` and `sid`.  For ["unified" r
 + Parameters
     + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source records associated with this record.  Defaults to "false".
 
-+ Response 200 (application/schema+json)
++ Response 200 (application/json)
     + Headers
-        + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/product-results.json#
-        + Link: <https://api.ul.gpii.net/schemas/product-results.json#>; rel="describedBy"
+        + Content-Type: application/json
     + Body
 
         ```
@@ -388,10 +384,9 @@ Return a list of products, with optional filters (see below).
     + `unified` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  Defaults to `true`.  If this is set to `true` and `sources` is set, the `unified` source is automatically added to the list of `sources` (see above).
     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
-+ Response 200 (application/schema+json)
++ Response 200 (application/json)
     + Headers
-        + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/products-results.json#
-        + Link: <https://api.ul.gpii.net/schemas/products-results.json#>; rel="describedBy"
+        + Content-Type: application/json
     + Body
 
         ```
@@ -445,10 +440,9 @@ Performs a full text search of all data, returns matching products, grouped by t
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
     + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
- + Response 200 (application/schema+json)
+ + Response 200 (application/json)
      + Headers
-         + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/search-results.json#
-         + Link: <https://api.ul.gpii.net/schemas/search-results.json#>; rel="describedBy"
+         + Content-Type: application/json
      + Body
 
          ```
@@ -500,10 +494,9 @@ for use in things like "autocomplete", where a fuller list would be too cumberso
      + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
      + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
 
- + Response 200 (application/schema+json)
+ + Response 200 (application/json)
      + Headers
-         + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/search-results.json#
-         + Link: <https://api.ul.gpii.net/schemas/search-results.json#>; rel="describedBy"
+         + Content-Type: application/json
      + Body
 
          ```
@@ -551,10 +544,9 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
      + `updatedSince` (optional, String) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product records updated at or after this time are included in the comparison.
      + `sourcesNewer` (optional, Boolean) ... If `true`, the comparison is inverted, and cases in which the "source" record is newer will be displayed.  Defaults to `false`.
 
- + Response 200 (application/schema+json)
+ + Response 200 (application/json)
      + Headers
-         + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/updates.json#
-         + Link: <https://api.ul.gpii.net/schemas/updates.json#>; rel="describedBy"
+         + Content-Type: application/json
      + Body
 
          ```
@@ -613,10 +605,9 @@ record:
      + `target` (required, String) ... The unique identifier (uid) for the "original" unified record.
      + `sources` (required, String|Array) ... One or more unique identifiers (uids) for records which are duplicates of the "original" referred to by `target`.
 
- + Response 200 (application/schema+json)
+ + Response 200 (application/json)
      + Headers
-         + Content-Type: application/schema+json; profile=https://api.ul.gpii.net/schemas/message.json#
-         + Link: <https://api.ul.gpii.net/schemas/message.json#>; rel="describedBy"
+         + Content-Type: application/json
      + Body
 
          ```

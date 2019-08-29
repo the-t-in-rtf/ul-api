@@ -25,6 +25,110 @@ fluid.defaults("gpii.tests.ul.api.product.post.request", {
     endpoint:   "api/product"
 });
 
+gpii.tests.ul.api.product.post.commonTests = [
+    {
+        name: "Try to create a valid record without logging in...",
+        type: "test",
+        sequence: [
+            {
+                func: "{anonymousCreate}.send",
+                args: ["{that}.options.inputs.validNewRecord"]
+            },
+            {
+                event:    "{anonymousCreate}.events.onComplete",
+                listener: "jqUnit.assertLeftHand",
+                args:     ["We should have received an authorization error.", { isError: true, statusCode: 401, message: "You are not authorized to view this record." }, "@expand:JSON.parse({arguments}.0)"]
+            },
+            {
+                func: "jqUnit.assertEquals",
+                args: ["The status code should be correct...", 401, "{anonymousCreate}.nativeResponse.statusCode"]
+            }
+        ]
+    },
+    {
+        name: "Try to create an invalid record (logged in)...",
+        type: "test",
+        sequence: [
+            {
+                func: "{invalidRecordLogin}.send",
+                args: [{ username: "existing", password: "password" }]
+            },
+            {
+                event:    "{invalidRecordLogin}.events.onComplete",
+                listener: "{invalidRecord}.send",
+                args:     [{ sid: "contrib99", source: "~existing"}]
+            },
+            {
+                event:    "{invalidRecord}.events.onComplete",
+                listener: "jqUnit.assertLeftHand",
+                args:     ["We should have received a validation error.", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
+            },
+            {
+                func: "jqUnit.assertEquals",
+                args: ["The status code should be correct...", 400, "{invalidRecord}.nativeResponse.statusCode"]
+            }
+        ]
+    },
+    {
+        name: "Update a single record...",
+        type: "test",
+        sequence: [
+            {
+                func: "{validRecordLogin}.send",
+                args: [{ username: "existing", password: "password" }]
+            },
+            {
+                event:    "{validRecordLogin}.events.onComplete",
+                listener: "{validRecordPost}.send",
+                args: ["{that}.options.inputs.validNewRecord"]
+            },
+            {
+                event:    "{validRecordPost}.events.onComplete",
+                listener: "{validRecordVerify}.send",
+                args:     []
+            },
+            {
+                event:    "{validRecordVerify}.events.onComplete",
+                listener: "gpii.tests.ul.api.product.updates.verifyRecordUpdated",
+                args:     ["{that}.options.inputs.validNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
+            },
+            {
+                func: "jqUnit.assertEquals",
+                args: ["The status code should be correct...", 200, "{validRecordVerify}.nativeResponse.statusCode"]
+            }
+        ]
+    },
+    {
+        name: "Add a record with an explicit `updated` value...",
+        type: "test",
+        sequence: [
+            {
+                func: "{ancientRecordLogin}.send",
+                args: [{ username: "existing", password: "password" }]
+            },
+            {
+                event:    "{ancientRecordLogin}.events.onComplete",
+                listener: "{ancientRecordPost}.send",
+                args: ["{that}.options.inputs.ancientNewRecord"]
+            },
+            {
+                event:    "{ancientRecordPost}.events.onComplete",
+                listener: "{ancientRecordVerify}.send",
+                args:     []
+            },
+            {
+                event:    "{ancientRecordVerify}.events.onComplete",
+                listener: "jqUnit.assertDeepEq",
+                args:     ["The record should have been updated, including the supplied (older) date of last update...", "{that}.options.inputs.ancientNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
+            },
+            {
+                func: "jqUnit.assertEquals",
+                args: ["The status code should be correct...", 200, "{ancientRecordVerify}.nativeResponse.statusCode"]
+            }
+        ]
+    }
+];
+
 fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     inputs: {
@@ -48,114 +152,10 @@ fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
             uid: "1421059432806-826608318"
         }
     },
-    rawModules: [
-        {
-            name: "testing POST /api/product/:source/:sid",
-            tests: [
-                {
-                    name: "Try to create a valid record without logging in...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{anonymousCreate}.send",
-                            args: ["{that}.options.inputs.validNewRecord"]
-                        },
-                        {
-                            event:    "{anonymousCreate}.events.onComplete",
-                            listener: "jqUnit.assertLeftHand",
-                            args:     ["We should have received an authorization error.", { isError: true, statusCode: 401, message: "You are not authorized to view this record." }, "@expand:JSON.parse({arguments}.0)"]
-                        },
-                        {
-                            func: "jqUnit.assertEquals",
-                            args: ["The status code should be correct...", 401, "{anonymousCreate}.nativeResponse.statusCode"]
-                        }
-                    ]
-                },
-                {
-                    name: "Try to create an invalid record (logged in)...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{invalidRecordLogin}.send",
-                            args: [{ username: "existing", password: "password" }]
-                        },
-                        {
-                            event:    "{invalidRecordLogin}.events.onComplete",
-                            listener: "{invalidRecord}.send",
-                            args:     [{ sid: "contrib99", source: "~existing"}]
-                        },
-                        {
-                            event:    "{invalidRecord}.events.onComplete",
-                            listener: "jqUnit.assertLeftHand",
-                            args:     ["We should have received a validation error.", { isError: true, statusCode: 400, message: "The information you provided is incomplete or incorrect.  Please check the following:" }, "@expand:JSON.parse({arguments}.0)"]
-                        },
-                        {
-                            func: "jqUnit.assertEquals",
-                            args: ["The status code should be correct...", 400, "{invalidRecord}.nativeResponse.statusCode"]
-                        }
-                    ]
-                },
-                {
-                    name: "Update a single record...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{validRecordLogin}.send",
-                            args: [{ username: "existing", password: "password" }]
-                        },
-                        {
-                            event:    "{validRecordLogin}.events.onComplete",
-                            listener: "{validRecordPost}.send",
-                            args: ["{that}.options.inputs.validNewRecord"]
-                        },
-                        {
-                            event:    "{validRecordPost}.events.onComplete",
-                            listener: "{validRecordVerify}.send",
-                            args:     []
-                        },
-                        {
-                            event:    "{validRecordVerify}.events.onComplete",
-                            listener: "gpii.tests.ul.api.product.updates.verifyRecordUpdated",
-                            args:     ["{that}.options.inputs.validNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
-                        },
-                        {
-                            func: "jqUnit.assertEquals",
-                            args: ["The status code should be correct...", 200, "{validRecordVerify}.nativeResponse.statusCode"]
-                        }
-                    ]
-                },
-                {
-                    name: "Add a record with an explicit `updated` value...",
-                    type: "test",
-                    sequence: [
-                        {
-                            func: "{ancientRecordLogin}.send",
-                            args: [{ username: "existing", password: "password" }]
-                        },
-                        {
-                            event:    "{ancientRecordLogin}.events.onComplete",
-                            listener: "{ancientRecordPost}.send",
-                            args: ["{that}.options.inputs.ancientNewRecord"]
-                        },
-                        {
-                            event:    "{ancientRecordPost}.events.onComplete",
-                            listener: "{ancientRecordVerify}.send",
-                            args:     []
-                        },
-                        {
-                            event:    "{ancientRecordVerify}.events.onComplete",
-                            listener: "jqUnit.assertDeepEq",
-                            args:     ["The record should have been updated, including the supplied (older) date of last update...", "{that}.options.inputs.ancientNewRecord", "@expand:JSON.parse({arguments}.0)"] // expectedRecord, actualRecord
-                        },
-                        {
-                            func: "jqUnit.assertEquals",
-                            args: ["The status code should be correct...", 200, "{ancientRecordVerify}.nativeResponse.statusCode"]
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
+    rawModules: [{
+        name: "testing POST /api/product/:source/:sid",
+        tests: gpii.tests.ul.api.product.post.commonTests
+    }],
     components: {
         cookieJar: {
             type: "kettle.test.cookieJar"
@@ -200,16 +200,14 @@ fluid.defaults("gpii.tests.ul.api.product.post.caseHolder", {
 
 fluid.defaults("gpii.tests.ul.api.product.put.caseHolder", {
     gradeNames: ["gpii.tests.ul.api.product.post.caseHolder"],
-    distributeOptions: [
-        {
-            record: "testing PUT /api/product/:source/:sid",
-            target: "{that}.options.rawModules.0.name"
-        },
-        {
-            record: "PUT",
-            target: "{that gpii.tests.ul.api.product.post.request}.options.method"
-        }
-    ]
+    rawModules: [{
+        name: "testing PUT /api/product/:source/:sid",
+        tests: gpii.tests.ul.api.product.post.commonTests
+    }],
+    distributeOptions: [{
+        record: "PUT",
+        target: "{that gpii.tests.ul.api.product.post.request}.options.method"
+    }]
 });
 
 fluid.defaults("gpii.tests.ul.api.product.post.environment", {
@@ -231,8 +229,7 @@ fluid.test.runTests("gpii.tests.ul.api.product.post.environment");
 fluid.defaults("gpii.tests.ul.api.product.put.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9072,
-        couch:  2709
+        api: 9072
     },
     components: {
         testCaseHolder: {

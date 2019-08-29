@@ -334,8 +334,7 @@ fluid.defaults("gpii.tests.ul.api.updates.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.updates.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9786,
-        couch:  6879
+        api: 9786
     },
     components: {
         testCaseHolder: {

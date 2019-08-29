@@ -24,7 +24,7 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
                         {
                             event:    "{anonymousInvalidRequest}.events.onComplete",
                             listener: "jqUnit.assertLeftHand",
-                            args:     ["We should have received a validation error message...", { isError: true, statusCode: 400, message: "The information you provided is incomplete or incorrect.  Please check the following:"}, "@expand:JSON.parse({arguments}.0)"]
+                            args:     ["We should have received a validation error message...", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
                         },
                         {
                             func: "jqUnit.assertEquals",
@@ -67,7 +67,7 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
                         {
                             event:    "{invalidRequest}.events.onComplete",
                             listener: "jqUnit.assertLeftHand",
-                            args:     ["We should have received a validation error message...", { isError: true, statusCode: 400, message: "The information you provided is incomplete or incorrect.  Please check the following:"}, "@expand:JSON.parse({arguments}.0)"]
+                            args:     ["We should have received a validation error message...", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
                         },
                         {
                             func: "jqUnit.assertEquals",
@@ -230,9 +230,7 @@ fluid.defaults("gpii.tests.ul.api.product.delete.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.product.delete.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9751,
-        couch:  3519,
-        lucene: 9151
+        api: 9751
     },
     components: {
         testCaseHolder: {

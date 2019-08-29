@@ -114,19 +114,7 @@ fluid.defaults("gpii.ul.api.images.file.read", {
     routerOptions: {
         mergeParams: true
     },
-    rules: {
-        requestContentToValidate: {
-            "": "params"
-        }
-    },
-    events: {
-        onSchemasDereferenced: null
-    },
     distributeOptions: [
-        {
-            source: "{that}.options.rules",
-            target: "{that gpii.express.handler}.options.rules"
-        },
         {
             source: "{that}.options.cacheDir",
             target: "{that gpii.express.handler}.options.cacheDir"
@@ -149,12 +137,30 @@ fluid.defaults("gpii.ul.api.images.file.read", {
             type: "gpii.schema.validationMiddleware",
             options: {
                 priority: "after:permissionMiddleware",
-                schemaDirs: "%ul-api/src/schemas",
-                schemaKey:  "file-read-input.json",
-                rules: "{gpii.ul.api.images.file.read}.options.rules",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.images.file.read}.events.onSchemasDereferenced.fire"
+                rules: {
+                    requestContentToValidate: {
+                        "": "params"
+                    }
+                },
+                inputSchema: {
+                    "title": "File reader input Schema",
+                    "type": "object",
+                    "properties": {
+                        "uid": gpii.ul.api.schemas.required.product.uid,
+                        "source": gpii.ul.api.schemas.required.product.source,
+                        "image_id": {
+                            "required": true,
+                            "type": "string",
+                            "errors": {
+                                "type": "The 'image_id' URL parameter must be a valid string."
+                            }
+                        },
+                        "width": {
+                            "type": "string",
+                            "errors": {
+                                "type": "The 'width' query parameter must be a valid string."
+                            }
+                        }
                     }
                 }
             }

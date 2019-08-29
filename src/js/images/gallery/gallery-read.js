@@ -129,7 +129,13 @@ fluid.defaults("gpii.ul.api.images.gallery.read", {
     components: {
         validationMiddleware: {
             options: {
-                schemaKey:  "gallery-read-input.json"
+                inputSchema: {
+                    "title": "gallery 'read' input schema",
+                    "type": "object",
+                    "properties": {
+                        "uid": gpii.ul.api.schemas.required.product.uid
+                    }
+                }
             }
         },
         // If our request is valid, handle it normally.

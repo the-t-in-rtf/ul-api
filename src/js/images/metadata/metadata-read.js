@@ -157,20 +157,6 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
     routerOptions: {
         mergeParams: true
     },
-    rules: {
-        requestContentToValidate: {
-            "": "params"
-        }
-    },
-    events: {
-        onSchemasDereferenced: null
-    },
-    distributeOptions: [
-        {
-            source: "{that}.options.rules",
-            target: "{that gpii.express.handler}.options.rules"
-        }
-    ],
     components: {
         // Make sure the user has permission to view (non-unified) image sources.
         permissionMiddleware: {
@@ -184,12 +170,20 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
             type: "gpii.schema.validationMiddleware",
             options: {
                 priority: "after:permissionMiddleware",
-                schemaDirs: "%ul-api/src/schemas",
-                schemaKey:  "metadata-read-input.json",
-                rules: "{gpii.ul.api.images.metadata.read.base}.options.rules",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.images.metadata.read.base}.events.onSchemasDereferenced.fire"
+                rules: {
+                    requestContentToValidate: {
+                        "": "params"
+                    }
+                },
+                inputSchema:  {
+                    "title": "UL Image API metadata 'read' input schema",
+                    "type": "object",
+                    "properties": {
+                        "uid": gpii.ul.api.schemas.required.product.uid,
+                        "source": gpii.ul.api.schemas.required.product.source,
+                        "image_id": {
+                            "type": "string"
+                        }
                     }
                 }
             }

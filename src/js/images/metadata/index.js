@@ -18,22 +18,9 @@ require("./metadata-read");
 fluid.defaults("gpii.ul.api.images.metadata", {
     gradeNames: ["gpii.express.router"],
     path: "/metadata",
-    events: {
-        onReadReady: null,
-        onReady: {
-            onReadReady: "onReadReady"
-        }
-    },
     components: {
         read: {
-            type: "gpii.ul.api.images.metadata.read",
-            options: {
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.images.metadata}.events.onReadReady.fire"
-                    }
-                }
-            }
+            type: "gpii.ul.api.images.metadata.read"
         }
     }
 });

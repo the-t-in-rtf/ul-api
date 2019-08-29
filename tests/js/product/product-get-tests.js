@@ -6,6 +6,8 @@ fluid.logObjectRenderChars = 20000;
 
 var gpii  = fluid.registerNamespace("gpii");
 
+fluid.require("%gpii-express/tests/js/lib/test-helpers.js");
+
 var jqUnit = require("node-jqunit");
 
 require("../../../");
@@ -20,7 +22,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.request", {
 fluid.registerNamespace("gpii.tests.ul.api.product.get");
 gpii.tests.ul.api.product.get.verifyContent = function (message, response, body, expected, statusCode) {
     gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
-    jqUnit.assertDeepEq(message, expected, body);
+    jqUnit.assertLeftHand(message, expected, body);
 };
 
 gpii.tests.ul.api.product.get.verifyRedirect = function (response) {
@@ -225,8 +227,13 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                     type: "test",
                     sequence: [
                         {
-                            func: "{requestPrivateRecord}.send",
+                            func: "{requestPrivateLogout}.send",
                             args: []
+                        },
+                        {
+                            event:    "{requestPrivateLogout}.events.onComplete",
+                            listener: "{requestPrivateRecord}.send",
+                            args:     []
                         },
                         {
                             event:    "{requestPrivateRecord}.events.onComplete",
@@ -340,6 +347,9 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
                 endpoint: "api/product/~existing/contrib1?includeSources=true"
             }
         },
+        requestPrivateLogout: {
+            type: "gpii.test.ul.api.request.logout"
+        },
         requestPrivateRecord: {
             type: "gpii.tests.ul.api.product.get.request",
             options: {
@@ -361,43 +371,12 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
     },
     expected: {
         noParams: {
-            "isError": true,
-            "message": "The information you provided is incomplete or incorrect.  Please check the following:",
-            "statusCode": 400,
-            "fieldErrors": [
-                {
-                    "keyword": "required",
-                    "dataPath": "",
-                    "schemaPath": "#/required",
-                    "params": {
-                        "missingProperty": "sid"
-                    },
-                    "message": "The 'sid' URL parameter is required."
-                },
-                {
-                    "keyword": "required",
-                    "dataPath": "",
-                    "schemaPath": "#/required",
-                    "params": {
-                        "missingProperty": "source"
-                    },
-                    "message": "The 'source' URL parameter is required."
-                }
-            ]
+            "isValid": false,
+            "statusCode": 400
         },
         oneParam: {
-            "isError": true,
-            "message": "The information you provided is incomplete or incorrect.  Please check the following:",
-            "statusCode": 400,
-            "fieldErrors": [{
-                "keyword": "required",
-                "dataPath": "",
-                "schemaPath": "#/required",
-                "params": {
-                    "missingProperty": "sid"
-                },
-                "message": "The 'sid' URL parameter is required."
-            }]
+            "isValid": false,
+            "statusCode": 400
         },
         missing: {
             isError: true,
@@ -505,8 +484,7 @@ fluid.defaults("gpii.tests.ul.api.product.get.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.product.get.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9752,
-        couch:  2579
+        api: 9752
     },
     components: {
         testCaseHolder: {

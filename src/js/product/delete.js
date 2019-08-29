@@ -3,6 +3,8 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
+require("../schemas");
+
 fluid.registerNamespace("gpii.ul.api.product.delete.handler");
 
 gpii.ul.api.product["delete"].handler.handleRequest = function (that) {
@@ -142,29 +144,34 @@ fluid.defaults("gpii.ul.api.product.delete", {
     routerOptions: {
         mergeParams: true
     },
-    schemas: {
-        input: "product-delete-input.json"
-    },
-    handlers: {
-        json: {
-            contentType:   "application/json",
-            handlerGrades: ["gpii.ul.api.product.delete.handler"]
-        }
-    },
     rules: {
         requestContentToValidate: {
             "sid":     "params.sid",
             "source":  "params.source"
         }
     },
-    distributeOptions: [
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
-        },
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
+    distributeOptions: [{
+        source: "{that}.options.rules.requestContentToValidate",
+        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+    }],
+    handlers: {
+        json: {
+            contentType:   "application/json",
+            handlerGrades: ["gpii.ul.api.product.delete.handler"]
         }
-    ]
+    },
+    components: {
+        validationMiddleware: {
+            options: {
+                rules: "{gpii.ul.api.product.delete}.options.rules",
+                inputSchema: {
+                    "type": "object",
+                    "properties": {
+                        "sid": gpii.ul.api.schemas.required.product.sid,
+                        "source": gpii.ul.api.schemas.required.product.source
+                    }
+                }
+            }
+        }
+    }
 });

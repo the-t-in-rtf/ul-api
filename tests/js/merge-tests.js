@@ -1,5 +1,5 @@
 /* eslint-env node */
-// Tests for GET /api/product
+// Tests for POST /api/merge
 "use strict";
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
@@ -34,7 +34,6 @@ fluid.defaults("gpii.test.ul.api.merge.request.withData", {
 fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
-        // TODO: Convert these to use sequences
         {
             name: "Tests for POST /api/merge...",
             tests: [
@@ -71,7 +70,7 @@ fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
                         {
                             event:     "{noPayloadRequest}.events.onComplete",
                             listener:  "jqUnit.assertEquals",
-                            args:      ["We should have been rejected because we did not include valid query data...", 400, "{noPayloadRequest}.nativeResponse.statusCode"]
+                            args:      ["We should have been rejected because we did not include the required data...", 400, "{noPayloadRequest}.nativeResponse.statusCode"]
                         }
                     ]
                 },
@@ -292,8 +291,7 @@ fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.merge.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9816,
-        couch:  6819
+        api: 9816
     },
     components: {
         testCaseHolder: {

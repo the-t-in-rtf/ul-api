@@ -1,9 +1,0 @@
-{
-    "id": "search-base.json",
-    "description": "Common definitions used in both search input and search results.",
-    "definitions": {
-        "q": {
-            "type": "string"
-        }
-    }
-}

@@ -109,7 +109,8 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
             }
         },
         invalidStatus: {
-            isError: true
+            isValid: false,
+            statusCode: 400
         },
         distantFuture: {
             "total_rows": 0,
@@ -569,8 +570,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
 fluid.defaults("gpii.tests.ul.api.products.environment", {
     gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9806,
-        couch:  6809
+        api: 9806
     },
     components: {
         testCaseHolder: {

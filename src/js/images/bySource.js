@@ -92,21 +92,8 @@ fluid.defaults("gpii.ul.api.images.bySource", {
     routerOptions: {
         mergeParams: true
     },
-    rules: {
-        requestContentToValidate: {
-            "": "params"
-        }
-    },
-    events: {
-        onSchemasDereferenced: null
-    },
-    distributeOptions: [
-        {
-            source: "{that}.options.rules",
-            target: "{that gpii.express.handler}.options.rules"
-        }
-    ],
     components: {
+        // TODO: Add schema validation if required.
         // Make sure the user has permission to view (non-unified) image sources.
         permissionMiddleware: {
             type: "gpii.ul.images.sourcePermissionMiddleware",

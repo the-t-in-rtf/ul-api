@@ -1,8 +1,73 @@
-{
-    "type": "object",
-    "id": "product-base.json",
-    "description": "Common definitions used in validating user input to and returning data from the 'product' REST endpoint.",
-    "definitions": {
+"use strict";
+(function (fluid) {
+    var gpii = fluid.registerNamespace("gpii");
+    fluid.registerNamespace("gpii.ul.api.schemas");
+
+    gpii.ul.api.schemas.generateRequiredHolder = function (original) {
+        return fluid.transform(original, function (singleEntry) {
+            var updatedEntry = fluid.copy(singleEntry);
+            updatedEntry.required = true;
+            return updatedEntry;
+        });
+    };
+
+    /*
+
+        The GSS language use for our schemas intentionally lacks the $ref construct used to compose complex schemas out
+        of smaller parts.  This file takes the snippets reused and presents them as sub-schema holding namespaced
+        global variables which can be referred to directly when defining input schemas.
+
+        Most of these are not actually schemas themselves, but can be easily converted.  For example, to make a
+        "product" schema, you would simply wrap the list of sub-schemas in a "properties" attribute:
+
+        {
+            properties: gpii.ul.api.schemas.product
+        }
+
+        The one exception is gpii.ul.api.schemas.sortBy, which is itself a complete schema for a single field.
+
+     */
+
+    gpii.ul.api.schemas.output = {
+        "includeSources": {
+            "type": "boolean"
+        },
+        "unified": {
+            "type": "boolean"
+        }
+    };
+
+    gpii.ul.api.schemas.paging = {
+        "total_rows": {
+            "type": "number",
+            "description": "The total number of rows that match the input parameters."
+        },
+        "offset": {
+            "type": "number",
+            "description": "The position of the first record to return.  Defaults to zero (the first record in the set)."
+        },
+        "limit": {
+            "type": "number",
+            "description": "The number of records to return."
+        }
+    };
+
+    gpii.ul.api.schemas.sortBy = {
+        "anyOf": [
+            {
+                "type": "string"
+            },
+            {
+                "type": "array",
+                "description": "An array of field names, prefixed with / for ascending order and \\ for descending order.",
+                "items": {
+                    "type": "string"
+                }
+            }
+        ]
+    };
+
+    gpii.ul.api.schemas.product = {
         "source": {
             "type": "string",
             "description": "The source of a record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to 'ul'.",
@@ -59,6 +124,7 @@
             "description": "A JSON object describing the manufacturer.",
             "properties": {
                 "name": {
+                    "required": true,
                     "type": "string",
                     "minLength": 1,
                     "description": "The name of the manufacturer.",
@@ -139,21 +205,20 @@
                         "minLength": "The manufacturer's URL must be a valid URL."
                     }
                 }
-            },
-            "required": [
-                "name"
-            ],
-            "errors": {
-                "required/0": "You must provide the name of the product's manufacturer."
             }
         },
         "status": {
-            "type": "string",
             "enum": [
                 "new",
                 "active",
                 "discontinued",
                 "deleted"
+            ],
+            "enumLabels": [
+                "New",
+                "Active",
+                "Discontinued",
+                "Deleted"
             ],
             "description": "The status of this record. Current supported values are: 'new', 'active', 'discontinued', 'deleted'.",
             "errors": {
@@ -162,16 +227,13 @@
             }
         },
         "language": {
-            "$ref": "product-base.json#/definitions/languagePattern",
+            "type": "string",
+            "pattern": "^[a-zA-Z]{2}_[A-Za-z]{2}$",
             "description": "The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.",
             "errors": {
                 "pattern": "You must provide a valid language code (ex: en_us).",
                 "type": "You must provide a valid language code (ex: en_us)."
             }
-        },
-        "languagePattern": {
-            "type": "string",
-            "pattern": "^[a-zA-Z]{2}_[A-Za-z]{2}$"
         },
         "sourceData": {
             "type": "object",
@@ -198,5 +260,47 @@
                 "type": "You must provide a valid date."
             }
         }
-    }
-}
+    };
+
+    fluid.registerNamespace("gpii.ul.api.schemas.required");
+    gpii.ul.api.schemas.required.product = gpii.ul.api.schemas.generateRequiredHolder(gpii.ul.api.schemas.product);
+
+    gpii.ul.api.schemas.filters = {
+        "updatedSince": {
+            "type": "string",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                }
+            ],
+            "errors": {
+                "type": "You must supply a valid date in ISO 8601 string format.",
+                "anyOf": "You must supply a valid date in ISO 8601 string format."
+            }
+        },
+        "status": {
+            "anyOf": [
+                gpii.ul.api.schemas.product.status,
+                {
+                    "type": "array",
+                    "items": gpii.ul.api.schemas.product.status
+                }
+            ],
+            "errors": {
+                "anyOf": "Invalid status.  See the API docs for supported values."
+            }
+        },
+        "sources": {
+            "anyOf": [
+                gpii.ul.api.schemas.product.source,
+                {
+                    "type": "array",
+                    "items": gpii.ul.api.schemas.product.source
+                }
+            ]
+        }
+    };
+})(fluid);

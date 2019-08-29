@@ -7,46 +7,82 @@ var gpii  = fluid.registerNamespace("gpii");
 var kettle = fluid.require("%kettle");
 kettle.loadTestingSupport();
 
-require("gpii-express");
-gpii.express.loadTestingSupport();
+fluid.require("%gpii-couchdb-test-harness");
+gpii.test.couchdb.loadTestingSupport();
 
 require("./test-harness");
 
-// A caseholder for tests that do not require a browser (browser tests can use gpii.test.webdriver.caseHolder).
-fluid.defaults("gpii.test.ul.api.caseHolder", {
-    gradeNames: ["gpii.test.express.caseHolder.base"],
-    sequenceStart: gpii.test.express.standardSequenceStart,
-    sequenceEnd: [
-        { func: "{testEnvironment}.events.stopFixtures.fire", args: [] },
-        { listener: "fluid.identity", event: "{testEnvironment}.events.onFixturesStopped"}
-    ]
+// Wire API harness startup and shutdown into existing sequences inherited from gpii-couchdb-test-harness.
+fluid.defaults("gpii.test.ul.api.sequenceElement.provision", {
+    gradeNames: "fluid.test.sequenceElement",
+    sequence: [{
+        // TODO: Tidy up this IoC reference when potentia ii is merged.
+        task:        "{gpii.test.ul.api.testEnvironment}.apiHarness.provisioner.provision",
+        resolve:     "fluid.log",
+        resolveArgs: ["Test image data provisioned."]
+    }]
 });
 
-
-// An environment for tests that don't require lucene (it's faster).
-fluid.defaults("gpii.test.ul.api.testEnvironment", {
-    gradeNames: ["gpii.test.express.testEnvironment", "gpii.tests.ul.api.harness"],
-    port: "{that}.options.ports.api"
+fluid.defaults("gpii.test.ul.api.sequenceElement.cleanup", {
+    gradeNames: "fluid.test.sequenceElement",
+    sequence: [{
+        // TODO: Tidy up this IoC reference when potentia ii is merged.
+        task:        "{gpii.test.ul.api.testEnvironment}.apiHarness.provisioner.cleanup",
+        resolve:     "fluid.log",
+        resolveArgs: ["Test image data cleaned up."]
+    }]
 });
 
-
-// An environment for tests that require lucene.
-fluid.defaults("gpii.test.ul.api.testEnvironment.withLucene", {
-    gradeNames: ["gpii.test.express.testEnvironment", "gpii.tests.ul.api.harness.withLucene"],
-    hangWait:   7500,
-    events: {
-        onFixturesConstructed: {
-            events: {
-                apiReady:      "apiReady",
-                luceneStarted: "luceneStarted",
-                pouchStarted:  "pouchStarted"
-            }
+fluid.defaults("gpii.test.ul.api.sequence", {
+    gradeNames: "gpii.test.couchdb.sequence",
+    sequenceElements: {
+        provision: {
+            gradeNames: "gpii.test.ul.api.sequenceElement.provision",
+            priority:   "after:startHarness"
         },
-        onFixturesStopped: {
-            events: {
-                apiStopped:    "apiStopped",
-                luceneStopped: "luceneStopped",
-                pouchStopped:  "pouchStopped"
+        cleanup: {
+            gradeNames: "gpii.test.ul.api.sequenceElement.cleanup",
+            priority:   "before:stopHarness"
+        }
+    }
+});
+
+fluid.defaults("gpii.test.ul.api.caseHolder", {
+    gradeNames: ["gpii.test.couchdb.caseHolder"],
+    sequenceGrade: "gpii.test.ul.api.sequence"
+});
+
+fluid.defaults("gpii.test.ul.api.testEnvironment", {
+    gradeNames: ["gpii.test.couchdb.lucene.environment"],
+    hangWait:   7500,
+    databases: {
+        users: { data: "%ul-api/tests/data/users.json" },
+        ul:    {
+            data: [
+                "%ul-api/tests/data/deleted.json",
+                "%ul-api/tests/data/duplicates.json",
+                "%ul-api/tests/data/pilot.json",
+                "%ul-api/tests/data/updates.json",
+                "%ul-api/tests/data/views.json",
+                "%ul-api/tests/data/whetstone.json"
+            ]
+        },
+        images: {
+            data: [
+                "%ul-api/tests/data/galleries.json",
+                "%ul-api/tests/data/images.json"
+            ]
+        }
+    },
+    components: {
+        apiHarness: {
+            type: "gpii.tests.ul.api.harness",
+            options: {
+                ports: {
+                    api:  "{testEnvironment}.options.ports.api",
+                    couch:  25984,
+                    lucene: 25985
+                }
             }
         }
     }
@@ -62,7 +98,7 @@ fluid.defaults("gpii.test.ul.api.request", {
     path: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.options.baseUrl", endpoint: "{that}.options.endpoint" }]
+            args:     ["%apiUrl%endpoint", { apiUrl: "{testEnvironment}.apiHarness.options.urls.api", endpoint: "{that}.options.endpoint" }]
         }
     }
 });
@@ -81,4 +117,11 @@ fluid.defaults("gpii.test.ul.api.request.login", {
     gradeNames: ["gpii.test.ul.api.request"],
     method:     "POST",
     endpoint:   "api/user/login"
+});
+
+// Some tests need to ensure that we are not already logged in.
+fluid.defaults("gpii.test.ul.api.request.logout", {
+    gradeNames: ["gpii.test.ul.api.request"],
+    method:     "GET",
+    endpoint:   "api/user/logout"
 });

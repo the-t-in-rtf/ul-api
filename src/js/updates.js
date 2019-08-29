@@ -12,9 +12,9 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 require("./lib/initialHtmlForm");
-require("./lib/validationMiddleware");
 
-require("gpii-sort");
+fluid.require("%gpii-json-schema");
+fluid.require("%gpii-sort");
 
 fluid.registerNamespace("gpii.ul.api.updates.handler.json");
 
@@ -180,12 +180,6 @@ fluid.defaults("gpii.ul.api.updates.handler.html", {
 fluid.defaults("gpii.ul.api.updates", {
     gradeNames: ["gpii.express.router"],
     path:       "/updates",
-    events: {
-        onSchemasDereferenced: null
-    },
-    schemas: {
-        input: "updates-input.json"
-    },
     components: {
         htmlForm: {
             type: "gpii.ul.api.middleware.initialHtmlForm",
@@ -196,17 +190,11 @@ fluid.defaults("gpii.ul.api.updates", {
         },
         // The JSON middleware requires valid input to access....
         validationMiddleware: {
-            type: "gpii.ul.api.middleware.validationMiddleware",
+            type: "gpii.schema.validationMiddleware",
             options: {
                 priority:   "after:htmlForm",
                 rules: {
                     requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate"
-                },
-                schemaKey:  "{gpii.ul.api.updates}.options.schemas.input",
-                listeners: {
-                    "onSchemasDereferenced.notifyParent": {
-                        func: "{gpii.ul.api.updates}.events.onSchemasDereferenced.fire"
-                    }
                 }
             }
         },

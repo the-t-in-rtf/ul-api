@@ -37,18 +37,24 @@ gpii.tests.ul.api.provisioner.provision = function (that) {
     });
 
     var sequence = fluid.promise.sequence(promises);
-    sequence.then(that.events.onProvisioned.fire, fluid.fail);
+    return sequence;
 };
 
-gpii.tests.ul.api.provisioner.deprovision = function (that) {
+gpii.tests.ul.api.provisioner.cleanup = function (that) {
+    var cleanupPromises = [];
     fluid.each(that.options.dataToCopy, function (destDir) {
+        var cleanupPromise = fluid.promise();
         fluid.log("Removing test image data from '", destDir, "'...");
         rimraf(destDir, function (error) {
             if (error) {
+                cleanupPromise.reject(fluid.get(error, "message.js") || error);
                 fluid.log("Cannot remove test image data:", error);
             }
+            cleanupPromise.resolve();
         });
+        cleanupPromises.push(cleanupPromise);
     });
+    return fluid.promise.sequence(cleanupPromises);
 };
 
 fluid.defaults("gpii.tests.ul.api.provisioner", {
@@ -66,16 +72,13 @@ fluid.defaults("gpii.tests.ul.api.provisioner", {
     },
     testCacheDir: "%ul-api/tests/images/cache",
     testDataDir: "%ul-api/tests/images/originals",
-    events: {
-        onProvisioned: null
-    },
-    listeners: {
-        "onCreate.provision": {
+    invokers: {
+        "provision": {
             funcName: "gpii.tests.ul.api.provisioner.provision",
             args:     ["{that}"]
         },
-        "onDestroy.deprovision": {
-            funcName: "gpii.tests.ul.api.provisioner.deprovision",
+        "cleanup": {
+            funcName: "gpii.tests.ul.api.provisioner.cleanup",
             args:     ["{that}"]
         }
     }

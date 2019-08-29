@@ -225,36 +225,25 @@ fluid.defaults("gpii.ul.api.products", {
     gradeNames:   ["gpii.ul.api.validationGatedContentAware"],
     timeout: 60000,
     path: "/products",
-    events: {
-        onSchemasDereferenced: null
-    },
-    rules: {
-        requestContentToValidate: {
-            "": "query"
-        }
-    },
-    schemas: {
-        input:  "products-input.json",
-        output: "products-results.json"
-    },
     defaultParams: {
         offset:  0,
         limit:   250,
         unified: true,
         sortBy:  "/name"
     },
+    rules: {
+        requestContentToValidate: {
+            "": "query"
+        }
+    },
     distributeOptions: [
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
-        },
-        {
-            source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.schema.validationMiddleware}.options.rules.requestContentToValidate"
-        },
         {
             source: "{that}.options.defaultParams",
             target: "{that gpii.express.handler}.options.defaultParams"
+        },
+        {
+            source: "{that}.options.rules.requestContentToValidate",
+            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
         }
     ],
     handlers: {
@@ -274,6 +263,25 @@ fluid.defaults("gpii.ul.api.products", {
             priority:      "after:json",
             contentType:   "*/*",
             handlerGrades: ["gpii.ul.api.products.handler.html"]
+        }
+    },
+    components: {
+        validationMiddleware: {
+            options: {
+                rules: "{gpii.ul.api.products}.options.rules",
+                inputSchema: {
+                    "type": "object",
+                    "properties": {
+                        "unified": gpii.ul.api.schemas.output.unified,
+                        "limit": gpii.ul.api.schemas.paging.limit,
+                        "offset": gpii.ul.api.schemas.paging.offset,
+                        "sources": gpii.ul.api.schemas.filters.sources,
+                        "sortBy": gpii.ul.api.schemas.sortBy,
+                        "status": gpii.ul.api.schemas.filters.status,
+                        "updatedSince": gpii.ul.api.schemas.filters.updatedSince
+                    }
+                }
+            }
         }
     }
 });

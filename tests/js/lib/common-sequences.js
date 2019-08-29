@@ -7,34 +7,6 @@ var jqUnit = require("node-jqunit");
 
 require("./request");
 
-// The next two grades expect to work with a testEnvironment that supports the startup/teardown events used in
-// gpii-express, gpii-handlebars, gpii-pouchdb and various other packages.
-fluid.defaults("gpii.tests.ul.api.images.elements.startup", {
-    gradeNames: ["fluid.test.sequenceElement"],
-    sequence: [
-        {
-            func: "{testEnvironment}.events.constructFixtures.fire"
-        },
-        {
-            event:    "{testEnvironment}.events.onFixturesConstructed",
-            listener: "fluid.identity"
-        }
-    ]
-});
-
-fluid.defaults("gpii.tests.ul.api.images.elements.shutdown", {
-    gradeNames: ["fluid.test.sequenceElement"],
-    sequence: [
-        {
-            func: "{testEnvironment}.events.stopFixtures.fire"
-        },
-        {
-            event:    "{testEnvironment}.events.onFixturesStopped",
-            listener: "fluid.identity"
-        }
-    ]
-});
-
 // A "marker" grade to allow a sequence to expose a single cookie jar to all requests within sequences and elements.
 fluid.defaults("gpii.tests.ul.api.images.needsCookieJar", {
     gradeNames: ["fluid.component"]
@@ -100,21 +72,6 @@ fluid.defaults("gpii.tests.ul.api.images.elements.login", {
     }
 });
 
-// A sequence that allows you to insert your tests between the standard "startup" and "shutdown" steps.
-fluid.defaults("gpii.tests.ul.api.images.sequences.standardStartupAndShutdown", {
-    gradeNames: ["fluid.test.sequence"],
-    sequenceElements: {
-        startup: {
-            gradeNames: ["gpii.tests.ul.api.images.elements.startup"],
-            priority: "first"
-        },
-        shutdown: {
-            gradeNames: ["gpii.tests.ul.api.images.elements.shutdown"],
-            priority: "last"
-        }
-    }
-});
-
 // A grade that provides the same cookie jar to all children with the `gpii.tests.ul.api.images.needsCookieJar` marker grade.
 fluid.defaults("gpii.tests.ul.api.images.hasCookieJar", {
     gradeNames: "fluid.component",
@@ -135,6 +92,7 @@ fluid.defaults("gpii.tests.ul.api.images.hasCookieJar", {
     the "login" priority, at which point the user should already be logged in and have a session cookie.
 
  */
+// TODO: Update to work with standard gpii-couchdb-test-harness sequence.
 fluid.defaults("gpii.tests.ul.api.images.sequences.requiresLogin", {
     gradeNames: ["gpii.tests.ul.api.images.sequences.standardStartupAndShutdown", "gpii.tests.ul.api.images.hasCookieJar"],
     sequenceElements: {

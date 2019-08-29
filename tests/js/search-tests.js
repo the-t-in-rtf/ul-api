@@ -191,7 +191,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                         {
                             event:    "{invalidSearch}.events.onComplete",
                             listener: "jqUnit.assertLeftHand",
-                            args:     ["An search with invalid query parameters should not be succesful...", { isError: true }, "@expand:JSON.parse({arguments}.0)"]
+                            args:     ["An search with invalid query parameters should not be succesful...", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
                         }
                     ]
                 },
@@ -248,19 +248,19 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
         limitedRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/search?q=%22whetstone%22&limit=43"
+                endpoint: "api/search?q=%22whetstone%22&limit=43&sortBy=%22name%22"
             }
         },
         offsetRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/search?q=%22whetstone%22&offset=499"
+                endpoint: "api/search?q=%22whetstone%22&offset=499&sortBy=%22name%22"
             }
         },
         limitedAndOffsetRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/search?q=%22whetstone%22&offset=41&limit=2"
+                endpoint: "api/search?q=%22whetstone%22&offset=41&limit=2&sortBy=%22name%22"
             }
         },
         searchForDeleted: {
@@ -292,11 +292,9 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
 
 
 fluid.defaults("gpii.tests.ul.api.search.environment", {
-    gradeNames: ["gpii.test.ul.api.testEnvironment.withLucene"],
+    gradeNames: ["gpii.test.ul.api.testEnvironment"],
     ports: {
-        api:    9753,
-        couch:  3579,
-        lucene: 9451
+        api: 9753
     },
     components: {
         testCaseHolder: {

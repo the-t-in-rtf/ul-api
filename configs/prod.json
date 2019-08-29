@@ -1,7 +1,8 @@
 {
   "type": "prodConfig",
   "options": {
-    "gradeNames": ["gpii.ul.api.harness"]
+    "gradeNames": ["gpii.ul.api.harness"],
+    "setLogging": false
   },
   "require": ["%ul-api/src/js/harness.js"]
 }

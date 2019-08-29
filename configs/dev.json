@@ -2,11 +2,6 @@
   "type": "devConfig",
   "options": {
     "gradeNames": ["gpii.tests.ul.api.harness"],
-    "listeners": {
-      "onCreate.constructFixtures": {
-        "func": "{that}.events.constructFixtures.fire"
-      }
-    }
   },
   "require": ["%ul-api/tests/js/lib/test-harness.js"]
 }
