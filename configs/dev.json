@@ -1,7 +1,11 @@
 {
-  "type": "devConfig",
-  "options": {
-    "gradeNames": ["gpii.tests.ul.api.harness"],
-  },
-  "require": ["%ul-api/tests/js/lib/test-harness.js"]
+    "type": "devConfig",
+    "options": {
+        "gradeNames": [
+            "gpii.tests.ul.api.harness"
+        ]
+    },
+    "require": [
+        "%ul-api/tests/js/lib/test-harness.js"
+    ]
 }
