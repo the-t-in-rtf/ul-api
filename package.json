@@ -16,20 +16,20 @@
     "dependencies": {
         "gpii-binder": "1.0.5",
         "gpii-express": "1.0.15",
-        "gpii-express-user": "1.0.2-dev.20190628T073950Z.6efdc50.GPII-3921",
+        "gpii-express-user": "1.0.2-dev.20191007T095819Z.4c21f06.GPII-3921",
         "gpii-handlebars": "1.1.4",
         "gpii-json-schema": "2.1.2-dev.20190829T092959Z.fc01d7b.GPII-4022",
         "gpii-launcher": "1.0.0-dev.20190527T124956Z.9255cfa.GPII-2103",
         "gpii-location-bar-relay": "1.0.4",
         "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
-        "infusion": "3.0.0-dev.20190808T142952Z.f8576acb6",
-        "markdown-it": "9.1.0",
+        "infusion": "3.0.0-dev.20190926T213421Z.e84b3cf0e.FLUID-6148",
+        "markdown-it": "10.0.0",
         "mkdirp": "0.5.1",
         "ncp": "2.0.0",
-        "sharp": "0.23.0"
+        "sharp": "0.23.1"
     },
     "devDependencies": {
-        "eslint": "6.2.2",
+        "eslint": "6.5.1",
         "gpii-grunt-lint-all": "1.0.5",
         "gpii-couchdb-test-harness": "1.0.0-dev.20190827T101451Z.024d2c3.GPII-3531",
         "grunt": "1.0.4",
