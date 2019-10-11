@@ -18,7 +18,20 @@ gpii.ul.api.harness.setLogging = function (that) {
 
 fluid.defaults("gpii.ul.api.harness", {
     gradeNames:   ["fluid.component"],
-    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    templateDirs: {
+        api: {
+            path: "%ul-api/src/templates",
+            priority: "before:user"
+        },
+        user: {
+            path: "%gpii-express-user/src/templates",
+            priority: "before:validation"
+        },
+        validation: {
+            priority: "last",
+            path: "%gpii-json-schema/src/templates"
+        }
+    },
     sessionKey:   "_ul_user",
     originalsDir: "/opt/ul-files/originalsDir",
     cacheDir:     "/opt/ul-files/cacheDir",

@@ -28,7 +28,20 @@ fluid.defaults("gpii.ul.api", {
         cacheDir:     true
     },
     path:         "/api",
-    templateDirs: ["%ul-api/src/templates", "%gpii-express-user/src/templates", "%gpii-json-schema/src/templates"],
+    templateDirs: {
+        api: {
+            path: "%ul-api/src/templates",
+            priority: "before:user"
+        },
+        user: {
+            path: "%gpii-express-user/src/templates",
+            priority: "before:validation"
+        },
+        validation: {
+            priority: "last",
+            path: "%gpii-json-schema/src/templates"
+        }
+    },
     sessionKey:   "_ul_user",
     distributeOptions: [
         {
