@@ -227,7 +227,7 @@ fluid.defaults("gpii.tests.ul.api.merge.caseHolder", {
             type: "kettle.test.cookieJar"
         },
         anonymousRequest: {
-            type: "gpii.test.ul.api.merge.request"
+            type: "gpii.test.ul.api.merge.request.withData"
         },
         noPayloadLoginRequest: {
             type: "gpii.test.ul.api.request.login"

@@ -107,7 +107,7 @@ fluid.defaults("gpii.ul.api.harness", {
                         type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
                             priority: "after:api",
-                            path: "/hbs",
+                            path: "/templates",
                             method: "get",
                             templateDirs: "{gpii.ul.api.harness}.options.templateDirs"
                         }

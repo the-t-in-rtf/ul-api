@@ -4,7 +4,7 @@
     "description": "The Unified Listing API and tests.",
     "main": "index.js",
     "scripts": {
-        "test": "node node_modules/istanbul/lib/cli.js cover tests/all-tests.js"
+        "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
     },
     "repository": "https://github.com/GPII/ul-api.git",
     "author": "Tony Atkins <tony@raisingthefloor.org>",
@@ -14,15 +14,15 @@
     },
     "homepage": "https://github.com/GPII/ul-api",
     "dependencies": {
-        "gpii-binder": "1.0.5",
+        "gpii-binder": "1.0.6",
         "gpii-express": "1.0.15",
-        "gpii-express-user": "1.0.2-dev.20191007T095819Z.4c21f06.GPII-3921",
-        "gpii-handlebars": "1.1.4",
-        "gpii-json-schema": "2.1.2-dev.20190829T092959Z.fc01d7b.GPII-4022",
+        "gpii-express-user": "1.0.2-dev.20191011T081350Z.de1da4c.GPII-3921",
+        "gpii-handlebars": "2.1.0-dev.20191011T075156Z.b698e3b.GPII-4100",
+        "gpii-json-schema": "2.1.2-dev.20191011T080355Z.2d0aae3.GPII-4022",
         "gpii-launcher": "1.0.0-dev.20190527T124956Z.9255cfa.GPII-2103",
         "gpii-location-bar-relay": "1.0.4",
         "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
-        "infusion": "3.0.0-dev.20190926T213421Z.e84b3cf0e.FLUID-6148",
+        "infusion": "3.0.0-dev.20191009T141140Z.32c9263b4.FLUID-6148",
         "markdown-it": "10.0.0",
         "mkdirp": "0.5.1",
         "ncp": "2.0.0",
@@ -34,9 +34,9 @@
         "gpii-couchdb-test-harness": "1.0.0-dev.20190827T101451Z.024d2c3.GPII-3531",
         "grunt": "1.0.4",
         "grunt-jsonlint": "2.0.0",
-        "istanbul": "0.4.5",
         "kettle": "1.11.0",
         "node-jqunit": "1.1.8",
+        "nyc": "14.1.1",
         "request": "2.88.0"
     }
 }
