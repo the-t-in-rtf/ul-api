@@ -46,15 +46,14 @@ fluid.defaults("gpii.ul.api.images.bySource.dataSource", {
 fluid.registerNamespace("gpii.ul.api.images.bySource.handler");
 
 gpii.ul.api.images.bySource.handler.handleRequest = function (that) {
-    var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
-    var promise = that.reader.get({ key: userOptions.source });
+    var source = fluid.get(that.options.request, "params.source");
+    var promise = that.reader.get({ key: source });
     promise.then(that.handleSuccess, that.handleError);
 };
 
 gpii.ul.api.images.bySource.handler.handleSuccess = function (that, records) {
-    var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
-
-    that.sendResponse(200, { params: userOptions, records: records});
+    var source = fluid.get(that.options.request, "params.source");
+    that.sendResponse(200, { source: source, records: records});
 };
 
 gpii.ul.api.images.bySource.handler.handleError = function (that, response) {
@@ -64,6 +63,11 @@ gpii.ul.api.images.bySource.handler.handleError = function (that, response) {
 
 fluid.defaults("gpii.ul.api.images.bySource.handler", {
     gradeNames: ["gpii.express.handler"],
+    rules: {
+        requestContentToValidate: {
+            "": ""
+        }
+    },
     invokers: {
         handleRequest: {
             funcName: "gpii.ul.api.images.bySource.handler.handleRequest",
@@ -93,7 +97,6 @@ fluid.defaults("gpii.ul.api.images.bySource", {
         mergeParams: true
     },
     components: {
-        // TODO: Add schema validation if required.
         // Make sure the user has permission to view (non-unified) image sources.
         permissionMiddleware: {
             type: "gpii.ul.images.sourcePermissionMiddleware",
