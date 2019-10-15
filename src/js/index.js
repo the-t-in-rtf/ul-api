@@ -42,7 +42,7 @@ fluid.defaults("gpii.ul.api", {
             path: "%gpii-json-schema/src/templates"
         }
     },
-    sessionKey:   "_ul_user",
+    sessionKey: "_ul_user",
     distributeOptions: [
         {
             source: "{that}.options.sessionKey",
