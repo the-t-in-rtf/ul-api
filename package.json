@@ -16,9 +16,9 @@
     "dependencies": {
         "gpii-binder": "1.0.6",
         "gpii-express": "1.0.15",
-        "gpii-express-user": "1.0.2-dev.20191014T133849Z.154a17f.GPII-3921",
-        "gpii-handlebars": "2.1.0-dev.20191014T131654Z.fd29700.GPII-4100",
-        "gpii-json-schema": "2.1.2-dev.20191014T132412Z.bd209d8.GPII-4022",
+        "gpii-express-user": "1.0.2-dev.20191014T143404Z.150969f.GPII-3921",
+        "gpii-handlebars": "2.1.0-dev.20191014T141924Z.45a74ef.GPII-4100",
+        "gpii-json-schema": "2.1.2-dev.20191014T143306Z.8a372f7.GPII-4022",
         "gpii-launcher": "1.0.0-dev.20190527T124956Z.9255cfa.GPII-2103",
         "gpii-location-bar-relay": "1.0.4",
         "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
