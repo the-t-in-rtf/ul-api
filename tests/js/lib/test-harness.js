@@ -28,7 +28,7 @@ gpii.tests.ul.api.harness.getCachePath = function (that) {
 
 gpii.tests.ul.api.harness.getPath = function (that, dirName) {
     var uniqueDirName = that.id + "-" + dirName;
-    return gpii.ul.api.images.file.resolvePath(os.tmpDir(), uniqueDirName);
+    return gpii.ul.api.images.file.resolvePath(os.tmpdir(), uniqueDirName);
 };
 
 fluid.defaults("gpii.tests.ul.api.harness", {

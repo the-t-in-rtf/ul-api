@@ -117,6 +117,9 @@ gpii.ul.api.images.metadata.read.handler.handleError = function (that, response)
 
 fluid.defaults("gpii.ul.api.images.metadata.read.handler", {
     gradeNames: ["gpii.express.handler"],
+    rules: {
+        requestContentToValidate: "{gpii.ul.api.images.metadata.read.base}.options.rules.requestContentToValidate"
+    },
     messages: {
         notFound: "The image ID you have supplied does not correspond to an existing metadata record."
     },
@@ -157,6 +160,11 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
     routerOptions: {
         mergeParams: true
     },
+    rules: {
+        requestContentToValidate: {
+            "": "params"
+        }
+    },
     components: {
         // Make sure the user has permission to view (non-unified) image sources.
         permissionMiddleware: {
@@ -171,9 +179,7 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
             options: {
                 priority: "after:permissionMiddleware",
                 rules: {
-                    requestContentToValidate: {
-                        "": "params"
-                    }
+                    requestContentToValidate: "{gpii.ul.api.images.metadata.read.base}.options.rules.requestContentToValidate"
                 },
                 inputSchema:  {
                     "title": "UL Image API metadata 'read' input schema",

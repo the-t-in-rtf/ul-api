@@ -88,6 +88,9 @@ gpii.ul.api.images.file.read.handler.checkQueryParams = function (that) {
 
 fluid.defaults("gpii.ul.api.images.file.read.handler", {
     gradeNames: ["gpii.express.handler"],
+    rules: {
+        requestContentToValidate: "{gpii.ul.api.images.file.read}.options.rules.requestContentToValidate"
+    },
     messages: {
         fileNotFound: "Can't find an original image to resize.",
         mkdirError:   "Error creating directory to hold resized image",
@@ -114,6 +117,11 @@ fluid.defaults("gpii.ul.api.images.file.read", {
     routerOptions: {
         mergeParams: true
     },
+    rules: {
+        requestContentToValidate: {
+            "": "params"
+        }
+    },
     distributeOptions: [
         {
             source: "{that}.options.cacheDir",
@@ -138,9 +146,7 @@ fluid.defaults("gpii.ul.api.images.file.read", {
             options: {
                 priority: "after:permissionMiddleware",
                 rules: {
-                    requestContentToValidate: {
-                        "": "params"
-                    }
+                    requestContentToValidate: "{gpii.ul.api.images.file.read}.options.rules.requestContentToValidate"
                 },
                 inputSchema: {
                     "title": "File reader input Schema",
