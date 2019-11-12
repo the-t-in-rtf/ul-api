@@ -71,8 +71,8 @@ gpii.ul.api.images.gallery.read.handler.handleRequest = function (that) {
     var userOptions = fluid.model.transformWithRules(that.options.request, that.options.rules.requestContentToValidate);
 
     var requestData = {
-        startkey: [userOptions.uid, "unified"],
-        endkey:   [userOptions.uid, "unified", {}]
+        startkey: [userOptions.uid, userOptions.source],
+        endkey:   [userOptions.uid, userOptions.source, {}]
     };
 
     that.metadataReader.get(requestData);
@@ -88,8 +88,27 @@ gpii.ul.api.images.gallery.read.handler.handleMetadataResponse = function (handl
 
 fluid.defaults("gpii.ul.api.images.gallery.read.handler", {
     gradeNames: ["gpii.express.handler"],
+    rules: {
+        requestContentToValidate: {
+            source: {
+                transform: {
+                    type: "fluid.transforms.firstValue",
+                    values: [
+                        "params.source",
+                        {
+                            transform: {
+                                type: "fluid.transforms.literalValue",
+                                input: "unified"
+                            }
+                        }
+                    ]
+                }
+            },
+            uid: "params.uid"
+        }
+    },
     messages: {
-        notFound: "There are no images "
+        notFound: "There are no images."
     },
     invokers: {
         handleRequest: {

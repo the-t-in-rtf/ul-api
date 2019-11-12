@@ -162,7 +162,21 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
     },
     rules: {
         requestContentToValidate: {
-            "": "params"
+            "": "params",
+            source: {
+                transform: {
+                    type: "fluid.transforms.firstValue",
+                    values: [
+                        "params.source",
+                        {
+                            transform: {
+                                type: "fluid.transforms.literalValue",
+                                input: "unified"
+                            }
+                        }
+                    ]
+                }
+            }
         }
     },
     components: {
