@@ -12,42 +12,47 @@ var jqUnit = require("node-jqunit");
 fluid.registerNamespace("gpii.tests.ul.api.search");
 
 gpii.tests.ul.api.search.hasSearchResults = function (body, maxResults) {
-    jqUnit.assertTrue("There should be at least one result...", body.products && body.products.length > 0);
+    jqUnit.assertTrue("There should be at least one result.", body.products && body.products.length > 0);
 
     if (maxResults) {
-        jqUnit.assertTrue("There should be no more than " + maxResults + " products returned...", body.products.length <= maxResults);
+        jqUnit.assertTrue("There should be no more than " + maxResults + " products returned.", body.products.length <= maxResults);
     }
 
     gpii.tests.ul.api.checkForCouchisms(body.products);
 };
 
 gpii.tests.ul.api.search.hasNoSearchResults = function (body) {
-    jqUnit.assertTrue("There should be no search results...", body.products && body.products.length === 0);
+    jqUnit.assertTrue("There should be no search results.", body.products && body.products.length === 0);
 };
 
 // Confirm whether the first record contains any source data.  Used to check permissions by source.
 gpii.tests.ul.api.search.checkSourceRecords = function (body, shouldHaveSourceData) {
     if (shouldHaveSourceData) {
-        jqUnit.assertTrue("There should be source data...", fluid.get(body, "products.0.sources.length") > 0);
+        jqUnit.assertTrue("There should be source data.", fluid.get(body, "products.0.sources.length") > 0);
     }
     else {
-        jqUnit.assertTrue("There should not be any source data...", fluid.get(body, "products.0.sources.length") === 0);
+        jqUnit.assertTrue("There should not be any source data.", fluid.get(body, "products.0.sources.length") === 0);
     }
 };
 
 gpii.tests.ul.api.search.checkSpecificRecord = function (body, recordNumber, expected) {
     var record = body.products[recordNumber];
-    jqUnit.assertLeftHand("The record should match what we expect...", expected, record);
+    jqUnit.assertLeftHand("The record should match what we expect.", expected, record);
+};
+
+gpii.tests.ul.api.search.checkDataLimitedResults = function (body) {
+    jqUnit.assertEquals("There should only be one record.", 1, fluid.get(body, "products.length"));
+    jqUnit.assertLeftHand("The record returned should be as expected.", { name: "A record ahead of its time."}, fluid.get(body, "products.0"));
 };
 
 fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
     gradeNames: ["gpii.test.ul.api.caseHolder"],
     rawModules: [
         {
-            name: "testing GET /api/search and GET /api/suggest...",
+            name: "Testing GET /api/search and GET /api/suggest.",
             tests: [
                 {
-                    name: "Confirm that a search with only a simple query works...",
+                    name: "Confirm that a search with only a simple query works.",
                     type: "test",
                     sequence: [
                         {
@@ -62,7 +67,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that source records are based on the logged in user...",
+                    name: "Confirm that source records are based on the logged in user.",
                     type: "test",
                     sequence: [
                         {
@@ -91,7 +96,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that using a record limit works...",
+                    name: "Confirm that using a record limit works.",
                     type: "test",
                     sequence: [
                         {
@@ -106,7 +111,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that using an offset works...",
+                    name: "Confirm that using an offset works.",
                     type: "test",
                     sequence: [
                         {
@@ -121,7 +126,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that using both an offset and limit works...",
+                    name: "Confirm that using both an offset and limit works.",
                     type: "test",
                     sequence: [
                         {
@@ -136,7 +141,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that deleted records do not appear by default...",
+                    name: "Confirm that deleted records do not appear by default.",
                     type: "test",
                     sequence: [
                         {
@@ -151,7 +156,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that deleted records appear when the right status string is sent...",
+                    name: "Confirm that deleted records appear when the right status string is sent.",
                     type: "test",
                     sequence: [
                         {
@@ -166,7 +171,7 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that deleted records appear when an array of status strings is sent...",
+                    name: "Confirm that deleted records appear when an array of status strings is sent.",
                     type: "test",
                     sequence: [
                         {
@@ -181,7 +186,22 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                     ]
                 },
                 {
-                    name: "Confirm that an invalid search request receives an appropriate response...",
+                    name: "Confirm that we can limit results by date.",
+                    type: "test",
+                    sequence: [
+                        {
+                            func: "{dateLimitedSearch}.send",
+                            args: []
+                        },
+                        {
+                            event: "{dateLimitedSearch}.events.onComplete",
+                            listener: "gpii.tests.ul.api.search.checkDataLimitedResults",
+                            args: ["@expand:JSON.parse({arguments}.0)"]
+                        }
+                    ]
+                },
+                {
+                    name: "Confirm that an invalid search request receives an appropriate response.",
                     type: "test",
                     sequence: [
                         {
@@ -191,12 +211,12 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
                         {
                             event:    "{invalidSearch}.events.onComplete",
                             listener: "jqUnit.assertLeftHand",
-                            args:     ["An search with invalid query parameters should not be succesful...", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
+                            args:     ["An search with invalid query parameters should not be succesful.", { isValid: false, statusCode: 400 }, "@expand:JSON.parse({arguments}.0)"]
                         }
                     ]
                 },
                 {
-                    name: "Confirm that the `suggest` simplified search works...",
+                    name: "Confirm that the `suggest` simplified search works.",
                     type: "test",
                     sequence: [
                         {
@@ -279,6 +299,12 @@ fluid.defaults("gpii.tests.ul.api.search.caseHolder", {
             type: "gpii.test.ul.api.request",
             options: {
                 endpoint: "api/search?q=%22deleted%22&statuses=%5B%22deleted%22%5D"
+            }
+        },
+        dateLimitedSearch: {
+            type: "gpii.test.ul.api.request",
+            options: {
+                endpoint: "api/search?q=%22record%22&updatedSince=%222525-01-01%22"
             }
         },
         invalidSearch: {

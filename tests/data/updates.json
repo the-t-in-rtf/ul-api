@@ -25,6 +25,18 @@
             "updated": "3000-01-01"
         },
         {
+            "uid": "oldRecord",
+            "status": "discontinued",
+            "source": "unified",
+            "sid": "oldRecord",
+            "name": "Old Record",
+            "description": "An elegant record from a more civilised age.",
+            "manufacturer": {
+                "name": "Old Ben"
+            },
+            "updated": "1977-12-15"
+        },
+        {
             "uid": "unifiedNewer",
             "status": "new",
             "source": "~existing",

@@ -83,9 +83,9 @@ gpii.ul.api.products.handler.matchesFilters = function (that, record) {
     }
 
     // Filter by last updated
-    if (that.options.request.productsParams.updated) {
+    if (that.options.request.productsParams.updatedSince) {
         var recordUpdated = new Date(record.updated);
-        var includeAfter = new Date(that.options.request.productsParams.updated);
+        var includeAfter = new Date(that.options.request.productsParams.updatedSince);
 
         if (recordUpdated < includeAfter) {
             return false;

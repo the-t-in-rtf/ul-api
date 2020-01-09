@@ -115,7 +115,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         distantFuture: {
             "total_rows": 0,
             "params": {
-                "updated":  "3000-01-01T16:54:12.023Z",
+                "updatedSince":  "3000-01-01T16:54:12.023Z",
                 "sources": gpii.tests.ul.api.products.defaultSources,
                 "offset": 0,
                 "limit": 250,
@@ -125,7 +125,7 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         },
         distantPast: {
             "params": {
-                "updated":  "1970-01-01T16:54:12.023Z",
+                "updatedSince":  "1970-01-01T16:54:12.023Z",
                 "sources": gpii.tests.ul.api.products.defaultSources,
                 "offset": 0,
                 "limit": 250,
@@ -188,29 +188,16 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
                 "sources": ["unified"]
             },
             products: [{
+                "uid": "oldRecord",
+                "status": "discontinued",
                 "source": "unified",
-                "sid": "1421059432813-849447471",
-                "uid": "1421059432813-849447471",
-                "status": "new",
-                "name": "TEXTHELP - READ&WRITE",
-                "description": "Read&Write GOLD integrates with familiar applications (i.e. Microsoft Word, Internet Explorer, and Adobe Reader) giving access to features for reading, writing, and research support from within programs used every day.<br /><br />Technical details:<br />REPORTED WITHIN THE RESEARCH PROJECT<br />Cloud4All",
+                "sid": "oldRecord",
+                "name": "Old Record",
+                "description": "An elegant record from a more civilised age.",
                 "manufacturer": {
-                    "name": "TEXTHELP SYSTEM INC",
-                    "cityTown": "Woburn",
-                    "country": "UNITED STATES",
-                    "email": "u.s.info@texthelp.com",
-                    "url": "http://www.texthelp.com"
+                    "name": "Old Ben"
                 },
-                "ontologies": {
-                    "iso9999": {
-                        "IsoCodePrimary": {
-                            "Code": "22.30.03",
-                            "Name": "Reading materials with audible output"
-                        },
-                        "IsoCodesOptional": []
-                    }
-                },
-                "updated": "2008-11-23T23:00:00.000Z"
+                "updated": "1977-12-15"
             }]
         }
     },
@@ -513,13 +500,13 @@ fluid.defaults("gpii.tests.ul.api.products.caseHolder", {
         updatedFutureRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?updated=%223000-01-01T16:54:12.023Z%22"
+                endpoint: "api/products?updatedSince=%223000-01-01T16:54:12.023Z%22"
             }
         },
         updatedLongAgoRequest: {
             type: "gpii.test.ul.api.request",
             options: {
-                endpoint: "api/products?updated=%221970-01-01T16:54:12.023Z%22"
+                endpoint: "api/products?updatedSince=%221970-01-01T16:54:12.023Z%22"
             }
         },
         unauthorizedSourceRequest: {

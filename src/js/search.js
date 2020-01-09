@@ -121,13 +121,28 @@ gpii.ul.api.search.handler.processFullRecordResponse = function (that, couchResp
         if (uid && distinctUids.indexOf(uid) === -1) {
             distinctUids.push(uid);
 
-
             // Look up the full record from the upstream results.
             var unifiedRecord = unifiedRecordsByUid[uid];
             // If we are limiting by statuses for a "unified" view, the status of the unified record trumps.
             var acceptableStatuses = fluid.makeArray(that.options.request.query.statuses);
-            if (unifiedRecord && (!acceptableStatuses.length || acceptableStatuses.indexOf(unifiedRecord.status) !== -1)) {
-                products.push(unifiedRecord);
+            if (unifiedRecord) {
+                var matchesParams = true;
+
+                if (acceptableStatuses.length && acceptableStatuses.indexOf(unifiedRecord.status) === -1) {
+                    matchesParams = false;
+                }
+
+                if (that.options.request.searchParams.updatedSince) {
+                    var recordUpdated = new Date(unifiedRecord.updated);
+                    var startDate = new Date(that.options.request.searchParams.updatedSince);
+                    if (recordUpdated < startDate) {
+                        matchesParams = false;
+                    }
+                }
+
+                if (matchesParams) {
+                    products.push(unifiedRecord);
+                }
             }
             else {
                 fluid.log("Unable to retrieve full record for uid `" + uid + "`...");
