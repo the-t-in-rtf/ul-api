@@ -14,29 +14,29 @@
     },
     "homepage": "https://github.com/GPII/ul-api",
     "dependencies": {
-        "gpii-binder": "1.0.6",
+        "gpii-binder": "1.1.0",
         "gpii-express": "1.0.15",
         "gpii-express-user": "1.0.2-dev.20191014T143404Z.150969f.GPII-3921",
-        "gpii-handlebars": "2.1.0-dev.20191014T141924Z.45a74ef.GPII-4100",
-        "gpii-json-schema": "2.1.2-dev.20191014T143306Z.8a372f7.GPII-4022",
+        "gpii-handlebars": "2.1.0",
+        "gpii-json-schema": "2.1.2",
         "gpii-launcher": "1.0.0-dev.20190527T124956Z.9255cfa.GPII-2103",
-        "gpii-location-bar-relay": "1.0.4",
+        "gpii-location-bar-relay": "1.0.5",
         "gpii-sort": "1.0.0-dev.20170420T114825Z.804ac19",
         "infusion": "3.0.0-dev.20191009T141140Z.32c9263b4.FLUID-6148",
-        "markdown-it": "10.0.0",
-        "mkdirp": "0.5.1",
+        "markdown-it": "11.0.0",
+        "mkdirp": "1.0.4",
         "ncp": "2.0.0",
-        "sharp": "0.23.1"
+        "sharp": "0.25.3"
     },
     "devDependencies": {
-        "eslint": "6.5.1",
-        "gpii-grunt-lint-all": "1.0.5",
-        "gpii-couchdb-test-harness": "1.0.0-dev.20190827T101451Z.024d2c3.GPII-3531",
-        "grunt": "1.0.4",
-        "grunt-jsonlint": "2.0.0",
-        "kettle": "1.11.0",
+        "eslint": "7.1.0",
+        "gpii-grunt-lint-all": "1.0.7",
+        "gpii-couchdb-test-harness": "1.0.1",
+        "grunt": "1.1.0",
+        "grunt-jsonlint": "2.1.2",
+        "kettle": "1.12.0",
         "node-jqunit": "1.1.8",
-        "nyc": "14.1.1",
-        "request": "2.88.0"
+        "nyc": "15.0.1",
+        "request": "2.88.2"
     }
 }

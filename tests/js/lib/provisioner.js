@@ -15,21 +15,22 @@ gpii.tests.ul.api.provisioner.provision = function (that) {
         var sourcePath = fluid.module.resolvePath(that.options[sourceDir]);
         var destPath   = fluid.module.resolvePath(that.options[destDir]);
 
-        var promise = fluid.promise();
-        promises.push(promise);
-        mkdirp(destPath, function (err) {
+        var wrappedPromise = fluid.promise();
+        promises.push(wrappedPromise);
+        var mkdirRawPromise = mkdirp(destPath);
+        mkdirRawPromise.then(wrappedPromise.resolve, function (err) {
             if (err) {
-                promise.reject(err);
+                wrappedPromise.reject(err);
             }
             else {
                 fluid.log("Copying test data from '", sourcePath, "' to '", destPath, "'.");
                 // Copy our pregenerated test data in place
                 ncp(sourcePath, destPath, function (err) {
                     if (err) {
-                        promise.reject(err);
+                        wrappedPromise.reject(err);
                     }
                     else {
-                        promise.resolve();
+                        wrappedPromise.resolve();
                     }
                 });
             }

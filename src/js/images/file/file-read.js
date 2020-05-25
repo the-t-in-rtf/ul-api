@@ -49,31 +49,31 @@ gpii.ul.api.images.file.read.handler.checkQueryParams = function (that) {
         // If we don't have a resized file, create one.
         else {
             if (fs.existsSync(originalFilePath)) {
-                mkdirp(resizedDirPath, function (err) {
-                    if (err) {
-                        that.sendResponse(500, { isError: true, message: that.options.messages.mkdirError });
+                try {
+                    mkdirp.sync(resizedDirPath);
+
+                    try {
+                        var tileSize = parseInt(userOptions.width, 10);
+                        sharp(originalFilePath)
+                            .background("white") // Ideally we would use transparent, but for image formats (JPG) that lack transparency, this becomes black.
+                            .resize(tileSize, tileSize) // Create a square tile
+                            .embed() // embed the original image within the square tile rather than changing its aspect ratio.
+                            .toFile(resizedFilePath, function (error) {
+                                if (error) {
+                                    that.sendResponse(500, { isError: true, message: that.options.messages.saveError });
+                                }
+                                else {
+                                    that.options.next(); // If we've made it this far, we can defer to the static middleware.
+                                }
+                            });
                     }
-                    else {
-                        try {
-                            var tileSize = parseInt(userOptions.width, 10);
-                            sharp(originalFilePath)
-                                .background("white") // Ideally we would use transparent, but for image formats (JPG) that lack transparency, this becomes black.
-                                .resize(tileSize, tileSize) // Create a square tile
-                                .embed() // embed the original image within the square tile rather than changing its aspect ratio.
-                                .toFile(resizedFilePath, function (error) {
-                                    if (error) {
-                                        that.sendResponse(500, { isError: true, message: that.options.messages.saveError });
-                                    }
-                                    else {
-                                        that.options.next(); // If we've made it this far, we can defer to the static middleware.
-                                    }
-                                });
-                        }
-                        catch (error) {
-                            that.sendResponse(500, { isError: true, message: that.options.messages.resizeError });
-                        }
+                    catch (error) {
+                        that.sendResponse(500, { isError: true, message: that.options.messages.resizeError });
                     }
-                });
+                }
+                catch (error) {
+                    that.sendResponse(500, { isError: true, message: that.options.messages.mkdirError });
+                }
             }
             else {
                 that.sendResponse(404, { isError: true, message: that.options.messages.fileNotFound});
