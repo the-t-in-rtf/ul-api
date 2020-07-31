@@ -17,7 +17,7 @@ fluid.registerNamespace("gpii.ul.api.middleware.initialHtmlForm");
  */
 gpii.ul.api.middleware.initialHtmlForm.renderFormOrDefer = function (that, request, response, next) {
     if (request.accepts(that.options.contentTypes)) {
-        gpii.express.singleTemplateMiddleware.renderForm(that, request, response);
+        fluid.express.singleTemplateMiddleware.renderForm(that, request, response);
     }
     else {
         next();
@@ -26,7 +26,7 @@ gpii.ul.api.middleware.initialHtmlForm.renderFormOrDefer = function (that, reque
 
 // A component to serve up an initial form.  Intended to be loaded before any JSON validation or handling.
 fluid.defaults("gpii.ul.api.middleware.initialHtmlForm", {
-    gradeNames: ["gpii.express.singleTemplateMiddleware"],
+    gradeNames: ["fluid.express.singleTemplateMiddleware"],
     contentTypes: ["text/html"],
     invokers: {
         middleware: {

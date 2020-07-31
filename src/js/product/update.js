@@ -68,7 +68,7 @@ gpii.ul.api.product.update.handler.processWriteResponse = function (that, couchR
 
 
 fluid.defaults("gpii.ul.api.product.update.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     members: {
         statusCode: 200
     },
@@ -127,7 +127,7 @@ fluid.defaults("gpii.ul.api.product.update.handler", {
             args:     ["{that}", "{arguments}.0"] // couchResponse
         },
         handleError: {
-            func: "{gpii.express.handler}.sendResponse",
+            func: "{fluid.express.handler}.sendResponse",
             args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
             // args: [ 500, "{arguments}.0"] // statusCode, body
             // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
@@ -157,7 +157,7 @@ fluid.defaults("gpii.ul.api.product.update", {
     },
     distributeOptions: [{
         source: "{that}.options.rules.requestContentToValidate",
-        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
     }],
     handlers: {
         json: {

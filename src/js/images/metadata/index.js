@@ -16,7 +16,7 @@ require("./metadata-read");
 */
 
 fluid.defaults("gpii.ul.api.images.metadata", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path: "/metadata",
     components: {
         read: {

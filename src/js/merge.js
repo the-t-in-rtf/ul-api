@@ -8,8 +8,8 @@
 var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
-fluid.require("%gpii-express");
-fluid.require("%gpii-express-user");
+fluid.require("%fluid-express");
+fluid.require("%fluid-express-user");
 
 fluid.registerNamespace("gpii.ul.api.merge");
 
@@ -102,7 +102,7 @@ gpii.ul.api.merge.handleError = function (that, errorPayload) {
 };
 
 fluid.defaults("gpii.ul.api.merge.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     invokers: {
         handleRequest: {
             funcName: "gpii.ul.api.merge.handleRequest",
@@ -123,7 +123,7 @@ fluid.defaults("gpii.ul.api.merge.handler", {
     },
     components: {
         recordReader: {
-            type: "gpii.express.dataSource.urlEncodedJson",
+            type: "fluid.express.dataSource.urlEncodedJson",
             options: {
                 url: {
                     expander: {
@@ -152,7 +152,7 @@ fluid.defaults("gpii.ul.api.merge.handler", {
 });
 
 fluid.defaults("gpii.ul.api.merge.middleware", {
-    gradeNames: ["gpii.express.middleware.requestAware"],
+    gradeNames: ["fluid.express.middleware.requestAware"],
     handlerGrades: ["gpii.ul.api.merge.handler"]
 });
 
@@ -167,7 +167,7 @@ fluid.defaults("gpii.ul.api.merge", {
     },
     components: {
         loginRequired: {
-            type: "gpii.express.user.middleware.loginRequired",
+            type: "fluid.express.user.middleware.loginRequired",
             options: {
                 priority: "first",
                 sessionKey: "{gpii.ul.api}.options.sessionKey"
@@ -175,7 +175,7 @@ fluid.defaults("gpii.ul.api.merge", {
         },
         validationMiddleware: {
             options: {
-                gradeNames: ["gpii.schema.validationMiddleware.handlesQueryData"],
+                gradeNames: ["fluid.schema.validationMiddleware.handlesQueryData"],
                 inputSchema: {
                     "type": "object",
                     "properties": {

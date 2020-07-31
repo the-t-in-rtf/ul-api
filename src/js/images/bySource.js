@@ -30,8 +30,8 @@ var fluid = require("infusion");
 
 var gpii   = fluid.registerNamespace("gpii");
 
-fluid.require("%gpii-express");
-fluid.require("%gpii-json-schema");
+fluid.require("%fluid-express");
+fluid.require("%fluid-json-schema");
 
 require("./source-permission-middleware");
 require("./view-read-dataSource");
@@ -62,7 +62,7 @@ gpii.ul.api.images.bySource.handler.handleError = function (that, response) {
 };
 
 fluid.defaults("gpii.ul.api.images.bySource.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     rules: {
         requestContentToValidate: {
             "": ""
@@ -90,7 +90,7 @@ fluid.defaults("gpii.ul.api.images.bySource.handler", {
 });
 
 fluid.defaults("gpii.ul.api.images.bySource", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     method:     ["get"],
     path:       ["/:source"],
     routerOptions: {
@@ -105,7 +105,7 @@ fluid.defaults("gpii.ul.api.images.bySource", {
             }
         },
         metadataMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:permissionMiddleware",
                 handlerGrades: ["gpii.ul.api.images.bySource.handler"]

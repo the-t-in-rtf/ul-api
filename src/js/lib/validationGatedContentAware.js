@@ -8,10 +8,10 @@
 var fluid = require("infusion");
 
 fluid.defaults("gpii.ul.api.validatingEndpoint", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     components: {
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "fluid.schema.validationMiddleware",
             options: {
                 priority:   "first",
                 messages: {
@@ -21,7 +21,7 @@ fluid.defaults("gpii.ul.api.validatingEndpoint", {
         },
         // We let JSON errors fall back to a more general handler, but render HTML errors ourselves
         renderedValidationError: {
-            type: "gpii.handlebars.errorRenderingMiddleware",
+            type: "fluid.handlebars.errorRenderingMiddleware",
             options: {
                 priority: "after:validationMiddleware",
                 templateKey: "pages/validation-error"
@@ -34,7 +34,7 @@ fluid.defaults("gpii.ul.api.validationGatedContentAware", {
     gradeNames: ["gpii.ul.api.validatingEndpoint"],
     components: {
         contentAwareMiddleware: {
-            type: "gpii.express.middleware.contentAware",
+            type: "fluid.express.middleware.contentAware",
             options: {
                 priority: "after:renderedValidationError",
                 handlers: "{gpii.ul.api.validationGatedContentAware}.options.handlers"

@@ -35,7 +35,7 @@ same password.
 
 ### Creating a New User
 
-The UL API includes a copy of the [gpii-express-user/](https://github.com/GPII/gpii-express-user/) user management
+The UL API includes a copy of the [fluid-express-user/](https://github.com/fluid-project/fluid-express-user/) user management
 package.  See that package for full details about the supported login/logout endpoints.
 
 To create a user using the self-signup procedure:

@@ -55,12 +55,12 @@ fluid.defaults("gpii.ul.api.images.gallery.read.dataSource", {
         "onRead.prepareResponse": {
             priority: "after:filter",
             funcName: "gpii.ul.api.images.gallery.read.dataSource.handleGalleryResponse",
-            args:     ["{gpii.express.handler}", "{arguments}.0"] // statusCode, body
+            args:     ["{fluid.express.handler}", "{arguments}.0"] // statusCode, body
         },
         // If there's no custom gallery record, proceed with the defaults.
         "onError.prepareResponse": {
             funcName: "gpii.ul.api.images.gallery.read.dataSource.handleGalleryResponse",
-            args:     ["{gpii.express.handler}", false, "{arguments}.0"]
+            args:     ["{fluid.express.handler}", false, "{arguments}.0"]
         }
     }
 });
@@ -87,7 +87,7 @@ gpii.ul.api.images.gallery.read.handler.handleMetadataResponse = function (handl
 };
 
 fluid.defaults("gpii.ul.api.images.gallery.read.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     rules: {
         requestContentToValidate: {
             source: {
@@ -133,7 +133,7 @@ fluid.defaults("gpii.ul.api.images.gallery.read.handler", {
                     "onRead.handleMetadataResponse": {
                         priority: "after:filter",
                         funcName: "gpii.ul.api.images.gallery.read.handler.handleMetadataResponse",
-                        args:     ["{gpii.express.handler}", "{arguments}.0"] // statusCode, body
+                        args:     ["{fluid.express.handler}", "{arguments}.0"] // statusCode, body
                     }
                 }
             }
@@ -159,7 +159,7 @@ fluid.defaults("gpii.ul.api.images.gallery.read", {
         },
         // If our request is valid, handle it normally.
         galleryMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
                 handlerGrades: ["gpii.ul.api.images.gallery.read.handler"]

@@ -7,7 +7,7 @@ require("gpii-sort");
 require("./sources");
 require("./lib/htmlMessageHandler");
 
-fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
+fluid.require("%fluid-express/src/js/lib/querystring-coding.js");
 
 fluid.registerNamespace("gpii.ul.api.products.handler");
 
@@ -30,8 +30,8 @@ gpii.ul.api.products.handler.resolveSourceKeys = function (sources, username) {
  *
  * Handle a single incoming request.  Performs a few initial checks and then requests data from CouchDB.
  *
- * Fulfills the contract outlined in `gpii.express.handler`:
- * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
+ * Fulfills the contract outlined in `fluid.express.handler`:
+ * https://github.com/fluid-project/fluid-express/blob/master/docs/handler.md
  *
  * @param {Object} that - The component itself
  *
@@ -155,7 +155,7 @@ gpii.ul.api.products.handler.processCouchResponse = function (that, couchRespons
 };
 
 fluid.defaults("gpii.ul.api.products.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     couchFieldsToRemove: ["_id", "_rev"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.products}.options.rules.requestContentToValidate"
@@ -168,7 +168,7 @@ fluid.defaults("gpii.ul.api.products.handler", {
     },
     components: {
         couchReader: {
-            type: "gpii.express.dataSource.urlEncodedJson",
+            type: "fluid.express.dataSource.urlEncodedJson",
             options: {
                 url: {
                     expander: {
@@ -239,11 +239,11 @@ fluid.defaults("gpii.ul.api.products", {
     distributeOptions: [
         {
             source: "{that}.options.defaultParams",
-            target: "{that gpii.express.handler}.options.defaultParams"
+            target: "{that fluid.express.handler}.options.defaultParams"
         },
         {
             source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+            target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
         }
     ],
     handlers: {

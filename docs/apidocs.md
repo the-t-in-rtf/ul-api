@@ -619,7 +619,7 @@ record:
 ## User Management
 
 Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
-create an account, log in, etc. are described [in the user management API documentation](https://github.com/GPII/gpii-express-user/).
+create an account, log in, etc. are described [in the user management API documentation](https://github.com/fluid-project/fluid-express-user/).
 
 ## Image API
 

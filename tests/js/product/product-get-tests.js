@@ -6,7 +6,7 @@ fluid.logObjectRenderChars = 20000;
 
 var gpii  = fluid.registerNamespace("gpii");
 
-fluid.require("%gpii-express/tests/js/lib/test-helpers.js");
+fluid.require("%fluid-express/tests/js/lib/test-helpers.js");
 
 var jqUnit = require("node-jqunit");
 
@@ -18,10 +18,10 @@ fluid.defaults("gpii.tests.ul.api.product.get.request", {
     method:     "GET"
 });
 
-// Wrapper to call the correct functions from the `gpii-express test helpers.
+// Wrapper to call the correct functions from the `fluid-express test helpers.
 fluid.registerNamespace("gpii.tests.ul.api.product.get");
 gpii.tests.ul.api.product.get.verifyContent = function (message, response, body, expected, statusCode) {
-    gpii.test.express.helpers.isSaneResponse(response, body, statusCode);
+    fluid.test.express.helpers.isSaneResponse(response, body, statusCode);
     jqUnit.assertLeftHand(message, expected, body);
 };
 

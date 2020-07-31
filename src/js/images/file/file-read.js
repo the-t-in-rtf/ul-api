@@ -20,8 +20,8 @@ var fs     = require("fs");
 var sharp  = require("sharp");
 var mkdirp = require("mkdirp");
 
-fluid.require("%gpii-express");
-fluid.require("%gpii-json-schema");
+fluid.require("%fluid-express");
+fluid.require("%fluid-json-schema");
 
 fluid.registerNamespace("gpii.ul.api.images.file.read.handler");
 
@@ -87,7 +87,7 @@ gpii.ul.api.images.file.read.handler.checkQueryParams = function (that) {
 };
 
 fluid.defaults("gpii.ul.api.images.file.read.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.images.file.read}.options.rules.requestContentToValidate"
     },
@@ -106,7 +106,7 @@ fluid.defaults("gpii.ul.api.images.file.read.handler", {
 });
 
 fluid.defaults("gpii.ul.api.images.file.read", {
-    gradeNames: ["gpii.express.router", "gpii.hasRequiredOptions"],
+    gradeNames: ["fluid.express.router", "gpii.hasRequiredOptions"],
     method: ["get", "head"],
     requiredFields: {
         "originalsDir": true, // Where to store the originals.
@@ -125,11 +125,11 @@ fluid.defaults("gpii.ul.api.images.file.read", {
     distributeOptions: [
         {
             source: "{that}.options.cacheDir",
-            target: "{that gpii.express.handler}.options.cacheDir"
+            target: "{that fluid.express.handler}.options.cacheDir"
         },
         {
             source: "{that}.options.originalsDir",
-            target: "{that gpii.express.handler}.options.originalsDir"
+            target: "{that fluid.express.handler}.options.originalsDir"
         }
     ],
     components: {
@@ -142,7 +142,7 @@ fluid.defaults("gpii.ul.api.images.file.read", {
         },
         // Reject requests that have missing or bad data up front.
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "fluid.schema.validationMiddleware",
             options: {
                 priority: "after:permissionMiddleware",
                 rules: {
@@ -173,14 +173,14 @@ fluid.defaults("gpii.ul.api.images.file.read", {
         },
         // Intermediate middleware to check for custom height/width and existence of original
         resizingMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
                 handlerGrades: ["gpii.ul.api.images.file.read.handler"]
             }
         },
         static: {
-            type:     "gpii.express.router.static",
+            type:     "fluid.express.router.static",
             options: {
                 priority: "last",
                 content: ["{gpii.ul.api.images.file.read}.options.originalsDir", "{gpii.ul.api.images.file.read}.options.cacheDir"]

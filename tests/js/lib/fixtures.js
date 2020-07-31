@@ -2,17 +2,16 @@
 // Test fixtures (testEnvironment, testCaseHolder)
 "use strict";
 var fluid = require("infusion");
-var gpii  = fluid.registerNamespace("gpii");
 
 var kettle = fluid.require("%kettle");
 kettle.loadTestingSupport();
 
-fluid.require("%gpii-couchdb-test-harness");
-gpii.test.couchdb.loadTestingSupport();
+fluid.require("%fluid-couchdb-test-harness");
+fluid.test.couchdb.loadTestingSupport();
 
 require("./test-harness");
 
-// Wire API harness startup and shutdown into existing sequences inherited from gpii-couchdb-test-harness.
+// Wire API harness startup and shutdown into existing sequences inherited from fluid-couchdb-test-harness.
 fluid.defaults("gpii.test.ul.api.sequenceElement.provision", {
     gradeNames: "fluid.test.sequenceElement",
     sequence: [{
@@ -34,7 +33,7 @@ fluid.defaults("gpii.test.ul.api.sequenceElement.cleanup", {
 });
 
 fluid.defaults("gpii.test.ul.api.sequence", {
-    gradeNames: "gpii.test.couchdb.sequence",
+    gradeNames: "fluid.test.couchdb.sequence",
     sequenceElements: {
         provision: {
             gradeNames: "gpii.test.ul.api.sequenceElement.provision",
@@ -48,12 +47,12 @@ fluid.defaults("gpii.test.ul.api.sequence", {
 });
 
 fluid.defaults("gpii.test.ul.api.caseHolder", {
-    gradeNames: ["gpii.test.couchdb.caseHolder"],
+    gradeNames: ["fluid.test.couchdb.caseHolder"],
     sequenceGrade: "gpii.test.ul.api.sequence"
 });
 
 fluid.defaults("gpii.test.ul.api.testEnvironment", {
-    gradeNames: ["gpii.test.couchdb.lucene.environment"],
+    gradeNames: ["fluid.test.couchdb.lucene.environment"],
     hangWait:   7500,
     databases: {
         users: { data: "%ul-api/tests/data/users.json" },

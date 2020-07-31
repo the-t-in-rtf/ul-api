@@ -2,14 +2,14 @@
 "use strict";
 var fluid = require("infusion");
 
-require("gpii-express");
+require("fluid-express");
 
 require("./get");
 require("./update");
 require("./delete");
 
 fluid.defaults("gpii.ul.api.product", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path:       "/product",
     method:     "use",
     components: {

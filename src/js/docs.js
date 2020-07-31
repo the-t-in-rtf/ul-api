@@ -1,6 +1,6 @@
 /*
 
-    Display our API docs.  Requires an instance of `gpii.express` that has a copy of `gpii-handlebars` available to
+    Display our API docs.  Requires an instance of `fluid.express` that has a copy of `fluid-handlebars` available to
     render the boilerplate content.
 
  */
@@ -17,12 +17,12 @@ fluid.registerNamespace("gpii.ul.api.docs");
  *
  * Read our documentation, render it, and send the rendered content to the user.
  *
- * Fulfills the standard contract for `gpii.express.middleware`:
- * https://github.com/GPII/gpii-express/blob/master/docs/middleware.md
+ * Fulfills the standard contract for `fluid.express.middleware`:
+ * https://github.com/fluid-project/fluid-express/blob/master/docs/middleware.md
  *
  * @param {Object} that - The component itself.
- * @param {Object} req - The request object.  See: https://github.com/GPII/gpii-express/blob/master/docs/express.md#the-express-request-object
- * @param {Object} res - The response object.  See: https://github.com/GPII/gpii-express/blob/master/docs/express.md#the-express-response-object
+ * @param {Object} req - The request object.  See: https://github.com/fluid-project/fluid-express/blob/master/docs/express.md#the-express-request-object
+ * @param {Object} res - The response object.  See: https://github.com/fluid-project/fluid-express/blob/master/docs/express.md#the-express-response-object
  *
  */
 gpii.ul.api.docs.middleware = function (that, req, res) {
@@ -32,7 +32,7 @@ gpii.ul.api.docs.middleware = function (that, req, res) {
 };
 
 fluid.defaults("gpii.ul.api.docs", {
-    gradeNames: ["gpii.express.middleware"],
+    gradeNames: ["fluid.express.middleware"],
     path:       ["/", "/docs"],
     method:     "get",
     template:   "pages/docs",

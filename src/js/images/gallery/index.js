@@ -13,7 +13,7 @@ require("./gallery-read");
 */
 
 fluid.defaults("gpii.ul.api.images.gallery", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path: "/gallery",
     components: {
         read: {

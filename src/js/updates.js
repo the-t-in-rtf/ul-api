@@ -13,7 +13,7 @@ var gpii  = fluid.registerNamespace("gpii");
 
 require("./lib/initialHtmlForm");
 
-fluid.require("%gpii-json-schema");
+fluid.require("%fluid-json-schema");
 fluid.require("%gpii-sort");
 
 fluid.registerNamespace("gpii.ul.api.updates.handler.json");
@@ -116,7 +116,7 @@ gpii.ul.api.updates.handler.json.processCouchResponse = function (that, couchRes
 };
 
 fluid.defaults("gpii.ul.api.updates.handler.json", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     couchKeysToExclude: ["_id", "_rev"],
     messages: {
         couchError:   "No response from CouchDB, can't retrieve product records.",
@@ -155,7 +155,7 @@ fluid.defaults("gpii.ul.api.updates.handler.json", {
                     },
                     // Report back to the user on failure.
                     "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
+                        func: "{fluid.express.handler}.sendResponse",
                         args: [ 500, { message: "{arguments}.0" }] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -178,7 +178,7 @@ fluid.defaults("gpii.ul.api.updates.handler.html", {
 });
 
 fluid.defaults("gpii.ul.api.updates", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path:       "/updates",
     components: {
         htmlForm: {
@@ -190,7 +190,7 @@ fluid.defaults("gpii.ul.api.updates", {
         },
         // The JSON middleware requires valid input to access....
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "fluid.schema.validationMiddleware",
             options: {
                 priority:   "after:htmlForm",
                 rules: {
@@ -200,7 +200,7 @@ fluid.defaults("gpii.ul.api.updates", {
         },
         // Middleware to serve a JSON payload.
         jsonMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
                 handlerGrades: ["gpii.ul.api.updates.handler.json"],
@@ -216,7 +216,7 @@ fluid.defaults("gpii.ul.api.updates", {
     distributeOptions: [
         {
             source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+            target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
         }
     ]
 });

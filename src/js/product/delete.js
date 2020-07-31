@@ -65,7 +65,7 @@ gpii.ul.api.product["delete"].handler.processWriteResponse = function (that, cou
 
 
 fluid.defaults("gpii.ul.api.product.delete.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     messages: {
         duplicateFound:        "More than one record exists for this source and SID.  Contact an administrator for help.",
         noCouchDeleteResponse: "Could not delete record.  Contact an administrator for help.",
@@ -92,11 +92,11 @@ fluid.defaults("gpii.ul.api.product.delete.handler", {
                     // Continue processing after an initial successful read.
                     "onRead.processReadResponse": {
                         funcName: "gpii.ul.api.product.delete.handler.processReadResponse",
-                        args: ["{gpii.express.handler}", "{arguments}.0"] // couchResponse
+                        args: ["{fluid.express.handler}", "{arguments}.0"] // couchResponse
                     },
                     // Report back to the user on failure.
                     "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
+                        func: "{fluid.express.handler}.sendResponse",
                         args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
                         // args: [ 500, "{arguments}.0"] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
@@ -152,7 +152,7 @@ fluid.defaults("gpii.ul.api.product.delete", {
     },
     distributeOptions: [{
         source: "{that}.options.rules.requestContentToValidate",
-        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
     }],
     handlers: {
         json: {

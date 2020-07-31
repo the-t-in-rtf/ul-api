@@ -11,8 +11,8 @@
 var fluid = require("infusion");
 var gpii = fluid.registerNamespace("gpii");
 
-require("gpii-express");
-require("gpii-json-schema");
+require("fluid-express");
+require("fluid-json-schema");
 
 require("../lib/validationGatedContentAware");
 require("../schemas");
@@ -124,13 +124,13 @@ gpii.ul.api.product.get.handler.processSourcesResponse = function (that, couchRe
 };
 
 gpii.ul.api.product.get.handler.sendResponse = function (that, statusCode, body) {
-    gpii.express.handler.sendResponse(that, that.options.response, statusCode, body.product || body);
+    fluid.express.handler.sendResponse(that, that.options.response, statusCode, body.product || body);
 };
 
 // Our main handler.  Looks up the underlying record using a kettle.dataSource and expects to call the
-// underlying `gpii.express.handler` `that.sendResponse` invoker with the results.
+// underlying `fluid.express.handler` `that.sendResponse` invoker with the results.
 fluid.defaults("gpii.ul.api.product.get.handler.base", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     errorMessages: {
         noCouchResponse: "Could not retrieve the original record from the database.  Contact an administrator for help.",
         noCouchSourceResponse: "Could not retrieve the list of source products for the original record.  Contact an administrator for help.",
@@ -172,7 +172,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     },
                     // Report back to the user on failure.
                     "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
+                        func: "{fluid.express.handler}.sendResponse",
                         args: [ 500, { message: "{arguments}.0", url: "{that}.options.url" }] // statusCode, body
                         // args: [ 500, "{arguments}.0"] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
@@ -201,7 +201,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
                     },
                     // Report back to the user on failure.
                     "onError.sendResponse": {
-                        func: "{gpii.express.handler}.sendResponse",
+                        func: "{fluid.express.handler}.sendResponse",
                         args: [ 500, { message: "{arguments}.0" }] // statusCode, body
                         // TODO:  Discuss with Antranig how to retrieve HTTP status codes from kettle.datasource.URL
                     }
@@ -283,7 +283,7 @@ fluid.defaults("gpii.ul.api.product.get", {
     },
     distributeOptions: [{
         source: "{that}.options.rules.requestContentToValidate",
-        target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+        target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
     }],
     components: {
         validationMiddleware: {

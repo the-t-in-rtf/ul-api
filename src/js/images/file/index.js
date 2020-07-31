@@ -24,7 +24,7 @@ Scan uploaded images with clamav.
 // require("./file-delete.js");
 
 fluid.defaults("gpii.ul.api.images.file", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path: "/file",
     components: {
         read: {

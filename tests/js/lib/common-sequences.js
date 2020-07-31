@@ -54,7 +54,7 @@ fluid.defaults("gpii.tests.ul.api.images.elements.loadAndCheck", {
     }
 });
 
-// An extension of the above "load and check" sequenceElement that uses the gpii-express-user API to log in.
+// An extension of the above "load and check" sequenceElement that uses the fluid-express-user API to log in.
 fluid.defaults("gpii.tests.ul.api.images.elements.login", {
     gradeNames: ["gpii.tests.ul.api.images.elements.loadAndCheck"],
     endpoint: "/api/user/login",
@@ -92,7 +92,7 @@ fluid.defaults("gpii.tests.ul.api.images.hasCookieJar", {
     the "login" priority, at which point the user should already be logged in and have a session cookie.
 
  */
-// TODO: Update to work with standard gpii-couchdb-test-harness sequence.
+// TODO: Update to work with standard fluid-couchdb-test-harness sequence.
 fluid.defaults("gpii.tests.ul.api.images.sequences.requiresLogin", {
     gradeNames: ["gpii.tests.ul.api.images.sequences.standardStartupAndShutdown", "gpii.tests.ul.api.images.hasCookieJar"],
     sequenceElements: {

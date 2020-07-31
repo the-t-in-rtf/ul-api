@@ -12,7 +12,7 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 fluid.require("%kettle");
-fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
+fluid.require("%fluid-express/src/js/lib/querystring-coding.js");
 
 fluid.registerNamespace("gpii.ul.images.dataSources.couch");
 
@@ -86,7 +86,7 @@ gpii.ul.images.dataSources.couch.rules = {
 };
 
 fluid.defaults("gpii.ul.images.dataSources.couch", {
-    gradeNames: ["gpii.express.dataSource.urlEncodedJson", "gpii.hasRequiredOptions"],
+    gradeNames: ["fluid.express.dataSource.urlEncodedJson", "gpii.hasRequiredOptions"],
     requiredFields: {
         "baseUrl":               true,
         "rules.getRecords":      true,

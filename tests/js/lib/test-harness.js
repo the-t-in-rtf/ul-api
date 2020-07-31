@@ -8,14 +8,14 @@ var os    = require("os");
 
 fluid.require("%ul-api");
 fluid.require("%ul-api/src/js/harness.js");
-fluid.require("%gpii-couchdb-test-harness");
-gpii.test.couchdb.loadTestingSupport();
+fluid.require("%fluid-couchdb-test-harness");
+fluid.test.couchdb.loadTestingSupport();
 
 require("../lib/provisioner");
 
 fluid.registerNamespace("gpii.tests.ul.api.harness");
 gpii.tests.ul.api.harness.stopServer = function (that) {
-    gpii.express.stopServer(that.express);
+    fluid.express.stopServer(that.express);
 };
 
 gpii.tests.ul.api.harness.getOriginalsPath = function (that) {
@@ -32,7 +32,7 @@ gpii.tests.ul.api.harness.getPath = function (that, dirName) {
 };
 
 fluid.defaults("gpii.tests.ul.api.harness", {
-    gradeNames:   ["gpii.ul.api.harness", "gpii.test.couchdb.harness"],
+    gradeNames:   ["gpii.ul.api.harness", "fluid.test.couchdb.harness"],
     setLogging:   true,
     originalsDir: "@expand:gpii.tests.ul.api.harness.getOriginalsPath({that})",
     cacheDir:     "@expand:gpii.tests.ul.api.harness.getCachePath({that})",

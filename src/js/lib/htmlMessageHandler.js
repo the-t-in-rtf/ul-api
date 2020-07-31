@@ -22,9 +22,9 @@ gpii.ul.api.htmlMessageHandler.renderAndSend = function (that, statusCode, body)
     that.events.afterResponseSent.fire(that);
 };
 
-// A `gpii.express.handler` mix-in grade that uses the `gpii-handlebars` renderer to deliver HTML content.
+// A `fluid.express.handler` mix-in grade that uses the `fluid-handlebars` renderer to deliver HTML content.
 // NOTE:  This cannot be used by itself, as the required `handleRequest` invoker is not implemented.  It must be mixed
-// with an instance of `gpii.express.handler`.
+// with an instance of `fluid.express.handler`.
 //
 fluid.defaults("gpii.ul.api.htmlMessageHandler", {
     templateKey: "pages/message.handlebars",
@@ -65,7 +65,7 @@ fluid.defaults("gpii.ul.api.htmlMessageHandler.staticBody", {
     }
 });
 
-// A grade that delivers `gpii-json-schema` validation errors as HTML.
+// A grade that delivers `fluid-json-schema` validation errors as HTML.
 //
 fluid.defaults("gpii.ul.api.htmlMessageHandler.validationErrors", {
     gradeNames: ["gpii.ul.api.htmlMessageHandler"],

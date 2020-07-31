@@ -20,7 +20,7 @@ var gpii  = fluid.registerNamespace("gpii");
 var fs    = require("fs");
 var path  = require("path");
 
-require("gpii-express");
+require("fluid-express");
 
 fluid.registerNamespace("gpii.ul.api.sources");
 gpii.ul.api.sources.sources = JSON.parse(fs.readFileSync(path.resolve(__dirname, "sources.json"), { encoding: "utf8"}));
@@ -32,8 +32,8 @@ fluid.registerNamespace("gpii.ul.api.sources.request");
  * Handle a single incoming request.  Compares the current user to the full list of sources and returns those for which
  * the user has permission.  Used in the "updates" interface.
  *
- * Fulfills the standard contract for a `gpii.express.handler` instance:
- * https://github.com/GPII/gpii-express/blob/master/docs/handler.md
+ * Fulfills the standard contract for a `fluid.express.handler` instance:
+ * https://github.com/fluid-project/fluid-express/blob/master/docs/handler.md
  *
  * @param {Object} that - The component itself.
  *
@@ -56,7 +56,7 @@ gpii.ul.api.sources.request.handleRequest = function (that) {
  * A static function to filter a list of source definitions and return only those the current user can "view".
  *
  * @param {Object} sources - A map of source definitions, keyed by name.
- * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @param {Object} user - The current object, as stored in the request session by fluid-express-user.
  * @return {Array} An array of sources the current user can "view".
  *
  */
@@ -69,7 +69,7 @@ gpii.ul.api.sources.request.listReadableSources = function (sources, user) {
  * A static function to filter a list of source definitions and return only those the current user can "edit".
  *
  * @param {Object} sources - A map of source definitions, keyed by name.
- * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @param {Object} user - The current object, as stored in the request session by fluid-express-user.
  * @return {Array} An array of sources the current user can "edit".
  *
  */
@@ -82,7 +82,7 @@ gpii.ul.api.sources.request.listWritableSources = function (sources, user) {
  * A static function to filter a list of source definitions down to those for which the current user has a specified permission.
  *
  * @param {Object} sources - A map of source definitions, keyed by name.
- * @param {Object} user - The current object, as stored in the request session by gpii-express-user.
+ * @param {Object} user - The current object, as stored in the request session by fluid-express-user.
  * @param {String} permission - The permission to look for, either "view" or "edit".
  * @return {Array} An array of sources for which the current user has the selected permission.
  *
@@ -124,7 +124,7 @@ gpii.ul.api.sources.request.listSources = function (sources, user, permission) {
 };
 
 fluid.defaults("gpii.ul.api.sources.request", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     invokers: {
         handleRequest: {
             funcName: "gpii.ul.api.sources.request.handleRequest",
@@ -134,12 +134,12 @@ fluid.defaults("gpii.ul.api.sources.request", {
 });
 
 fluid.defaults("gpii.ul.api.sources", {
-    gradeNames:    ["gpii.express.middleware.requestAware"],
+    gradeNames:    ["fluid.express.middleware.requestAware"],
     path:          "/sources",
     handlerGrades: ["gpii.ul.api.sources.request"],
     sources:       gpii.ul.api.sources.sources,
     distributeOptions: {
         source: "{that}.options.sources",
-        target: "{that gpii.express.handler}.options.sources"
+        target: "{that fluid.express.handler}.options.sources"
     }
 });

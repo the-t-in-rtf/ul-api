@@ -8,8 +8,8 @@
 "use strict";
 var fluid = require("infusion");
 
-require("gpii-express");
-require("gpii-express-user");
+require("fluid-express");
+require("fluid-express-user");
 
 require("./schemas");
 require("./docs");
@@ -22,7 +22,7 @@ require("./images");
 require("./merge");
 
 fluid.defaults("gpii.ul.api", {
-    gradeNames:   ["gpii.express.router", "gpii.hasRequiredOptions"],
+    gradeNames:   ["fluid.express.router", "gpii.hasRequiredOptions"],
     requiredFields: {
         originalsDir: true,
         cacheDir:     true
@@ -34,19 +34,19 @@ fluid.defaults("gpii.ul.api", {
             priority: "before:user"
         },
         user: {
-            path: "%gpii-express-user/src/templates",
+            path: "%fluid-express-user/src/templates",
             priority: "before:validation"
         },
         validation: {
             priority: "last",
-            path: "%gpii-json-schema/src/templates"
+            path: "%fluid-json-schema/src/templates"
         }
     },
     sessionKey: "_ul_user",
     distributeOptions: [
         {
             source: "{that}.options.sessionKey",
-            target: "{that gpii.express.handler}.options.sessionKey"
+            target: "{that fluid.express.handler}.options.sessionKey"
         },
         {
             source: "{that}.options.rules.contextToExpose",
@@ -57,7 +57,7 @@ fluid.defaults("gpii.ul.api", {
         // Our public API is available for integrators to make calls against remotely.  These CORS headers make that
         // possible: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
         corsHeaders: {
-            type: "gpii.express.middleware.headerSetter",
+            type: "fluid.express.middleware.headerSetter",
             options: {
                 priority: "first",
                 headers: {
@@ -70,19 +70,19 @@ fluid.defaults("gpii.ul.api", {
             }
         },
         json: {
-            type: "gpii.express.middleware.bodyparser.json",
+            type: "fluid.express.middleware.bodyparser.json",
             options: {
                 priority: "first"
             }
         },
         urlencoded: {
-            type: "gpii.express.middleware.bodyparser.urlencoded",
+            type: "fluid.express.middleware.bodyparser.urlencoded",
             options: {
                 priority: "after:json"
             }
         },
         handlebars: {
-            type: "gpii.express.hb",
+            type: "fluid.express.hb",
             options: {
                 priority: "after:urlencoded",
                 templateDirs: "{gpii.ul.api}.options.templateDirs",
@@ -114,13 +114,13 @@ fluid.defaults("gpii.ul.api", {
             }
         },
         cookieparser: {
-            type:     "gpii.express.middleware.cookieparser",
+            type:     "fluid.express.middleware.cookieparser",
             options: {
                 priority: "first"
             }
         },
         session: {
-            type: "gpii.express.middleware.session",
+            type: "fluid.express.middleware.session",
             options: {
                 priority: "after:cookieparser",
                 sessionOptions: {
@@ -129,12 +129,12 @@ fluid.defaults("gpii.ul.api", {
             }
         },
         user: {
-            type: "gpii.express.user.api",
+            type: "fluid.express.user.api",
             options: {
                 priority: "after:session",
                 templateDirs: "{gpii.ul.api}.options.templateDirs",
                 // TODO:  Update this
-                app:       "{gpii.express}.options.config.app",
+                app:       "{fluid.express}.options.config.app",
                 couch: {
                     userDbName: "users", // TODO:  Confirm whether this is used in the package
                     userDbUrl: "{gpii.ul.api}.options.urls.usersDb"
@@ -206,14 +206,14 @@ fluid.defaults("gpii.ul.api", {
             }
         },
         htmlErrorHandler: {
-            type:     "gpii.handlebars.errorRenderingMiddleware",
+            type:     "fluid.handlebars.errorRenderingMiddleware",
             options: {
                 priority: "after:docs",
                 templateKey: "pages/error"
             }
         },
         jsonErrors: {
-            type: "gpii.express.middleware.error",
+            type: "fluid.express.middleware.error",
             options: {
                 priority: "after:htmlErrorHandler",
                 rules: {

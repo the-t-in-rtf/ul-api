@@ -1,7 +1,7 @@
 "use strict";
 var fluid = require("infusion");
 
-fluid.require("%gpii-express");
+fluid.require("%fluid-express");
 
 require("./file");
 require("./metadata");
@@ -30,7 +30,7 @@ require("./bySource");
 */
 
 fluid.defaults("gpii.ul.api.images", {
-    gradeNames: ["gpii.express.router", "gpii.hasRequiredOptions"],
+    gradeNames: ["fluid.express.router", "gpii.hasRequiredOptions"],
     requiredFields: {
         "urls.imageDb": true // The location of the images database
     },

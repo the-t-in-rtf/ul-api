@@ -29,7 +29,7 @@ gpii.ul.images.sourcePermissionMiddleware.middleware = function (that, request, 
 };
 
 fluid.defaults("gpii.ul.images.sourcePermissionMiddleware", {
-    gradeNames: ["gpii.express.middleware"],
+    gradeNames: ["fluid.express.middleware"],
     permission: "view",
     sessionKey: "_ul_user",
     rules: {

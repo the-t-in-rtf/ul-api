@@ -31,8 +31,8 @@ var fluid = require("infusion");
 var gpii   = fluid.registerNamespace("gpii");
 
 
-fluid.require("%gpii-express");
-fluid.require("%gpii-json-schema");
+fluid.require("%fluid-express");
+fluid.require("%fluid-json-schema");
 
 require("../source-permission-middleware");
 require("../view-read-dataSource");
@@ -63,12 +63,12 @@ fluid.defaults("gpii.ul.api.images.metadata.read.dataSource", {
             namespace: "filter",
             priority:  "after:transform",
             funcName:  "gpii.ul.api.images.metadata.read.dataSource.filterBySource",
-            args:      ["{gpii.express.handler}", "{arguments}.0"]
+            args:      ["{fluid.express.handler}", "{arguments}.0"]
         },
         // On a successful read, send the transformed results.
         "onRead.sendResponse": {
             priority: "after:filter",
-            func:     "{gpii.express.handler}.sendResponse",
+            func:     "{fluid.express.handler}.sendResponse",
             args:     [ 200, "{arguments}.0.0"] // statusCode, body
         },
         "onError.handleError": {
@@ -116,7 +116,7 @@ gpii.ul.api.images.metadata.read.handler.handleError = function (that, response)
 };
 
 fluid.defaults("gpii.ul.api.images.metadata.read.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.images.metadata.read.base}.options.rules.requestContentToValidate"
     },
@@ -143,7 +143,7 @@ fluid.defaults("gpii.ul.api.images.metadata.read.handler", {
                     // Send the filtered results to the user.
                     "onRead.sendResponse": {
                         priority: "after:filter",
-                        func: "{gpii.express.handler}.sendResponse",
+                        func: "{fluid.express.handler}.sendResponse",
                         args: [ 200, "{arguments}.0"] // statusCode, body
                     }
                 }
@@ -153,7 +153,7 @@ fluid.defaults("gpii.ul.api.images.metadata.read.handler", {
 });
 
 fluid.defaults("gpii.ul.api.images.metadata.read.base", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     method: ["get"],
     // Support all variations, including those with missing URL params so that we can return appropriate error feedback.
     path: ["/:uid/:source/:image_id", "/:uid/:source", "/:uid", "/"],
@@ -189,7 +189,7 @@ fluid.defaults("gpii.ul.api.images.metadata.read.base", {
         },
         // Reject requests that have missing or bad data up front.
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "fluid.schema.validationMiddleware",
             options: {
                 priority: "after:permissionMiddleware",
                 rules: {
@@ -216,7 +216,7 @@ fluid.defaults("gpii.ul.api.images.metadata.read", {
     components: {
         // If our request is valid, handle it normally.
         metadataMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
                 handlerGrades: ["gpii.ul.api.images.metadata.read.handler"]

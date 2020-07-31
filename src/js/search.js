@@ -7,9 +7,9 @@ require("gpii-sort");
 require("./sources");
 require("./lib/initialHtmlForm");
 
-fluid.require("%gpii-json-schema");
+fluid.require("%fluid-json-schema");
 
-fluid.require("%gpii-express/src/js/lib/querystring-coding.js");
+fluid.require("%fluid-express/src/js/lib/querystring-coding.js");
 
 fluid.registerNamespace("gpii.ul.api.search.handler");
 
@@ -183,7 +183,7 @@ gpii.ul.api.search.handler.requestToLucene = function (that) {
 };
 
 fluid.defaults("gpii.ul.api.search.handler", {
-    gradeNames: ["gpii.express.handler"],
+    gradeNames: ["fluid.express.handler"],
     timeout: 60000,
     couchFieldsToRemove: ["_id", "_rev"],
     rules: {
@@ -199,7 +199,7 @@ fluid.defaults("gpii.ul.api.search.handler", {
     fullRecordsPerRequest: 50,
     components: {
         searchReader: {
-            type: "gpii.express.dataSource.urlEncodedJson",
+            type: "fluid.express.dataSource.urlEncodedJson",
             options: {
                 url: "{gpii.ul.api}.options.urls.lucene",
                 avoidStringifying: true,
@@ -215,7 +215,7 @@ fluid.defaults("gpii.ul.api.search.handler", {
             }
         },
         unifiedRecordReader: {
-            type: "gpii.express.dataSource.urlEncodedJson",
+            type: "fluid.express.dataSource.urlEncodedJson",
             options: {
                 url: {
                     expander: {
@@ -255,7 +255,7 @@ fluid.defaults("gpii.ul.api.search.handler", {
 });
 
 fluid.defaults("gpii.ul.api.search", {
-    gradeNames: ["gpii.express.router"],
+    gradeNames: ["fluid.express.router"],
     path: "/search",
     searchDefaults: {
         offset:  0,
@@ -269,11 +269,11 @@ fluid.defaults("gpii.ul.api.search", {
     distributeOptions: [
         {
             source: "{that}.options.searchDefaults",
-            target: "{that gpii.express.handler}.options.searchDefaults"
+            target: "{that fluid.express.handler}.options.searchDefaults"
         },
         {
             source: "{that}.options.rules.requestContentToValidate",
-            target: "{that gpii.express.handler}.options.rules.requestContentToValidate"
+            target: "{that fluid.express.handler}.options.rules.requestContentToValidate"
         }
     ],
     components: {
@@ -286,7 +286,7 @@ fluid.defaults("gpii.ul.api.search", {
         },
         // The JSON middleware requires valid input to access....
         validationMiddleware: {
-            type: "gpii.schema.validationMiddleware",
+            type: "fluid.schema.validationMiddleware",
             options: {
                 priority:   "after:htmlForm",
                 rules: {
@@ -310,7 +310,7 @@ fluid.defaults("gpii.ul.api.search", {
         },
         // Middleware to serve a JSON payload.
         jsonMiddleware: {
-            type: "gpii.express.middleware.requestAware",
+            type: "fluid.express.middleware.requestAware",
             options: {
                 priority: "after:validationMiddleware",
                 handlerGrades: ["gpii.ul.api.search.handler"],

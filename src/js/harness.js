@@ -6,9 +6,9 @@ var fluid = require("infusion");
 var gpii  = fluid.registerNamespace("gpii");
 
 fluid.require("%ul-api");
-fluid.require("%gpii-express");
-fluid.require("%gpii-express-user");
-fluid.require("%gpii-handlebars");
+fluid.require("%fluid-express");
+fluid.require("%fluid-express-user");
+fluid.require("%fluid-handlebars");
 
 fluid.registerNamespace("gpii.ul.api.harness");
 
@@ -24,12 +24,12 @@ fluid.defaults("gpii.ul.api.harness", {
             priority: "before:user"
         },
         user: {
-            path: "%gpii-express-user/src/templates",
+            path: "%fluid-express-user/src/templates",
             priority: "before:validation"
         },
         validation: {
             priority: "last",
-            path: "%gpii-json-schema/src/templates"
+            path: "%fluid-json-schema/src/templates"
         }
     },
     sessionKey:   "_ul_user",
@@ -48,7 +48,7 @@ fluid.defaults("gpii.ul.api.harness", {
     },
     distributeOptions: {
         record: 120000,
-        target: "{that gpii.express.handler}.options.timeout"
+        target: "{that fluid.express.handler}.options.timeout"
     },
     urls: {
         api: {
@@ -101,7 +101,7 @@ fluid.defaults("gpii.ul.api.harness", {
     },
     components: {
         express: {
-            type: "gpii.express.withJsonQueryParser",
+            type: "fluid.express.withJsonQueryParser",
             options: {
                 port :        "{gpii.ul.api.harness}.options.ports.api",
                 templateDirs: "{gpii.ul.api.harness}.options.templateDirs",
@@ -117,7 +117,7 @@ fluid.defaults("gpii.ul.api.harness", {
                         }
                     },
                     inline: {
-                        type: "gpii.handlebars.inlineTemplateBundlingMiddleware",
+                        type: "fluid.handlebars.inlineTemplateBundlingMiddleware",
                         options: {
                             priority: "after:api",
                             path: "/templates",
@@ -126,7 +126,7 @@ fluid.defaults("gpii.ul.api.harness", {
                         }
                     },
                     modules: {
-                        type: "gpii.express.router.static",
+                        type: "fluid.express.router.static",
                         options: {
                             priority: "after:api",
                             path: "/modules",
