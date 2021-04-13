@@ -30,8 +30,9 @@
     },
     "devDependencies": {
         "eslint": "7.1.0",
-        "gpii-grunt-lint-all": "1.0.7",
+        "eslint-plugin-markdown": "1.0.1",
         "gpii-couchdb-test-harness": "1.0.1",
+        "gpii-grunt-lint-all": "1.0.7",
         "grunt": "1.1.0",
         "grunt-jsonlint": "2.1.2",
         "kettle": "1.12.0",

@@ -27,8 +27,7 @@
     "Dlf data": {
         "name": "Dlf data",
         "view": [
-            "reviewers",
-            "importer"
+            "*"
         ],
         "edit": [
             "importer"
