@@ -24,6 +24,15 @@
             "importer"
         ]
     },
+    "AZARIM": {
+        "name": "Azarim",
+        "view": [
+            "*"
+        ],
+        "edit": [
+            "importer"
+        ]
+    },
     "Dlf data": {
         "name": "Dlf data",
         "view": [
