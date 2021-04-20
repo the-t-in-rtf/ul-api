@@ -63,6 +63,7 @@ gpii.tests.ul.api.checkUnifiedRecords = function (body) {
 
 gpii.tests.ul.api.products.defaultSources = [
     "ATAust",
+    "AZARIM",
     "AbleData",
     "Dlf data",
     "EASTIN Admin",

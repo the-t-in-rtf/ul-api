@@ -13,6 +13,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
         anonymous: {
             "sources": [
                 "ATAust",
+                "AZARIM",
                 "AbleData",
                 "Dlf data",
                 "EASTIN Admin",
@@ -28,6 +29,7 @@ fluid.defaults("gpii.tests.ul.api.sources.caseHolder", {
         loggedIn: {
             "sources": [
                 "ATAust",
+                "AZARIM",
                 "AbleData",
                 "Dlf data",
                 "EASTIN Admin",
