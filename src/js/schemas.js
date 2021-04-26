@@ -133,6 +133,13 @@
                         "minLength": "The product manufacturer's name must be one or more characters long."
                     }
                 },
+                "id": {
+                    "type": "integer",
+                    "description": "The unique identification number for the product manufacturer.",
+                    "errors": {
+                        "type": "The manufacturer ID must be a number."
+                    }
+                },
                 "address": {
                     "type": "string",
                     "minLength": 1,
@@ -258,6 +265,13 @@
             "errors": {
                 "format": "You must provide a valid date.",
                 "type": "You must provide a valid date."
+            }
+        },
+        "isoCodes":{
+            "type": "array",
+            "description": "An array of ISO 9999 codes indicating the category of assistive product.",
+            "items": {
+                "type": "string"
             }
         }
     };

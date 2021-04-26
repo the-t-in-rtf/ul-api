@@ -1,10 +1,12 @@
 # Unified Listing API
 
-The Unified Listing is a federated database of products, including those focused on Assistive Technology users as well as mainstream products
+The Unified Listing is a federated database of products, including those focused on Assistive Technology users as well
+as mainstream products
 
 This API allows developers to read, create, and update products stored in the Unified Listing.
 
-This document describes the REST API, including the syntax required to use all commands, and the format of all data to be passed into and returned from the API.
+This document describes the REST API, including the syntax required to use all commands, and the format of all data to
+be passed into and returned from the API.
 
 # Data Objects
 
@@ -18,25 +20,28 @@ fields:
 |Field                      | Description |
 | ------------------------- | ----------- |
 | `description` (required)  | A description of the product.|
-| `manufacturer` (required) | A JSON object describing the manufacturer (see ["Manufacturer"](#manufacturers) below).|
-| `name` (required)         | The name of the product.|
-| `sid` (required)          | The unique identifier to identify this record in the source database.|
-| `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "unified".|
-| `status` (required)       | The status of this record.  Current supported values are listed below under ["status"](#statuses).|
+| `manufacturer` (required) | A JSON object describing the manufacturer (see ["Manufacturer"](#manufacturers) below). |
+| `name` (required)         | The name of the product. |
+| `sid` (required)          | The unique identifier to identify this record in the source database. |
+| `source` (required)       | The source of this record.  If the record is provided by a source database, this field will be set to a unique string identifying the source.  If this record is unique to the Unified Listing, this field will be set to "unified". |
+| `status` (required)       | The status of this record.  Current supported values are listed below under ["status"](#statuses). |
 | `uid` (required)          | The Universal ID ("uid") is the ID of the "unified" record for a given product.  "Source" products use this field to indicate which "unified" record they are associated with (if any). |
-| `updated` (required)      | The date at which the record was last updated.|
-| `language`                | The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed.|
+| `updated` (required)      | The date at which the record was last updated. |
+| `language`                | The language used in the text of this record, expressed using a two letter language, code, an underscore, and a two letter country code, as in `en_us` or `it_it`.  If this is not specified, `en_us` is assumed. |
+| `isoCodes`                | One or more [ISO 9999](https://www.iso.org/standard/60547.html) codes indicating the category of assistive product. |
 
 ## Source Records
 
-The Unified Listing contains source products pulled from sources such as [EASTIN](http://www.eastin.eu/) and [GARI](http://www.gari.info/), represented as JSON objects.
+The Unified Listing contains source products pulled from sources such as [EASTIN](http://www.eastin.eu/) and
+[GARI](http://www.gari.info/), represented as JSON objects.
 
-In addition to the fields described in ["Product records"](#product-records), a source record includes the following additional fields:
+In addition to the fields described in ["Product records"](#product-records), a source record includes the following
+additional fields:
 
 | Field        | Description |
 | ------------ | ----------- |
-| `sourceData` | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field.|
-| `sourceURL`  | An optional URL where the original version of this record in the source site can be found.|
+| `sourceData` | The original source record represented as a JSON object.  As a source database may have any fields they like, so there are no other restrictions on this field. |
+| `sourceURL`  | An optional URL where the original version of this record in the source site can be found. |
 
 Here is an example JSON representation of a source record with all fields:
 
@@ -129,8 +134,8 @@ When viewing a record returned by the API, you may also see the following additi
 | --------- | ----------- |
 | `sources` | An array containing a list of "source" products (see ["Source Records"](#source-records) above). |
 
-This field is not editable, and will be rejected if you pass it as part of a new record or an update.  In most endpoints,
-you can retrieve records without this field by setting the `unified` option to `false`.
+This field is not editable, and will be rejected if you pass it as part of a new record or an update.  In most
+endpoints, you can retrieve records without this field by setting the `unified` option to `false`.
 
 Here is an example of a full "unified" record in JSON format, as might be returned by the search:
 
@@ -159,24 +164,27 @@ Here is an example of a full "unified" record in JSON format, as might be return
 
 ## Statuses
 
-The Unified Listing has a simple workflow to manage the lifecycle of all products.  The status field indicates which step in the workflow the product is currently at.
+The Unified Listing has a simple workflow to manage the lifecycle of all products.  The status field indicates which
+step in the workflow the product is currently at.
 
 The following table describes the allowed statutes and when they are to be used.
 
 | Status         | Description |
 | -------------- | ----------- |
-| `new`          | A product that has just been added and which has not been reviewed.|
-| `active`       | A product that has been reviewed and which is currently available.|
-| `discontinued` | A product which is no longer being produced (but which may still be available on the used market).|
-| `deleted`      | A product record which was has been deleted for administrative reasons.  Should only be used for duplicates or mistakenly-created products.  For products that are no longer available, use "discontinued" instead.|
+| `new`          | A product that has just been added and which has not been reviewed. |
+| `active`       | A product that has been reviewed and which is currently available. |
+| `discontinued` | A product which is no longer being produced (but which may still be available on the used market). |
+| `deleted`      | A product record which was has been deleted for administrative reasons.  Should only be used for duplicates or mistakenly-created products.  For products that are no longer available, use "discontinued" instead. |
 
 ## Manufacturers
 
-The company or individual that produces a product is called a "manufacturer" in the Unified Listing.  The following table describes the available fields and how they are to be used.
+The company or individual that produces a product is called a "manufacturer" in the Unified Listing.  The following
+table describes the available fields and how they are to be used.
 
 | Field             | Description |
 | ----------------- | ----------- |
 | `name` (required) | The name of the manufacturer. |
+| `ID`              | The unique identifier for the manufacturer within the UL API. |
 | `address`         | The street address of the manufacturer (may also be used for the complete address). |
 | `postalCode`      | The postal code (ZIP code, etc.) of the manufacturer. |
 | `cityTown`        | The city/town in which the manufacturer is located. |
@@ -336,10 +344,12 @@ current user is listed as the author.  You must be logged in to use this REST en
 
 ### `GET /api/product/{source}/{sid}{?includeSources}`
 
-Returns a single product identified by its `source` and `sid`.  For ["unified" records](#unified-records), source products are included by default.
+Returns a single product identified by its `source` and `sid`.  For ["unified" records](#unified-records), source
+products are included by default.
 
 + Parameters
-    + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source records associated with this record.  Defaults to "false".
+    + `includeSources` (optional, boolean) ... If this is a "unified" record, display the source records associated with
+       this record.  Defaults to "false".
 
 + Response 200 (application/json)
     + Headers
@@ -376,13 +386,20 @@ Returns a single product identified by its `source` and `sid`.  For ["unified" r
 Return a list of products, with optional filters (see below).
 
 + Parameters
-    + `sources` (optional, string) ... Only display products from a particular source.  If this is omitted, records from all visible sources are displayed. For a single value, you can supply a string. For multiple values, you must supply an array
-    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
-    + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated at or after this time are returned.
+    + `sources` (optional, string) ... Only display products from a particular source.  If this is omitted, records from
+       all visible sources are displayed. For a single value, you can supply a string. For multiple values, you must
+       supply an array
+    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).
+       For a single value, you can supply a string. For multiple values, you must supply an array.
+    + `updatedSince` (optional, string) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only products updated
+       at or after this time are returned.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
     + `limit` (optional, string) ... The number of products to return.  Used for pagination.
-    + `unified` (optional, boolean) ... If this is set to true, combine all products according to their "unified" grouping.  Defaults to `true`.  If this is set to `true` and `sources` is set, the `unified` source is automatically added to the list of `sources` (see above).
-    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
+    + `unified` (optional, boolean) ... If this is set to true, combine all products according to their "unified"
+       grouping.  Defaults to `true`.  If this is set to `true` and `sources` is set, the `unified` source is
+       automatically added to the list of `sources` (see above).
+    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to
+      [lucene's query syntax][1].
 
 + Response 200 (application/json)
     + Headers
@@ -425,8 +442,8 @@ Return a list of products, with optional filters (see below).
         ```
 
 Although the default behavior is to display all records grouped by the associated "unified" record, this endpoint can
-also be used to list the records from one or more sources, for example, to display contributions from the user `sample1`,
-you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
+also be used to list the records from one or more sources, for example, to display contributions from the user
+`sample1`, you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 
 
 ### `GET /api/search{?q,status,offset,limit,sortBy}`
@@ -434,11 +451,15 @@ you might use a URL like `/api/products?sources=%22sample1%22&unified=false`.
 Performs a full text search of all data, returns matching products, grouped by the "unified" record they are associated with.
 
  + Parameters
-    + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
-    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).  For a single value, you can supply a string. For multiple values, you must supply an array.
+    + `q` (required, string) ... The query string to match.  Can either consist of a word or phrase as plain text, or
+       can use [lucene's query syntax](http://lucene.apache.org/core/3_6_2/queryparsersyntax.html) to construct more complex searches.
+    + `status` (optional, string) ... The product status(es) to return (defaults to everything but 'deleted' products).
+       For a single value, you can supply a string. For multiple values, you must supply an array.
     + `offset` (optional, string) ... The number of products to skip in the list of results.  Used for pagination.
-    + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search results are returned, anything higher is silently ignored.
-    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to [lucene's query syntax][1].
+    + `limit` (optional, string) ... The number of products to return.  Used for pagination.  A maximum of 100 search
+       results are returned, anything higher is silently ignored.
+    + `sortBy` (optional,string) ... The sort order to use when displaying products.  Conforms to
+       [lucene's query syntax][1].
 
  + Response 200 (application/json)
      + Headers
@@ -541,8 +562,10 @@ Compare "unified" records to one or more "sources" and highlight "updates", whic
 
  + Parameters
      + `sources` (required, String|Array) ... Only display products from the specified sources.
-     + `updatedSince` (optional, String) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product records updated at or after this time are included in the comparison.
-     + `sourcesNewer` (optional, Boolean) ... If `true`, the comparison is inverted, and cases in which the "source" record is newer will be displayed.  Defaults to `false`.
+     + `updatedSince` (optional, String) ... Timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` Only unified product
+        records updated at or after this time are included in the comparison.
+     + `sourcesNewer` (optional, Boolean) ... If `true`, the comparison is inverted, and cases in which the "source"
+        record is newer will be displayed.  Defaults to `false`.
 
  + Response 200 (application/json)
      + Headers
@@ -599,11 +622,13 @@ record:
 
 1. Change the status of the merged record to "new" or another non-deleted status.
 2. Change the merged record's `uid` to match its own `sid` value.
-3. Update each source record that should be associated with the merged record to use the merged record's `sid` as its `uid` value.
+3. Update each source record that should be associated with the merged record to use the merged record's `sid` as its
+   `uid` value.
 
  + Parameters
      + `target` (required, String) ... The unique identifier (uid) for the "original" unified record.
-     + `sources` (required, String|Array) ... One or more unique identifiers (uids) for records which are duplicates of the "original" referred to by `target`.
+     + `sources` (required, String|Array) ... One or more unique identifiers (uids) for records which are duplicates of
+        the "original" referred to by `target`.
 
  + Response 200 (application/json)
      + Headers
@@ -619,7 +644,8 @@ record:
 ## User Management
 
 Some of the functions described here require you to have an account and be logged in.  The REST endpoints required to
-create an account, log in, etc. are described [in the user management API documentation](https://github.com/GPII/gpii-express-user/).
+create an account, log in, etc. are described
+[in the user management API documentation](https://github.com/GPII/gpii-express-user/).
 
 ## Image API
 
