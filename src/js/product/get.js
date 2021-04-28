@@ -141,7 +141,7 @@ fluid.defaults("gpii.ul.api.product.get.handler.base", {
     members: {
         productRecord: null
     },
-    couchKeysToExclude: ["_id", "_rev"],
+    couchKeysToExclude: ["_id", "_rev", "_conflicts"],
     rules: {
         productCouchResponseToJson: {
             "": "rows.0.value"
