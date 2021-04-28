@@ -156,7 +156,7 @@ gpii.ul.api.products.handler.processCouchResponse = function (that, couchRespons
 
 fluid.defaults("gpii.ul.api.products.handler", {
     gradeNames: ["gpii.express.handler"],
-    couchFieldsToRemove: ["_id", "_rev"],
+    couchFieldsToRemove: ["_id", "_rev", "_conflicts"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.products}.options.rules.requestContentToValidate"
     },

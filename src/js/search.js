@@ -185,7 +185,7 @@ gpii.ul.api.search.handler.requestToLucene = function (that) {
 fluid.defaults("gpii.ul.api.search.handler", {
     gradeNames: ["gpii.express.handler"],
     timeout: 60000,
-    couchFieldsToRemove: ["_id", "_rev"],
+    couchFieldsToRemove: ["_id", "_rev", "_conflicts"],
     rules: {
         requestContentToValidate: "{gpii.ul.api.search}.options.rules.requestContentToValidate",
         requestToLucene: {

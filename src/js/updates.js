@@ -117,7 +117,7 @@ gpii.ul.api.updates.handler.json.processCouchResponse = function (that, couchRes
 
 fluid.defaults("gpii.ul.api.updates.handler.json", {
     gradeNames: ["gpii.express.handler"],
-    couchKeysToExclude: ["_id", "_rev"],
+    couchKeysToExclude: ["_id", "_rev", "_conflicts"],
     messages: {
         couchError:   "No response from CouchDB, can't retrieve product records.",
         noPermission: "You do not have permission to view one or more of the sources you requested."
