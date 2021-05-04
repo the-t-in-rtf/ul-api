@@ -185,7 +185,8 @@ fluid.defaults("gpii.ul.api.product.update", {
                         "sourceData": gpii.ul.api.schemas.product.sourceData,
                         "sourceUrl": gpii.ul.api.schemas.product.sourceUrl,
                         "language": gpii.ul.api.schemas.product.language,
-                        "updated": gpii.ul.api.schemas.product.updated
+                        "updated": gpii.ul.api.schemas.product.updated,
+                        "isoCodes": gpii.ul.api.schemas.product.isoCodes
                     },
                     "additionalProperties": false
                 }
