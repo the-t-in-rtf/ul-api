@@ -271,7 +271,12 @@
             "type": "array",
             "description": "An array of ISO 9999 codes indicating the category of assistive product.",
             "items": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                    "Name": { "type": "string" },
+                    "Code": { "type": "string" }
+                },
+                "additionalProperties": false
             }
         }
     };
