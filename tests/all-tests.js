@@ -6,6 +6,7 @@
 require("./js/docs-tests");
 require("./js/merge-tests");
 require("./js/product");
+require("./js/eastin");
 require("./js/products-tests");
 require("./js/search-tests");
 require("./js/sources-tests");

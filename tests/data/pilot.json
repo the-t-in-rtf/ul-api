@@ -10,15 +10,10 @@
             "manufacturer": {
                 "name": "Freedom Scientific"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -66,15 +61,10 @@
                 "email": "",
                 "url": "www.freedomsci.com"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "11800 31st Court North",
                 "ManufacturerPostalCode": "FL 33716",
@@ -115,15 +105,10 @@
             "manufacturer": {
                 "name": "Freedom Scientific Benelux, Optelec Nederland B.V."
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes":  [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -164,15 +149,10 @@
             "manufacturer": {
                 "name": "Freedom Scientific USA"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -213,20 +193,16 @@
             "manufacturer": {
                 "name": "Freedom Scientific Blind/Low Vision Group and Corporate Offices"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": [
-                        {
-                            "Code": "22.39",
-                            "Name": "Output devices for computers"
-                        }
-                    ]
+            "isoCodes": [
+                {
+                    "Code": "22.39.12",
+                    "Name": "Special output software"
+                },
+                {
+                    "Code": "22.39",
+                    "Name": "Output devices for computers"
                 }
-            },
+            ],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -242,11 +218,11 @@
                 "Features": [],
                 "Database": "Rehadat",
                 "ProductCode": "C/00505",
-                "IsoCodePrimary": {
-                    "Code": "22.39.12",
-                    "Name": "Special output software"
-                },
-                "IsoCodesOptional": [
+                "isoCodes": [
+                    {
+                        "Code": "22.39.12",
+                        "Name": "Special output software"
+                    },
                     {
                         "Code": "22.39",
                         "Name": "Output devices for computers"
@@ -279,15 +255,10 @@
                 "email": "info@freedomscientific.com",
                 "url": "http://www.freedomscientific.com"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "11800 31st Court North",
                 "ManufacturerPostalCode": "FL 33716",
@@ -406,15 +377,10 @@
             "manufacturer": {
                 "name": "Freedom Scientifics corporate"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -455,15 +421,10 @@
             "manufacturer": {
                 "name": "Freedom Scientific"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "updated": "2015-01-12T12:14:39.526Z"
         },
         {
@@ -478,15 +439,10 @@
                 "country": "UNKNOWN",
                 "email": "mick@kulgan.net"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "",
                 "ManufacturerPostalCode": "",
@@ -529,15 +485,10 @@
                 "country": "UNKNOWN",
                 "email": "mick@kulgan.net"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "updated": "2011-01-14T22:00:00.000Z"
         },
         {
@@ -554,15 +505,10 @@
                 "email": "steve@fullmeasure.co.uk",
                 "url": "http://fullmeasure.co.uk/"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.33.12",
-                        "Name": "Operating software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.33.12",
+                "Name": "Operating software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "",
                 "ManufacturerPostalCode": "",
@@ -713,15 +659,10 @@
                 "email": "steve@fullmeasure.co.uk",
                 "url": "http://fullmeasure.co.uk/"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.33.12",
-                        "Name": "Operating software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isCodes": [{
+                "Code": "22.33.12",
+                "Name": "Operating software"
+            }],
             "updated": "2012-04-10T15:44:00.000Z"
         },
         {
@@ -734,20 +675,16 @@
             "manufacturer": {
                 "name": "Texthelp Systems Ltd"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.12.24",
-                        "Name": "Word processing software"
-                    },
-                    "IsoCodesOptional": [
-                        {
-                            "Code": "22.39.12",
-                            "Name": "Special output software"
-                        }
-                    ]
+            "isoCodes": [
+                {
+                    "Code": "22.12.24",
+                    "Name": "Word processing software"
+                },
+                {
+                    "Code": "22.39.12",
+                    "Name": "Special output software"
                 }
-            },
+            ],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -797,15 +734,10 @@
                 "email": "u.s.info@texthelp.com",
                 "url": "http://www.texthelp.com"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.30.03",
-                        "Name": "Reading materials with audible output"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.30.03",
+                "Name": "Reading materials with audible output"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "",
                 "ManufacturerPostalCode": "",
@@ -893,15 +825,10 @@
                 "email": "u.s.info@texthelp.com",
                 "url": "http://www.texthelp.com"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.30.03",
-                        "Name": "Reading materials with audible output"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.30.03",
+                "Name": "Reading materials with audible output"
+            }],
             "updated": "2008-11-23T23:00:00.000Z"
         },
         {
@@ -914,15 +841,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.12.24",
-                        "Name": "Word processing software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.12.24",
+                "Name": "Word processing software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -970,15 +892,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "http://www.yourdolphin.com/index.asp"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.30.03",
-                        "Name": "Reading materials with audible output"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.30.03",
+                "Name": "Reading materials with audible output"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1111,15 +1028,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1160,15 +1072,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1209,15 +1116,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1258,15 +1160,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1307,15 +1204,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1356,15 +1248,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1405,15 +1292,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1461,15 +1343,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "http://www.yourdolphin.com/index.asp"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1581,20 +1458,16 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd."
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": [
-                        {
-                            "Code": "22.39",
-                            "Name": "Output devices for computers"
-                        }
-                    ]
+            "isoCodes": [
+                {
+                    "Code": "22.39.12",
+                    "Name": "Special output software"
+                },
+                {
+                    "Code": "22.39",
+                    "Name": "Output devices for computers"
                 }
-            },
+            ],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1647,15 +1520,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "www.dolphinuk.co.uk"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1703,15 +1571,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "www.dolphinuk.co.uk"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1759,15 +1622,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "www.dolphinuk.co.uk"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1815,15 +1673,10 @@
                 "email": "info@yourdolphin.com",
                 "url": "www.dolphinuk.co.uk"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "Technology House, Blackpole Estate West",
                 "ManufacturerPostalCode": "WR3 8TJ",
@@ -1864,20 +1717,16 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd."
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": [
-                        {
-                            "Code": "22.39",
-                            "Name": "Output devices for computers"
-                        }
-                    ]
+            "isoCodes": [
+                {
+                    "Code": "22.39.12",
+                    "Name": "Special output software"
+                },
+                {
+                    "Code": "22.39",
+                    "Name": "Output devices for computers"
                 }
-            },
+            ],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -1927,15 +1776,10 @@
                 "email": "KenSaunders@AccessFirefox.org",
                 "url": "http://www.accessfirefox.org/"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "sourceData": {
                 "ManufacturerAddress": "",
                 "ManufacturerPostalCode": "",
@@ -2026,20 +1870,16 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd."
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": [
-                        {
-                            "Code": "22.39",
-                            "Name": "Output devices for computers"
-                        }
-                    ]
+            "isoCodes": [
+                {
+                    "Code": "22.39.12",
+                    "Name": "Special output software"
+                },
+                {
+                    "Code": "22.39",
+                    "Name": "Output devices for computers"
                 }
-            },
+            ],
             "sourceData": {
                 "ManufacturerAddress": null,
                 "ManufacturerPostalCode": null,
@@ -2085,15 +1925,10 @@
             "manufacturer": {
                 "name": "Dolphin Computer Access Ltd"
             },
-            "ontologies": {
-                "iso9999": {
-                    "IsoCodePrimary": {
-                        "Code": "22.39.12",
-                        "Name": "Special output software"
-                    },
-                    "IsoCodesOptional": []
-                }
-            },
+            "isoCodes": [{
+                "Code": "22.39.12",
+                "Name": "Special output software"
+            }],
             "updated": "2015-01-12T12:08:56.721Z"
         },
         {

@@ -14,9 +14,10 @@ fluid.defaults("gpii.ul.api.couchapp.converter", {
     toConvert: {
         lucene:  "%ul-api/src/couchapp/lucene",
         reports: "%ul-api/src/couchapp/reports",
-        ul:      "%ul-api/src/couchapp/ul"
+        ul:      "%ul-api/src/couchapp/ul",
+        eastin:  "%ul-api/src/couchapp/eastin"
     },
-    outputFile: "%ul-api/tests/data/views-generated.json",
+    outputFile: "%ul-api/tests/data/views.json",
     listeners: {
         "onCreate.convertToViews": {
             funcName: "gpii.ul.api.couchapp.converter.convertToViews"
@@ -45,7 +46,9 @@ gpii.ul.api.couchapp.converter.convertToViews = function (that) {
     });
 
     var outputPath = fluid.module.resolvePath(that.options.outputFile);
-    fs.writeFileSync(outputPath, JSON.stringify(allViews, null, 2), { encoding: "utf8"});
+    // Generate this following the linting conventions of manually-created files.
+    var JSONAsString = JSON.stringify(allViews, null, 4) + "\n";
+    fs.writeFileSync(outputPath, JSONAsString, { encoding: "utf8"});
 };
 
 gpii.ul.api.couchapp.converter.readSingleDir = function (startingPath) {

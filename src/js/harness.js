@@ -16,6 +16,8 @@ gpii.ul.api.harness.setLogging = function (that) {
     fluid.setLogging(that.options.setLogging);
 };
 
+fluid.require("%gpii-express/tests/js/lib/diagramAllRoutes.js");
+
 fluid.defaults("gpii.ul.api.harness", {
     gradeNames:   ["fluid.component"],
     templateDirs: {
@@ -133,8 +135,23 @@ fluid.defaults("gpii.ul.api.harness", {
                             content: "%ul-api/node_modules"
                         }
                     }
+                },
+                // TODO: Remove or comment out
+                listeners: {
+                    "onCreate.diagramRoutes": {
+                        funcName: "gpii.ul.api.harness.diagramRoutes",
+                        args: ["{that}"]
+                    }
                 }
             }
         }
     }
 });
+
+gpii.ul.api.harness.diagramRoutes = function (expressComponent) {
+    var diagram = gpii.test.express.diagramAllRoutes(expressComponent);
+    var oldLogChars = fluid.logObjectRenderChars;
+    fluid.logObjectRenderChars = 256000;
+    fluid.log(fluid.logLevel.IMPORTANT, JSON.stringify(diagram, null, 2));
+    fluid.logObjectRenderChars = oldLogChars;
+};

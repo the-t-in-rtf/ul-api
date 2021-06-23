@@ -20,6 +20,7 @@ require("./sources");
 require("./updates");
 require("./images");
 require("./merge");
+require("./eastin");
 
 fluid.defaults("gpii.ul.api", {
     gradeNames:   ["gpii.express.router", "gpii.hasRequiredOptions"],
@@ -79,6 +80,12 @@ fluid.defaults("gpii.ul.api", {
             type: "gpii.express.middleware.bodyparser.urlencoded",
             options: {
                 priority: "after:json"
+            }
+        },
+        eastin: {
+            type: "gpii.ul.api.eastin",
+            options: {
+                priority: "after:urlencoded"
             }
         },
         handlebars: {

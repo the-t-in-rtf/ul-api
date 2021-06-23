@@ -1,14 +1,10 @@
 function (doc) {
     "use strict";
-    var sourcedSid = doc.source + ":" + doc.sid;
 
     if (doc.isoCodes && doc.isoCodes.length > 0) {
-        for (var a = 0; a < doc.isoCodes.length; a++) {
-            var isoCode = doc.isoCodes[a];
-            emit(isoCode, sourcedSid);
-        }
+        emit(doc.status +" record, with ISO Code");
     }
     else {
-        emit("none", sourcedSid);
+        emit(doc.status + " record, with no ISO Code");
     }
 }
